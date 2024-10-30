@@ -1,0 +1,17 @@
+#header-wrapper {
+    height: 410px;
+}
+
+.header-h1 {
+    visibility: hidden;
+}
+
+.header-page {
+    position: absolute;
+    width: 1320px;
+    height: 100%;
+    left: 5%;
+    right: 5%;
+    top: 0%;
+    background-color: gray;
+}
