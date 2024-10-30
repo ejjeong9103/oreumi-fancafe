@@ -14,4 +14,4 @@ public class OreumiFancafeApplication {
 // test 커밋용
 // 영석 커밋
 // youngseok test
-// 윤종 커밋
+// 윤종 커밋 2
