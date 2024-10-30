@@ -12,3 +12,4 @@ public class OreumiFancafeApplication {
 
 }
 // test 커밋용
+// 영석 커밋
