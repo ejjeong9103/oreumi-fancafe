@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" th:href="@{/css/reset.css}">
+	<link rel="stylesheet" th:href="@{/css/main.css}">
+	<link rel="stylesheet" th:href="@{/css/section.css}">
+</head>
+<style>
+</style>
+<body>
+	<th:block th:replace="header/header :: header"></th:block>
+
+	<main class="--main">
+		<th:block th:replace="nav/nav :: nav"></th:block>
+		<section class="--section">
+			글 작성
+		</section>
+	</main>
+
+	<th:block th:replace="footer/footer :: footer"></th:block>
+</body>
+</html>
