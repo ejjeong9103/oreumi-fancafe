@@ -1,0 +1,114 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+html {
+    width: auto;
+    font-family: Pretendard, "Pretendard Variable",sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    padding: 40px 50px;
+}
+
+.btn-secondary {
+    width: 70px;
+    white-space: nowrap;
+}
+
+.container {
+    padding: 40px 50px;
+}
+
+article {
+    padding: 0;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.board-page {
+    margin-top: 40px;
+    padding: 20px 20px 30px 20px;
+}
+
+.info-writer-detail {
+    vertical-align: bottom;
+    display: flex;
+}
+
+.user-rank {
+    font-size: 0.8rem;
+    align-content: flex-end;
+}
+
+.info-writer-detail2 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.article-body {
+    padding-bottom: 80px;
+}
+
+.comment{
+    flex-direction: row;
+}
+.comment-pic-box {
+    padding-right: 20px;
+}
+
+.comment-pic {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.comment-context {
+    padding-left: 20px;
+}
+
+.comment-create {
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+
+.comment-writer {
+    font-weight: bold;
+}
+
+.comment-createdAt {
+    font-size: 14px;
+}
+
+.title {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 60px;
+    border: none;
+    resize: none;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.comment-write-btn {
+    float: right;
+}
+
+.page-button-list {
+    display: flex;
+    justify-content: space-between;
+}
+.padding-left{
+    padding-left: 70px;
+}

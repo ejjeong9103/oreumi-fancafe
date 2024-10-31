@@ -1,0 +1,39 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+html {
+    width: auto;
+    min-height: 600px;
+    font-family: Pretendard, "Pretendard Variable", sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    padding: 40px 50px;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+.container {
+    padding: 40px 50px;
+}
+
+.deleteupdate button {
+    width: 70px;
+    height: 30px;
+}
+
+table {
+    border-bottom: 2px solid lightgray;
+}
+
+thead {
+    font-weight: bold;
+}
+
+.write-btn-div {
+    display: flex;
+    flex-direction: row-reverse;
+}
