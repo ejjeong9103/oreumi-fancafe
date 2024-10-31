@@ -1,17 +1,68 @@
-#header-wrapper {
-    height: 410px;
+#my-page {
+    position: relative;
+    width: 940px;
+    height: 1280px;
+    left: 10%;
+    top: 80px;
+    border: 1px solid black;
 }
 
-.header-h1 {
+.my-page-heading {
     visibility: hidden;
 }
 
-.header-page {
-    position: absolute;
-    width: 1320px;
-    height: 100%;
-    left: 5%;
-    right: 5%;
-    top: 0%;
-    background-color: gray;
+.container-one {
+    display: flex;
+    position: relative;
+    top: 5%;
+}
+
+.my-page-info {
+    position: relative;
+    width: 245px;
+    height: 164px;
+    left: 10%;
+}
+
+.my-page-info > li {
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+    margin-bottom: 10.5px;
+}
+
+.my-page-profile-img {
+    position: relative;
+    width: 260px;
+    height: 180px;
+    left: 35%;
+    border: 1px solid gray;
+}
+
+.container-two {
+    position: relative;
+    top: 15%;
+    left: 10%;
+}
+
+.my-posts-label,
+.my-comments-label {
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.my-posts-list,
+.my-comments-list {
+    margin-top: 25px;
+}
+
+.my-posts-list > li,
+.my-comments-list > li {
+    font-size: x-large;
+}
+
+.container-three {
+    position: relative;
+    top: 35%;
+    left: 10%;
 }
