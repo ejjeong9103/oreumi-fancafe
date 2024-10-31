@@ -1,0 +1,43 @@
+.container {
+    padding-left: 90px;
+    padding-right: 90px;
+
+}
+.main-content {
+    width: 940px;
+    height: 1280px;
+    background-color: #D9D9D9;
+    display: flex;
+    flex-direction: column;
+
+}
+.main-container1 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.dropdown-btn{
+    width: 360px;
+    height: 50px;
+    background-color: gray;
+    text-align: left;
+}
+#title {
+    width: 760px;
+    height: 50px;
+}
+.btn-success {
+    width: 230px;
+    height: 50px;
+}
+.btn-div {
+    margin-top: 30px;
+    display: flex;
+    justify-content: right;
+}
+
+#content {
+    line-height: 1.5;
+    width: 760px;
+    height: 500px;
+}
