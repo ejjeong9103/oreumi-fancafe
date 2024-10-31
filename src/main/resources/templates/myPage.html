@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oreumi Fancafe</title>
+    <link rel="stylesheet" href="/static/reset.css" />
+    <link rel="stylesheet" href="/static/myPageStyle.css" />
+  </head>
+  <body>
+    <section id="my-page">
+      <h2 class="my-page-heading">오르미 팬카페 메인페이지</h2>
+      <div class="container-one">
+        <ul class="my-page-info" id="my-page-info">
+          <li th:text="'아이디 : ' + ${info.user_id}">아이디: 오르미</li>
+          <li th:text="'닉네임 : ' + ${}">닉네임: 영웅좋아</li>
+          <li th:text="'이메일 : ' + ${info.email}">이메일: n@naver.com</li>
+          <li th:text="'사이트 후원 : ' + ${} + '원'">사이트 후원: 1000원</li>
+          <li th:text="'기부 모금 : ' + ${} + '원'">기부 모금: 1000원</li>
+        </ul>
+        <img th:src="@{}" class="my-page-profile-img" />
+      </div>
+      <div class="container-two">
+        <label class="my-posts-label">내 글</label>
+        <ul class="my-posts-list" id="my-posts-list" th:each="title : ${}">
+          <li th:text="${title.title}">제목 1</li>
+          <li>제목 2</li>
+          <li>제목 3</li>
+        </ul>
+      </div>
+      <div class="container-three">
+        <label class="my-comments-label">내 댓글 (글목록)</label>
+        <ul class="my-comments-list" id="my-comments-list" th:each="comment : ${}">
+          <li th:text="${comment.title}">제목 1</li>
+          <li>제목 2</li>
+          <li>제목 3</li>
+        </ul>
+      </div>
+    </section>
+  </body>
+</html>

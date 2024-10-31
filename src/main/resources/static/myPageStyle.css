@@ -1,0 +1,74 @@
+#my-page {
+    position: relative;
+    width: 940px;
+    height: 1280px;
+    left: 10%;
+    top: 80px;
+    background-color: #D9D9D9;
+}
+
+.my-page-heading {
+    visibility: hidden;
+}
+
+.container-one {
+    display: flex;
+    position: relative;
+    top: 5%;
+}
+
+.my-page-info {
+    position: relative;
+    width: 245px;
+    height: 164px;
+    left: 10%;
+}
+
+.my-page-info > li {
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+    margin-bottom: 10.5px;
+}
+
+.my-page-profile-img {
+    position: relative;
+    width: 260px;
+    height: 180px;
+    left: 35%;
+    border: 1px solid gray;
+}
+
+.container-two {
+    position: relative;
+    top: 15%;
+    left: 10%;
+    width: 710px;
+    height: 361px;
+    background-color: #FFFFFF;
+}
+
+.my-posts-label,
+.my-comments-label {
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.my-posts-list,
+.my-comments-list {
+    margin-top: 25px;
+}
+
+.my-posts-list > li,
+.my-comments-list > li {
+    font-size: x-large;
+}
+
+.container-three {
+    position: relative;
+    top: 20%;
+    left: 10%;
+    width: 710px;
+    height: 361px;
+    background-color: #FFFFFF;
+}
