@@ -1,0 +1,14 @@
+.--nav {
+    width: 320px;
+    /*height: auto;*/
+    background-color: black;
+}
+.profile {
+    height: 420px;
+    background-color: #D9D9D9;
+}
+.board {
+    margin-top: 32px;
+    /*height: auto;*/
+    background-color: #D9D9D9;
+}

@@ -1,0 +1,8 @@
+.--main {
+    width: 1320px;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin: 0 auto;
+    margin-top: 40px;
+}
