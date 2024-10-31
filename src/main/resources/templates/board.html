@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>board</title>
+    <link rel="stylesheet" href="../static/css/reset.css"/>
+    <link rel="stylesheet" href="../static/css/board.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+<!--타임리프 내의 링크는 모두 임의로 넣었으니 실제 작업할 때 링크 경로를 수정해주세요-->
+<div class="container">
+    <h1>게시판 이름</h1>
+    <p class="text-muted">게시판 설명</p>
+    <table class="table">
+        <thead class="text-center">
+        <tr class="caption text-nowrap">
+            <th>제목</th>
+            <th>글쓴이</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--        thymeleaf로 articles 갯수만큼 반복-->
+
+        <tr class="board_body" th:each="item : ${articles}">
+            <!--      각 게시판마다 타임리프 url 수정해주세요      -->
+            <td th:text="${item.title}"><a th:href="@{/board/{id}(id=${item.id})}"></a></td>
+            <td th:text="${item.content}"></td>
+            <td th:text="${item.createdAt}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="write-btn-div">
+        <button class="btn btn-secondary write-btn" th:onclick="|location.href='@{/board/new-article}'|">글 작성</button>
+    </div>
+
+</div>
+
+
+</body>
+</html>
