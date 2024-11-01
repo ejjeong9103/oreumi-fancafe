@@ -20,6 +20,7 @@ public class UserService {
 
         // 아이디 중복 체크
         duplicateUserId(addUserRequest.getUserId());
+        // 닉네임 중복 체크
         return null;
     }
 
@@ -31,6 +32,17 @@ public class UserService {
     public void duplicateUserId(String userId) {
         if (isDuplicateUserId(userId)) {
             throw new IllegalArgumentException("중복된 아이디입니다.");
+        }
+    }
+
+    // 닉네임 중복 체크
+    public boolean isDuplicateNickName(String nickName) {
+        return userRepository.existsByNickName(nickName);
+    }
+
+    public void duplicateNickName(String nickName) {
+        if (isDuplicateNickName(nickName)) {
+            throw new IllegalArgumentException("중복된 닉네임입니다.");
         }
     }
 }
