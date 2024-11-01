@@ -21,6 +21,9 @@ public class UserService {
         // 아이디 중복 체크
         duplicateUserId(addUserRequest.getUserId());
         // 닉네임 중복 체크
+        duplicateNickName(addUserRequest.getNickName());
+        // 이메일 중복 체크
+        duplicateEmail(addUserRequest.getEmail());
         return null;
     }
 
@@ -43,6 +46,17 @@ public class UserService {
     public void duplicateNickName(String nickName) {
         if (isDuplicateNickName(nickName)) {
             throw new IllegalArgumentException("중복된 닉네임입니다.");
+        }
+    }
+
+    // 이메일 중복 체크
+    public boolean isDuplicateEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public void duplicateEmail(String email) {
+        if (isDuplicateEmail(email)) {
+            throw new IllegalArgumentException("중복된 이메일입니다.");
         }
     }
 }
