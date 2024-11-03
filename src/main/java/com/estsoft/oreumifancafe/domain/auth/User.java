@@ -24,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "user")
 @Entity
-    public class Users implements UserDetails {
+public class User implements UserDetails {
     @Id
     @Column(name = "user_id", nullable = false, updatable = false)
     private String userId;
