@@ -14,7 +14,7 @@ public class CustomUserDetailsService implements CustomUserDetailsServiceInterf 
     // ID로 사용자 검색
     @Override
     public UserDetails loadUsersById(String userId) throws UserNotFoundException {
-        return userRepository.findByUser_id(userId)
+        return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
