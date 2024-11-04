@@ -9,7 +9,8 @@ CREATE TABLE `user` (
                         `created_at`	timestamp	NOT NULL,
                         `role`	int	NOT NULL	DEFAULT 1,
                         `state`	int	NOT NULL	DEFAULT 1,
-                        `profile_image_address`	varchar(2000)	NOT NULL
+                        `profile_image_address`	varchar(2000)	NOT NULL,
+                        `nickname` varchar(100) NOT NULL
 );
 
 DROP TABLE IF EXISTS `board`;
