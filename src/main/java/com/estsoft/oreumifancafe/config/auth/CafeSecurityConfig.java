@@ -21,7 +21,7 @@ public class CafeSecurityConfig {
                 .requestMatchers("/resources/**");
     }
 
-    // 패스워드 인코딩
+    // 패스워드 인코더
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -31,22 +31,23 @@ public class CafeSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/main").hasRole("GUEST")      // 준회원이 접근할 수 있는 페이지 설정
-                        .requestMatchers("/main").hasRole("USER")       // 정회원
-                        .requestMatchers("/main").hasRole("ELITE")      // 우수회원
-                        .requestMatchers("/main").hasRole("TALENT")     // 연예인
-                        .requestMatchers("/main").hasRole("ADMIN")      // 관리자
-                        .requestMatchers("/main").hasAnyRole("GUEST", "USER") // 준회원, 정회원이 접근할 수 있는 페이지 설정
-                        .anyRequest().authenticated()
+                        .requestMatchers("/").hasRole("GUEST")      // 준회원이 접근할 수 있는 페이지 설정
+                        .requestMatchers("/").hasRole("USER")       // 정회원
+                        .requestMatchers("/").hasRole("ELITE")      // 우수회원
+                        .requestMatchers("/").hasRole("CELEBRITY")  // 연예인
+                        .requestMatchers("/").hasRole("ADMIN")      // 관리자
+                        .requestMatchers("/").hasAnyRole("CELEBRITY", "ADMIN") // 연예인과 관리자가 접근할 수 있는 페이지 설정
+                        .anyRequest().permitAll()
                 )
                 .formLogin(auth -> auth
                         .loginPage("/login") // 로그인 페이지 URL
                         .defaultSuccessUrl("/main") // 로그인 성공시 자동으로 이동할 페이지 URL
                 )
                 .logout(auth -> auth
-                        .logoutSuccessUrl("/login") // 로그아웃 성공시 자동으로 이동할 페이지 URL
+                        .logoutSuccessUrl("/logout") // 로그아웃 성공시 자동으로 이동할 페이지 URL
                         .invalidateHttpSession(true)
                 )
+                .csrf(auth -> auth.disable()) // CSRF 비활성화
                 .build();
     }
 }

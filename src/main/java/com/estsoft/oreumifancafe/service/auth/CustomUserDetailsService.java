@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements CustomUserDetailsServiceInterf {
     private final UserRepository userRepository;
 
-    // ID로 사용자 검색
+    // ID로 검색
     @Override
     public UserDetails loadUsersById(String userId) throws UserNotFoundException {
         return userRepository.findByUserId(userId)

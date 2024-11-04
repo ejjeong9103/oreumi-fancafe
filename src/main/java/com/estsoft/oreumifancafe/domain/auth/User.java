@@ -109,6 +109,10 @@ public class User implements UserDetails {
     // 계정 사용 가능 여부
     @Override
     public boolean isEnabled() {
+        if (this.state == 0) {
+            return false; // false : 사용 불가능
+        }
+
         return true; // true : 사용 가능
     }
 }

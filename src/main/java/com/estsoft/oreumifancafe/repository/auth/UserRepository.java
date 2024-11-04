@@ -8,12 +8,12 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-    // 사용자 ID 검색
+    // ID 검색
     Optional<User> findByUserId(String userId);
 
-    // 사용자 닉네임 검색
+    // 닉네임 검색
     Optional<User> findByNickName(String nickName);
 
-    // 사용자 이메일 검색
+    // 이메일 검색
     Optional<User> findByEmail(String email);
 }
