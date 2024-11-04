@@ -3,11 +3,9 @@ package com.estsoft.oreumifancafe.controller.user;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/user")
@@ -27,5 +25,12 @@ public class UserController {
     public String signup(@ModelAttribute AddUserRequest addUserRequest) {
         userService.saveUser(addUserRequest);
         return "index";
+    }
+
+    // userId 중복 체크
+    @GetMapping("/check/userid/{userId}")
+    @ResponseBody // JSON 응답만 필요한 메서드에 @ResponseBody 추가
+    public ResponseEntity<Boolean> checkUserId(@PathVariable String userId) {
+        return ResponseEntity.ok(userService.isDuplicateUserId(userId));
     }
 }
