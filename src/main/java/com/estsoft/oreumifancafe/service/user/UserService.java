@@ -1,10 +1,13 @@
 package com.estsoft.oreumifancafe.service.user;
 
+import com.estsoft.oreumifancafe.constans.user.Regx;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,9 @@ public class UserService {
         duplicateNickName(addUserRequest.getNickName());
         // 이메일 중복 체크
         duplicateEmail(addUserRequest.getEmail());
+        // 비밀번호 정규식 체크
+        validatePasswordRegex(addUserRequest.getUserPw());
+
         return null;
     }
 
@@ -40,7 +46,7 @@ public class UserService {
 
     // 닉네임 중복 체크
     public boolean isDuplicateNickName(String nickName) {
-        return userRepository.existsByNickName(nickName);
+        return userRepository.existsByNickname(nickName);
     }
 
     public void duplicateNickName(String nickName) {
@@ -57,6 +63,13 @@ public class UserService {
     public void duplicateEmail(String email) {
         if (isDuplicateEmail(email)) {
             throw new IllegalArgumentException("중복된 이메일입니다.");
+        }
+    }
+
+    // 비밀번호 정규식 체크
+    public void validatePasswordRegex(String password) {
+        if (!Pattern.matches(Regx.PASSWORD_PATTERN.getRegex(), password)) {
+            throw new IllegalArgumentException("비밀번호는 영소대문자, 숫자, 특수문자가 모두 포함되어야합니다.");
         }
     }
 }
