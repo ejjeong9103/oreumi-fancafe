@@ -51,7 +51,8 @@ CREATE TABLE `user` (
                         `created_at`	timestamp	NOT NULL,
                         `role`	int	NOT NULL	DEFAULT 1,
                         `state`	int	NOT NULL	DEFAULT 1,
-                        `profile_image_address`	varchar(2000)	NOT NULL
+                        `profile_image_address`	varchar(2000)	NOT NULL,
+                        `nickname` varchar(100) NOT NULL
 );
 
 
@@ -131,15 +132,10 @@ ALTER TABLE `board_category` ADD CONSTRAINT `FK_board_type_TO_board_category_1` 
                              `id`
         );
 
-ALTER TABLE project.user
-    ADD COLUMN `nick_name` VARCHAR(100) NOT NULL;
+ALTER TABLE help MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY;
 
-
--- Step 1: Drop foreign key constraint in reply table
 ALTER TABLE reply DROP FOREIGN KEY FK_board_TO_reply_1;
 
--- Step 2: Modify board table to add AUTO_INCREMENT to id
 ALTER TABLE board MODIFY id BIGINT NOT NULL AUTO_INCREMENT;
 
--- Step 3: Re-add the foreign key constraint
 ALTER TABLE reply ADD CONSTRAINT FK_board_TO_reply_1 FOREIGN KEY (board_id) REFERENCES board(id);
