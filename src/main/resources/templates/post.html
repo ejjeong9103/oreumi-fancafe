@@ -26,9 +26,10 @@
                 </div>
                 <div class="row info-writer-detail2">
                     <div class="col-md-auto text-secondary">
-                        <p th:if="${article.updatedAt != null}"
+                        <!-- 수정 시간 나타내는 조건 수정함(작성 시간과 수정 시간이 같을 경우 작성 시간으로 받아오고, 다를 경우 수정 시간으로 받아오게) -->
+                        <p th:if="${article.updatedAt != article.createdAt}"
                            th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')+' 수정됨'}"></p>
-                        <p th:if="${article.updatedAt == null}"
+                        <p th:if="${article.updatedAt == article.createdAt}"
                            th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
                     </div>
                     <div class="col-md-auto delete-update">
