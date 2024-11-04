@@ -3,6 +3,7 @@ package com.estsoft.oreumifancafe.service.user;
 import com.estsoft.oreumifancafe.constans.user.Regx;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
+import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,9 +33,11 @@ public class UserService {
         duplicateEmail(addUserRequest.getEmail());
         // 비밀번호 정규식 체크
         validatePasswordRegex(addUserRequest.getUserPw());
-        System.out.println(passwordEncoder.encode(addUserRequest.getUserPw()));
 
-        return null;
+        // dto to entity
+        User user = addUserRequest.toEntity(passwordEncoder.encode(addUserRequest.getUserPw()));
+
+        return userRepository.save(user).toUserResponse();
     }
 
     // 아이디 중복 체크

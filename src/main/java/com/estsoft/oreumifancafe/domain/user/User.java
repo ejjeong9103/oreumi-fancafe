@@ -1,8 +1,10 @@
 package com.estsoft.oreumifancafe.domain.user;
 
+import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,4 +53,9 @@ public class User {
 
     @Column(nullable = false)
     private String nickname;
+
+    @Transient
+    public UserResponse toUserResponse() {
+        return new UserResponse(this.userId, this.nickname);
+    }
 }

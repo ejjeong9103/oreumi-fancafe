@@ -17,10 +17,10 @@ public class AddUserRequest {
     private String addressDetail;
     private String email;
 
-    public User toEntity() {
+    public User toEntity(String encodedPassword) {
         return User.builder()
                 .userId(this.userId)
-                .userPw(this.userPw)
+                .userPw(encodedPassword)
                 .nickname(this.nickName)
                 .address("(" + this.post + ")" + " " + this.address)
                 .addressDetail(this.addressDetail)
