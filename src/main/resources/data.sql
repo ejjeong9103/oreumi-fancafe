@@ -9,7 +9,8 @@ CREATE TABLE `user` (
                         `created_at`	timestamp	NOT NULL,
                         `role`	int	NOT NULL	DEFAULT 1,
                         `state`	int	NOT NULL	DEFAULT 1,
-                        `profile_image_address`	varchar(2000)	NOT NULL
+                        `profile_image_address`	varchar(2000)	NOT NULL,
+                        `nickname` varchar(100) NOT NULL
 );
 
 DROP TABLE IF EXISTS `board`;
@@ -128,7 +129,3 @@ ALTER TABLE `board_category` ADD CONSTRAINT `FK_board_type_TO_board_category_1` 
     REFERENCES `board_type` (
                              `id`
         );
-
-ALTER TABLE user ADD COLUMN `nickName` VARCHAR(100) NOT NULL;
-
-ALTER TABLE help ADD COLUMN `help_type` INT NOT NULL;

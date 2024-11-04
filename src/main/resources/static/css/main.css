@@ -1,8 +1,8 @@
 .--main {
     width: 1320px;
+    max-width: 1320px;
     display: flex;
-    justify-content: center;
-    gap: 60px;
+    justify-content: space-between;
     margin: 0 auto;
     margin-top: 40px;
 }
