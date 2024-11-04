@@ -5,6 +5,7 @@ import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
@@ -14,6 +15,8 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     // 회원가입
     public UserResponse saveUser(AddUserRequest addUserRequest) {
@@ -29,6 +32,7 @@ public class UserService {
         duplicateEmail(addUserRequest.getEmail());
         // 비밀번호 정규식 체크
         validatePasswordRegex(addUserRequest.getUserPw());
+        System.out.println(passwordEncoder.encode(addUserRequest.getUserPw()));
 
         return null;
     }
