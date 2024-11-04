@@ -129,4 +129,3 @@ ALTER TABLE `board_category` ADD CONSTRAINT `FK_board_type_TO_board_category_1` 
     REFERENCES `board_type` (
                              `id`
         );
-
