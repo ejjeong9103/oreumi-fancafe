@@ -6,7 +6,7 @@ import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
@@ -17,7 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 회원가입
     public UserResponse saveUser(AddUserRequest addUserRequest) {
@@ -35,7 +35,7 @@ public class UserService {
         validatePasswordRegex(addUserRequest.getUserPw());
 
         // dto to entity
-        User user = addUserRequest.toEntity(passwordEncoder.encode(addUserRequest.getUserPw()));
+        User user = addUserRequest.toEntity(bCryptPasswordEncoder.encode(addUserRequest.getUserPw()));
 
         return userRepository.save(user).toUserResponse();
     }
@@ -78,5 +78,9 @@ public class UserService {
         if (!Pattern.matches(Regx.PASSWORD_PATTERN.getRegex(), password)) {
             throw new IllegalArgumentException("비밀번호는 영소대문자, 숫자, 특수문자가 모두 포함되어야합니다.");
         }
+    }
+
+    public User findUserById(String userId) {
+        return userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
     }
 }

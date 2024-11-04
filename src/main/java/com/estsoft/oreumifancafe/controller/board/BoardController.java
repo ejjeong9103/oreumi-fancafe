@@ -5,7 +5,6 @@ import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.service.board.BoardService;
 import com.estsoft.oreumifancafe.service.user.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

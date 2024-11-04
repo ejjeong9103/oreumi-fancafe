@@ -1,7 +1,7 @@
 package com.estsoft.oreumifancafe.service.auth;
 
 import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
-import com.estsoft.oreumifancafe.repository.auth.UserRepository;
+import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;

@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
 @Configuration
-public class CafeSecurityConfig {
+public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
 
     // 스프링 시큐리티 기능 비활성화

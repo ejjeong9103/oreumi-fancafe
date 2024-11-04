@@ -4,8 +4,6 @@ import com.estsoft.oreumifancafe.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.lang.reflect.Field;
-
 @Getter
 @AllArgsConstructor
 public class AddUserRequest {

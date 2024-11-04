@@ -4,7 +4,7 @@ import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
-import com.estsoft.oreumifancafe.repository.users.UserRepository;
+import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
