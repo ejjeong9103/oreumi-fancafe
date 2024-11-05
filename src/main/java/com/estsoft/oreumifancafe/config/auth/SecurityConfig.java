@@ -31,12 +31,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").hasRole("GUEST")      // 준회원이 접근할 수 있는 페이지 설정
-                        .requestMatchers("/").hasRole("USER")       // 정회원
-                        .requestMatchers("/").hasRole("ELITE")      // 우수회원
-                        .requestMatchers("/").hasRole("CELEBRITY")  // 연예인
-                        .requestMatchers("/").hasRole("ADMIN")      // 관리자
-                        .requestMatchers("/").hasAnyRole("CELEBRITY", "ADMIN") // 연예인과 관리자가 접근할 수 있는 페이지 설정
+                        //.requestMatchers("/board/1/**").hasRole("GUEST")      // 준회원이 접근할 수 있는 페이지 설정
+                        //.requestMatchers("/board/2/**").hasRole("USER")       // 정회원
+                        //.requestMatchers("/board/3/**").hasRole("ELITE")      // 우수회원
+                        //.requestMatchers("/board/4/**").hasRole("CELEBRITY")  // 연예인
+                        //.requestMatchers("/").hasRole("ADMIN")      // 관리자
+                        //.requestMatchers("/").hasAnyRole("CELEBRITY", "ADMIN") // 연예인과 관리자가 접근할 수 있는 페이지 설정
                         .anyRequest().permitAll()
                 )
                 .formLogin(auth -> auth
