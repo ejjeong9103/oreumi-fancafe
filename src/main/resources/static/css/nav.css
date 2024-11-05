@@ -1,14 +1,79 @@
 .--nav {
     width: 320px;
+    height: 420px;
     /*height: auto;*/
-    background-color: black;
+    background-color: #D9D9D9;
 }
+
 .profile {
     height: 420px;
     background-color: #D9D9D9;
 }
+
 .board {
     margin-top: 32px;
     /*height: auto;*/
     background-color: #D9D9D9;
+}
+
+.before-login-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form {
+    margin: 0 auto;
+    margin-top: 42px;
+    width: 260px;
+    height: 190px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.login-input {
+    height: 40px;
+    border-radius: 5px;
+}
+
+.login-button {
+    height: 60px;
+    background-color: black;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
+}
+
+.signup-container {
+    width: 260px;
+    height: 58px;
+    margin: 0 auto;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sns-login-container {
+    width: 260px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kakao-login-button {
+    background-color: yellow;
+}
+
+.naver-login-button {
+    background-color: limegreen;
+}
+
+.sns-button {
+    width: 115px;
+    height: 50px;
+    border-radius: 5px;
+    color: black;
 }

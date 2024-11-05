@@ -3,8 +3,22 @@
 <th:block th:fragment="nav">
 	<link rel="stylesheet" th:href="@{../css/nav.css}">
 		<nav class="--nav">
-			<div class="profile">
-				프로필
+			<div class="before-login-container">
+				<div class="login-container">
+					<form class="login-form" id="login-form">
+						<input class="login-input" name="userId" id="id" type="text" placeholder="아이디"/>
+						<input class="login-input" name="userPw" id="pw" type="password" placeholder="비밀번호"/>
+						<button onclick="login(event)" class="login-button" id="login">로그인</button>
+					</form>
+				</div>
+				<div class="signup-container">
+					<a href="/user/signup">회원가입</a>
+					<a href="#">아아디 찾기 / 비밀번호 찾기</a>
+				</div>
+			</div>
+			<div class="sns-login-container">
+				<button class="kakao-login-button sns-button">카카오</button>
+				<button class="naver-login-button sns-button">네이버</button>
 			</div>
 			<div class="board">
 				게시판 목록
