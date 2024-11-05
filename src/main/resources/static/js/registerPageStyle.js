@@ -280,13 +280,6 @@ inputEmailField.addEventListener("blur", function() {
 
 // check가 전부 true가 되어야 통과
 function preSubmitCheck(event) {
-    console.log("들어옴");
-    console.log(idCheck);
-    console.log(nicknameCheck);
-    console.log(pwCheck);
-    console.log(addressCheck);
-    console.log(emailCheck);
-
     // 각 체크 변수가 모두 true인지 확인
     if (!idCheck) {
         alert("아이디를 확인해주세요.");
