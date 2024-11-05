@@ -42,27 +42,32 @@ let isEmpty = (txt) => {
     return txt == null || txt === "";
 }
 
+let idCheck = false;
+let pwCheck = false;
+let addressCheck = false;
+let emailCheck = false;
+
 // 아이디 중복 체크
 // 아이디 입력 input
 const inputIdField = document.getElementById("id");
 // 아이디 입력란 밑에 표시해줄 메세지 span
-const messageSpan = document.getElementById("idCheckMessage");
+const messageIdSpan = document.getElementById("idCheckMessage");
 
 // 아이디에서 포커스가 빠지면 아이디 중복 체크 검사
 // 포커스가 빠질때마다 서버통신하면 낭비
 // 포커스가 빠지고나서 사용가능, 불가능 아이디를 저장해두고
 // 다시 포커스가 빠질때 검사하려는 아이디가 기존의 아이디와 다르다면 서버 통신
-let idValue = id.value;
+let idValue = inputIdField.value;
 inputIdField.addEventListener("blur", function() {
     // 포커스가 빠지고 기존에 가져왔던 아이디와
     // 현재 포커스가 빠진 시점의 아이디가 다르다면 서버 통신
-    let focusOutId = id.value;
+    let focusOutId = inputIdField.value;
 
     // 아이디를 입력안하고 포커스를 빠졌을 떄
     if (isEmpty(focusOutId)) {
-        messageSpan.style.display = "block";
-        messageSpan.style.color = "red";
-        messageSpan.textContent = "아이디를 입력해주세요.";
+        messageIdSpan.style.display = "block";
+        messageIdSpan.style.color = "red";
+        messageIdSpan.textContent = "아이디를 입력해주세요.";
         return
     }
 
@@ -79,22 +84,75 @@ inputIdField.addEventListener("blur", function() {
             .then(data => {
                 // 중복된 아이디라면 아이디 입력칸 밑에 빨간색으로 표기
                 if (data) {
-                    messageSpan.style.display = "block";
-                    messageSpan.style.color = "red";
-                    messageSpan.textContent = "이미 사용 중인 아이디입니다.";
+                    messageIdSpan.style.display = "block";
+                    messageIdSpan.style.color = "red";
+                    messageIdSpan.textContent = "이미 사용 중인 아이디입니다.";
                     // 사용 가능 아이디라면 아이디 입력칸 밑에 파란색으로 표기
                 } else {
-                    messageSpan.style.display = "block";
-                    messageSpan.style.color = "blue";
-                    messageSpan.textContent = "사용 가능한 아이디입니다.";
+                    messageIdSpan.style.display = "block";
+                    messageIdSpan.style.color = "blue";
+                    messageIdSpan.textContent = "사용 가능한 아이디입니다.";
                 }
                 idValue = focusOutId;
             })
             .catch(error => {
-                console.error("에러 발생:", error);
+                messageIdSpan.style.display = "block";
+                messageIdSpan.style.color = "red";
+                messageIdSpan.textContent = "에러 발생!! 문의 부탁드립니다.";
             });
     }
 });
 
 //=======================================================================
-// 비밀번호 검사 로직
+// 닉네임 중복 체크 로직
+
+// 닉네임 입력 input
+const inputNicknameField = document.getElementById("nickname");
+// 아이디 입력란 밑에 표시해줄 메세지 span
+const messageNicknameSpan = document.getElementById("nicknameCheckMessage");
+let nicknameValue = inputNicknameField.value;
+
+inputNicknameField.addEventListener("blur", function() {
+    // 포커스가 빠지고 기존에 가져왔던 아이디와
+    // 현재 포커스가 빠진 시점의 아이디가 다르다면 서버 통신
+    let focusOutNickname = inputNicknameField.value;
+
+    // 아이디를 입력안하고 포커스를 빠졌을 떄
+    if (isEmpty(focusOutNickname)) {
+        messageNicknameSpan.style.display = "block";
+        messageNicknameSpan.style.color = "red";
+        messageNicknameSpan.textContent = "닉네임를 입력해주세요.";
+        return
+    }
+
+    // 포커스가 빠질때 전에 입력해둔 아이디와 다를때만 서버통신
+    if (nicknameValue !== focusOutNickname) {
+        // 서버로 GET 요청을 보냄
+        fetch(`/user/check/nickname/${focusOutNickname}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 중복된 아이디라면 아이디 입력칸 밑에 빨간색으로 표기
+                if (data) {
+                    messageNicknameSpan.style.display = "block";
+                    messageNicknameSpan.style.color = "red";
+                    messageNicknameSpan.textContent = "이미 사용 중인 닉네임입니다.";
+                    // 사용 가능 아이디라면 아이디 입력칸 밑에 파란색으로 표기
+                } else {
+                    messageNicknameSpan.style.display = "block";
+                    messageNicknameSpan.style.color = "blue";
+                    messageNicknameSpan.textContent = "사용 가능한 닉네임입니다.";
+                }
+                nicknameValue = focusOutNickname;
+            })
+            .catch(error => {
+                messageNicknameSpan.style.display = "block";
+                messageNicknameSpan.style.color = "red";
+                messageNicknameSpan.textContent = "에러 발생!! 문의 부탁드립니다.";
+            });
+    }
+});

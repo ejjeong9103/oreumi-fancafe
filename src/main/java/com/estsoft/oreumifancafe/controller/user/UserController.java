@@ -33,4 +33,11 @@ public class UserController {
     public ResponseEntity<Boolean> checkUserId(@PathVariable String userId) {
         return ResponseEntity.ok(userService.isDuplicateUserId(userId));
     }
+
+    // nickname 중복 체크
+    @GetMapping("/check/nickname/{nickname}")
+    @ResponseBody // JSON 응답만 필요한 메서드에 @ResponseBody 추가
+    public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname) {
+        return ResponseEntity.ok(userService.isDuplicateNickName(nickname));
+    }
 }
