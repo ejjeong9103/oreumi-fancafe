@@ -36,8 +36,7 @@ function execDaumPostcode(event) {
             let addrElement = document.getElementById("address");
             zoneCodeElement.value = data.zonecode;
             addrElement.value = addr;
-            zoneCodeElement.style
-            document.get
+            addressCheck = true;
             document.getElementById("addressDetail").focus();
         }
     }).open();
@@ -69,6 +68,7 @@ inputIdField.addEventListener("blur", function() {
         messageIdSpan.style.display = "block";
         messageIdSpan.style.color = "red";
         messageIdSpan.textContent = "아이디를 입력해주세요.";
+        idCheck = false;
         return
     }
 
@@ -88,11 +88,13 @@ inputIdField.addEventListener("blur", function() {
                     messageIdSpan.style.display = "block";
                     messageIdSpan.style.color = "red";
                     messageIdSpan.textContent = "이미 사용 중인 아이디입니다.";
+                    idCheck = false;
                     // 사용 가능 아이디라면 아이디 입력칸 밑에 파란색으로 표기
                 } else {
                     messageIdSpan.style.display = "block";
                     messageIdSpan.style.color = "blue";
                     messageIdSpan.textContent = "사용 가능한 아이디입니다.";
+                    idCheck = true;
                 }
                 idValue = focusOutId;
             })
@@ -100,6 +102,7 @@ inputIdField.addEventListener("blur", function() {
                 messageIdSpan.style.display = "block";
                 messageIdSpan.style.color = "red";
                 messageIdSpan.textContent = "에러 발생!! 문의 부탁드립니다.";
+                idCheck = false;
             });
     }
 });
@@ -120,6 +123,7 @@ inputNicknameField.addEventListener("blur", function() {
         messageNicknameSpan.style.display = "block";
         messageNicknameSpan.style.color = "red";
         messageNicknameSpan.textContent = "닉네임를 입력해주세요.";
+        nicknameCheck = false;
         return
     }
 
@@ -138,11 +142,13 @@ inputNicknameField.addEventListener("blur", function() {
                     messageNicknameSpan.style.display = "block";
                     messageNicknameSpan.style.color = "red";
                     messageNicknameSpan.textContent = "이미 사용 중인 닉네임입니다.";
+                    nicknameCheck = false;
                     // 사용 가능 아이디라면 아이디 입력칸 밑에 파란색으로 표기
                 } else {
                     messageNicknameSpan.style.display = "block";
                     messageNicknameSpan.style.color = "blue";
                     messageNicknameSpan.textContent = "사용 가능한 닉네임입니다.";
+                    nicknameCheck = true;
                 }
                 nicknameValue = focusOutNickname;
             })
@@ -150,6 +156,7 @@ inputNicknameField.addEventListener("blur", function() {
                 messageNicknameSpan.style.display = "block";
                 messageNicknameSpan.style.color = "red";
                 messageNicknameSpan.textContent = "에러 발생!! 문의 부탁드립니다.";
+                nicknameCheck = false;
             });
     }
 });
@@ -168,31 +175,34 @@ const messagePwCheckSpan = document.getElementById("pwCheckMessage");
 const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/;
 
 function validatePw() {
-    let pw = inputPwField.value;
-    let pwCheck = inputPwCheckField.value
+    let pwValue = inputPwField.value;
+    let pwCheckValue = inputPwCheckField.value
 
 
-    if (isEmpty(pw)) {
+    if (isEmpty(pwValue)) {
         messagePwSpan.style.display = "block";
         messagePwSpan.style.color = "red";
         messagePwSpan.textContent = "비밀번호를 입력해주세요.";
+        pwCheck = false;
         return;
     }
 
-    if (!regex.test(pw)) {
+    if (!regex.test(pwValue)) {
         messagePwSpan.style.display = "block";
         messagePwSpan.style.color = "red";
         messagePwSpan.textContent = "비밀번호는 영문, 숫자, 특수문자가 최소 1개씩 들어가야합니다. (8~16)";
+        pwCheck = false;
     } else {
         messagePwSpan.style.display = "";
         messagePwSpan.style.color = "";
         messagePwSpan.textContent = "";
     }
 
-    if (pw !== pwCheck) {
+    if (pwValue !== pwCheckValue) {
         messagePwCheckSpan.style.display = "block";
         messagePwCheckSpan.style.color = "red";
         messagePwCheckSpan.textContent = "비밀번호가 다릅니다.";
+        pwCheck = false;
     } else {
         messagePwSpan.style.display = "none";
         messagePwSpan.style.color = "";
@@ -200,6 +210,7 @@ function validatePw() {
         messagePwCheckSpan.style.display = "";
         messagePwCheckSpan.style.color = "";
         messagePwCheckSpan.textContent = "";
+        pwCheck = true;
     }
 }
 inputPwField.addEventListener("blur", validatePw);
@@ -222,6 +233,7 @@ inputEmailField.addEventListener("blur", function() {
         messageEmailSpan.style.display = "block";
         messageEmailSpan.style.color = "red";
         messageEmailSpan.textContent = "이메일을 입력해주세요.";
+        emailCheck = false;
         return;
     }
 
@@ -229,10 +241,10 @@ inputEmailField.addEventListener("blur", function() {
         messageEmailSpan.style.display = "block";
         messageEmailSpan.style.color = "red";
         messageEmailSpan.textContent = "이메일의 형식이 아닙니다.";
+        emailCheck = false;
         return;
     }
 
-    // 포커스가 빠질때 전에 입력해둔 아이디와 다를때만 서버통신
     if (emailValue !== focusOutEmail) {
         // 서버로 GET 요청을 보냄
         fetch(`/user/check/email/${focusOutEmail}`, {
@@ -243,16 +255,16 @@ inputEmailField.addEventListener("blur", function() {
         })
             .then(response => response.json())
             .then(data => {
-                // 중복된 아이디라면 아이디 입력칸 밑에 빨간색으로 표기
                 if (data) {
                     messageEmailSpan.style.display = "block";
                     messageEmailSpan.style.color = "red";
                     messageEmailSpan.textContent = "이미 사용 중인 이메일입니다.";
-                    // 사용 가능 아이디라면 아이디 입력칸 밑에 파란색으로 표기
+                    emailCheck = false;
                 } else {
                     messageEmailSpan.style.display = "block";
                     messageEmailSpan.style.color = "blue";
                     messageEmailSpan.textContent = "사용 가능한 이메일입니다.";
+                    emailCheck = true;
                 }
                 emailValue = focusOutEmail;
             })
@@ -261,6 +273,45 @@ inputEmailField.addEventListener("blur", function() {
                 messageEmailSpan.style.display = "block";
                 messageEmailSpan.style.color = "red";
                 messageEmailSpan.textContent = "에러 발생!! 문의 부탁드립니다.";
+                emailCheck = false;
             });
     }
 });
+
+// check가 전부 true가 되어야 통과
+function preSubmitCheck(event) {
+    console.log("들어옴");
+    console.log(idCheck);
+    console.log(nicknameCheck);
+    console.log(pwCheck);
+    console.log(addressCheck);
+    console.log(emailCheck);
+
+    // 각 체크 변수가 모두 true인지 확인
+    if (!idCheck) {
+        alert("아이디를 확인해주세요.");
+        event.preventDefault();
+        return;
+    }
+    if (!nicknameCheck) {
+        alert("닉네임을 확인해주세요.");
+        event.preventDefault();
+        return;
+    }
+    if (!pwCheck) {
+        alert("비밀번호를 확인해주세요.");
+        event.preventDefault();
+        return;
+    }
+    if (!addressCheck) {
+        alert("주소 찾기를 진행해주세요.");
+        event.preventDefault();
+        return;
+    }
+    if (!emailCheck) {
+        alert("이메일을 확인해주세요.");
+        event.preventDefault();
+        return;
+    }
+}
+
