@@ -22,9 +22,10 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public String signup(@ModelAttribute AddUserRequest addUserRequest) {
+    @ResponseBody
+    public ResponseEntity<String> signup(@ModelAttribute AddUserRequest addUserRequest) {
         userService.saveUser(addUserRequest);
-        return "index";
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     // userId 중복 체크

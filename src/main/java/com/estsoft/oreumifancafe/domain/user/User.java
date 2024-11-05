@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +25,8 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "user")
 @Entity
+@DynamicInsert
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
     @Id
     @Column(name = "user_id", nullable = false, updatable = false)
@@ -45,13 +49,13 @@ public class User implements UserDetails {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @Column(nullable = false, columnDefinition = "int default 1")
+    @Column(name = "role")
     private int role;
 
-    @Column(nullable = false, columnDefinition = "int default 1")
+    @Column(name = "state")
     private int state;
 
-    @Column(name = "profile_image_address", nullable = false)
+    @Column(name = "profileImageAddress")
     private String profileImageAddress;
 
     @Column(nullable = false)
