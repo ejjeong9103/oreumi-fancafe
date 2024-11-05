@@ -32,12 +32,12 @@ function execDaumPostcode(event) {
             }
 
             // 데이터 셋팅
-            let zoneCodeElement = document.getElementById("post");
-            let addrElement = document.getElementById("address");
+            let zoneCodeElement = document.getElementById("user-post");
+            let addrElement = document.getElementById("user-address");
             zoneCodeElement.value = data.zonecode;
             addrElement.value = addr;
             addressCheck = true;
-            document.getElementById("addressDetail").focus();
+            document.getElementById("user-addressDetail").focus();
         }
     }).open();
 }
@@ -49,7 +49,7 @@ let isEmpty = (txt) => {
 
 // 아이디 중복 체크
 // 아이디 입력 input
-const inputIdField = document.getElementById("id");
+const inputIdField = document.getElementById("user-id");
 // 아이디 입력란 밑에 표시해줄 메세지 span
 const messageIdSpan = document.getElementById("idCheckMessage");
 
@@ -111,7 +111,7 @@ inputIdField.addEventListener("blur", function() {
 // 닉네임 중복 체크 로직
 
 // 닉네임 입력 input
-const inputNicknameField = document.getElementById("nickname");
+const inputNicknameField = document.getElementById("user-nickname");
 // 닉네임 입력란 밑에 표시해줄 메세지 span
 const messageNicknameSpan = document.getElementById("nicknameCheckMessage");
 let nicknameValue = inputNicknameField.value;
@@ -166,8 +166,8 @@ inputNicknameField.addEventListener("blur", function() {
 // 비밀번호
 
 // 비밀번호 입력 input
-const inputPwField = document.getElementById("pw");
-const inputPwCheckField = document.getElementById("pwCheck");
+const inputPwField = document.getElementById("user-pw");
+const inputPwCheckField = document.getElementById("user-pwCheck");
 // 아이디 입력란 밑에 표시해줄 메세지 span
 const messagePwSpan = document.getElementById("pwMessage");
 const messagePwCheckSpan = document.getElementById("pwCheckMessage");
@@ -221,7 +221,7 @@ inputPwCheckField.addEventListener("blur", validatePw);
 // 이메일 정규식
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
 // 이메일 입력 input
-const inputEmailField = document.getElementById("email");
+const inputEmailField = document.getElementById("user-email");
 // 이메일 입력란 밑에 표시해줄 메세지 span
 const messageEmailSpan = document.getElementById("emailCheckMessage");
 
