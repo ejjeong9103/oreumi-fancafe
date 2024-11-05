@@ -306,5 +306,28 @@ function preSubmitCheck(event) {
         event.preventDefault();
         return;
     }
+
+    const formData = new FormData(document.getElementById("signupForm"));
+
+    // 비동기 요청
+    fetch("/user/signup", {
+        method: "POST",
+        body: formData
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorMessage => {
+                    throw new Error(errorMessage);  // 에러 메시지를 던져 catch로 전달
+                });
+            }
+            return response.text(); // 성공 시 응답 텍스트 반환
+        })
+        .then(message => {
+            alert(message);
+            window.location.href = "/";  // 성공 시 메인 페이지로 이동
+        })
+        .catch(error => {
+            alert(error);
+        });
 }
 
