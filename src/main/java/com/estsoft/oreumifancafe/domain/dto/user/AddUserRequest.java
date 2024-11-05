@@ -15,6 +15,7 @@ public class AddUserRequest {
     private String addressDetail;
     private String email;
 
+    // 기본 회원 toEntity
     public User toEntity(String encodedPassword) {
         return User.builder()
                 .userId(this.userId)
@@ -23,6 +24,8 @@ public class AddUserRequest {
                 .address("(" + this.post + ")" + " " + this.address)
                 .addressDetail(this.addressDetail == null ? "" : this.addressDetail)
                 .email(this.email)
+                .role(1)
+                .state(1)
                 .build();
     }
 
