@@ -1,5 +1,6 @@
 package com.estsoft.oreumifancafe.domain.user;
 
+import com.estsoft.oreumifancafe.domain.dto.admin.UserInfoResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -115,5 +116,19 @@ public class User implements UserDetails {
     @Transient
     public UserResponse toUserResponse() {
         return new UserResponse(this.userId, this.nickname);
+    }
+
+    @Transient
+    public UserInfoResponse toUserInfoResponse() {
+        return UserInfoResponse.builder()
+                .userId(this.userId)
+                .userPw(this.userPw)
+                .nickname(this.nickname)
+                .address(this.address)
+                .createdAt(this.createdAt)
+                .role(this.role)
+                .state(this.state)
+                .profileImageAddress(this.profileImageAddress)
+                .build();
     }
 }
