@@ -40,4 +40,11 @@ public class UserController {
     public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname) {
         return ResponseEntity.ok(userService.isDuplicateNickName(nickname));
     }
+
+    // email 중복 체크
+    @GetMapping("/check/email/{email}")
+    @ResponseBody // JSON 응답만 필요한 메서드에 @ResponseBody 추가
+    public ResponseEntity<Boolean> checkEmail(@PathVariable String email) {
+        return ResponseEntity.ok(userService.isDuplicateEmail(email));
+    }
 }

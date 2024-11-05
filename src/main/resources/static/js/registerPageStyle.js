@@ -1,3 +1,9 @@
+let idCheck = false;
+let nicknameCheck = false;
+let pwCheck = false;
+let addressCheck = false;
+let emailCheck = false;
+
 function execDaumPostcode(event) {
     event.preventDefault(); // 기본 폼 제출 방지
     new daum.Postcode({
@@ -41,11 +47,6 @@ function execDaumPostcode(event) {
 let isEmpty = (txt) => {
     return txt == null || txt === "";
 }
-
-let idCheck = false;
-let pwCheck = false;
-let addressCheck = false;
-let emailCheck = false;
 
 // 아이디 중복 체크
 // 아이디 입력 input
@@ -108,16 +109,13 @@ inputIdField.addEventListener("blur", function() {
 
 // 닉네임 입력 input
 const inputNicknameField = document.getElementById("nickname");
-// 아이디 입력란 밑에 표시해줄 메세지 span
+// 닉네임 입력란 밑에 표시해줄 메세지 span
 const messageNicknameSpan = document.getElementById("nicknameCheckMessage");
 let nicknameValue = inputNicknameField.value;
 
 inputNicknameField.addEventListener("blur", function() {
-    // 포커스가 빠지고 기존에 가져왔던 아이디와
-    // 현재 포커스가 빠진 시점의 아이디가 다르다면 서버 통신
     let focusOutNickname = inputNicknameField.value;
 
-    // 아이디를 입력안하고 포커스를 빠졌을 떄
     if (isEmpty(focusOutNickname)) {
         messageNicknameSpan.style.display = "block";
         messageNicknameSpan.style.color = "red";
@@ -125,7 +123,6 @@ inputNicknameField.addEventListener("blur", function() {
         return
     }
 
-    // 포커스가 빠질때 전에 입력해둔 아이디와 다를때만 서버통신
     if (nicknameValue !== focusOutNickname) {
         // 서버로 GET 요청을 보냄
         fetch(`/user/check/nickname/${focusOutNickname}`, {
@@ -174,8 +171,6 @@ function validatePw() {
     let pw = inputPwField.value;
     let pwCheck = inputPwCheckField.value
 
-    console.log(pw);
-    console.log(pwCheck);
 
     if (isEmpty(pw)) {
         messagePwSpan.style.display = "block";
@@ -183,8 +178,7 @@ function validatePw() {
         messagePwSpan.textContent = "비밀번호를 입력해주세요.";
         return;
     }
-    console.log(regex.test(pw))
-    console.log(regex.test("skfnxh!234"));
+
     if (!regex.test(pw)) {
         messagePwSpan.style.display = "block";
         messagePwSpan.style.color = "red";
@@ -210,3 +204,63 @@ function validatePw() {
 }
 inputPwField.addEventListener("blur", validatePw);
 inputPwCheckField.addEventListener("blur", validatePw);
+
+
+// 이메일 중복 체크
+// 이메일 정규식
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+// 이메일 입력 input
+const inputEmailField = document.getElementById("email");
+// 이메일 입력란 밑에 표시해줄 메세지 span
+const messageEmailSpan = document.getElementById("emailCheckMessage");
+
+let emailValue = inputEmailField.value;
+inputEmailField.addEventListener("blur", function() {
+    let focusOutEmail = inputEmailField.value;
+
+    if (isEmpty(focusOutEmail)) {
+        messageEmailSpan.style.display = "block";
+        messageEmailSpan.style.color = "red";
+        messageEmailSpan.textContent = "이메일을 입력해주세요.";
+        return;
+    }
+
+    if (!emailRegex.test(focusOutEmail)) {
+        messageEmailSpan.style.display = "block";
+        messageEmailSpan.style.color = "red";
+        messageEmailSpan.textContent = "이메일의 형식이 아닙니다.";
+        return;
+    }
+
+    // 포커스가 빠질때 전에 입력해둔 아이디와 다를때만 서버통신
+    if (emailValue !== focusOutEmail) {
+        // 서버로 GET 요청을 보냄
+        fetch(`/user/check/email/${focusOutEmail}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 중복된 아이디라면 아이디 입력칸 밑에 빨간색으로 표기
+                if (data) {
+                    messageEmailSpan.style.display = "block";
+                    messageEmailSpan.style.color = "red";
+                    messageEmailSpan.textContent = "이미 사용 중인 이메일입니다.";
+                    // 사용 가능 아이디라면 아이디 입력칸 밑에 파란색으로 표기
+                } else {
+                    messageEmailSpan.style.display = "block";
+                    messageEmailSpan.style.color = "blue";
+                    messageEmailSpan.textContent = "사용 가능한 이메일입니다.";
+                }
+                emailValue = focusOutEmail;
+            })
+            .catch(error => {
+                console.log(error);
+                messageEmailSpan.style.display = "block";
+                messageEmailSpan.style.color = "red";
+                messageEmailSpan.textContent = "에러 발생!! 문의 부탁드립니다.";
+            });
+    }
+});
