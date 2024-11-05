@@ -156,3 +156,57 @@ inputNicknameField.addEventListener("blur", function() {
             });
     }
 });
+
+
+//=================================
+// 비밀번호
+
+// 비밀번호 입력 input
+const inputPwField = document.getElementById("pw");
+const inputPwCheckField = document.getElementById("pwCheck");
+// 아이디 입력란 밑에 표시해줄 메세지 span
+const messagePwSpan = document.getElementById("pwMessage");
+const messagePwCheckSpan = document.getElementById("pwCheckMessage");
+
+const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/;
+
+function validatePw() {
+    let pw = inputPwField.value;
+    let pwCheck = inputPwCheckField.value
+
+    console.log(pw);
+    console.log(pwCheck);
+
+    if (isEmpty(pw)) {
+        messagePwSpan.style.display = "block";
+        messagePwSpan.style.color = "red";
+        messagePwSpan.textContent = "비밀번호를 입력해주세요.";
+        return;
+    }
+    console.log(regex.test(pw))
+    console.log(regex.test("skfnxh!234"));
+    if (!regex.test(pw)) {
+        messagePwSpan.style.display = "block";
+        messagePwSpan.style.color = "red";
+        messagePwSpan.textContent = "비밀번호는 영문, 숫자, 특수문자가 최소 1개씩 들어가야합니다. (8~16)";
+    } else {
+        messagePwSpan.style.display = "";
+        messagePwSpan.style.color = "";
+        messagePwSpan.textContent = "";
+    }
+
+    if (pw !== pwCheck) {
+        messagePwCheckSpan.style.display = "block";
+        messagePwCheckSpan.style.color = "red";
+        messagePwCheckSpan.textContent = "비밀번호가 다릅니다.";
+    } else {
+        messagePwSpan.style.display = "none";
+        messagePwSpan.style.color = "";
+        messagePwSpan.textContent = "";
+        messagePwCheckSpan.style.display = "";
+        messagePwCheckSpan.style.color = "";
+        messagePwCheckSpan.textContent = "";
+    }
+}
+inputPwField.addEventListener("blur", validatePw);
+inputPwCheckField.addEventListener("blur", validatePw);
