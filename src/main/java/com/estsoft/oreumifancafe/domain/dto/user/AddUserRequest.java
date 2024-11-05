@@ -21,7 +21,7 @@ public class AddUserRequest {
                 .userPw(encodedPassword)
                 .nickname(this.nickName)
                 .address("(" + this.post + ")" + " " + this.address)
-                .addressDetail(this.addressDetail)
+                .addressDetail(this.addressDetail == null ? "" : this.addressDetail)
                 .email(this.email)
                 .build();
     }
