@@ -1,16 +1,17 @@
 DROP TABLE IF EXISTS `help`;
 
-CREATE TABLE `help` (
-                        `id`	bigint	NOT NULL AUTO_INCREMENT,
-                        `title`	text	NOT NULL,
-                        `content`	text	NOT NULL,
-                        `created_at`	timestamp	NOT NULL	DEFAULT now(),
-                        `user_id`	varchar(100)	NOT NULL,
-                        `admin_id`	varchar(100)	NULL,
-                        `answer`	text	NULL,
-                        `state`	int	NOT NULL,
-                        `answered_at`	timestamp	NULL,
-                        PRIMARY KEY (`id`)
+CREATE TABLE help (
+                      id    bigint    NOT NULL AUTO_INCREMENT,
+                      title    text    NOT NULL,
+                      content    text    NOT NULL,
+                      created_at    timestamp    NOT NULL    DEFAULT now(),
+                      user_id    varchar(100)    NOT NULL,
+                      admin_id    varchar(100)    NULL,
+                      answer    text    NULL,
+                      state    int    NOT NULL,
+                      answered_at    timestamp    NULL,
+                      help_type INT NOT NULL ,
+                      PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS `reply`;
