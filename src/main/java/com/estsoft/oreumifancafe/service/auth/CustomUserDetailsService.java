@@ -1,5 +1,6 @@
 package com.estsoft.oreumifancafe.service.auth;
 
+import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +13,13 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    // ID로 사용자 검색
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        return userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException(userId + "가 존재하지 않습니다."));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUserId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("아이디 또는 비밀번호를 확인해주세요."));
+
+        // 권한
+
+        return user;
     }
 }
