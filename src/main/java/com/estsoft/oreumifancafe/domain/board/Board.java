@@ -1,6 +1,7 @@
 package com.estsoft.oreumifancafe.domain.board;
 
 
+import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -60,6 +61,22 @@ public class Board {
         this.state = state;
     }
 
+    // 게시판 상태 변경
+    public void updateState(int state) {
+        this.state = state;
+    }
+
+    public BoardResponse toBoardResponse() {
+        return BoardResponse.builder()
+                .id(this.id)
+                .title(this.title)
+                .user(this.user)
+                .boardType(this.boardType)
+                .boardCategoryName(this.boardCategoryName)
+                .state(this.state)
+                .build();
+    }
+  
     public Board() {
         this.createdAt = LocalDateTime.now();
     }
