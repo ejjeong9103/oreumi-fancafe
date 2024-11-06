@@ -1,24 +1,17 @@
 package com.estsoft.oreumifancafe.service.auth;
 
 import com.estsoft.oreumifancafe.domain.user.User;
-import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CustomUserDetailsService implements CustomUserDetailsServiceInterf {
+public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
-
-    // ID로 검색
-    @Override
-    public UserDetails loadUsersById(String userId) throws UserNotFoundException {
-        return userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
