@@ -24,7 +24,6 @@ public class AddUserRequest {
                 .address("(" + this.post + ")" + " " + this.address)
                 .addressDetail(this.addressDetail == null ? "" : this.addressDetail)
                 .email(this.email)
-                .role(1)
                 .state(1)
                 .build();
     }
