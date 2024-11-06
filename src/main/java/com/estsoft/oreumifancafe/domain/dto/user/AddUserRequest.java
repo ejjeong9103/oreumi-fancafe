@@ -24,18 +24,12 @@ public class AddUserRequest {
                 .address("(" + this.post + ")" + " " + this.address)
                 .addressDetail(this.addressDetail == null ? "" : this.addressDetail)
                 .email(this.email)
-                .role(1)
                 .state(1)
                 .build();
     }
 
     public void validate()  {
-        if (this.userId == null || this.userId.isEmpty()) {
-            throw new IllegalArgumentException("아이디는 필수 입력값입니다.");
-        }
-        if (this.userPw == null || this.userPw.isEmpty()) {
-            throw new IllegalArgumentException("비밀번호는 필수 입력값입니다.");
-        }
+        loginValidate();
         if (this.nickname == null || this.nickname.isEmpty()) {
             throw new IllegalArgumentException("닉네임은 필수 입력값입니다.");
         }
@@ -50,6 +44,15 @@ public class AddUserRequest {
         }
         if (this.email == null || this.email.isEmpty()) {
             throw new IllegalArgumentException("이메일은 필수 입력값입니다.");
+        }
+    }
+
+    public void loginValidate() {
+        if (this.userId == null || this.userId.isEmpty()) {
+            throw new IllegalArgumentException("아이디는 필수 입력값입니다.");
+        }
+        if (this.userPw == null || this.userPw.isEmpty()) {
+            throw new IllegalArgumentException("비밀번호는 필수 입력값입니다.");
         }
     }
 }
