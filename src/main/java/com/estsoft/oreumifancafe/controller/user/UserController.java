@@ -1,13 +1,10 @@
 package com.estsoft.oreumifancafe.controller.user;
 
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
-import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.service.user.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -50,16 +47,5 @@ public class UserController {
     @ResponseBody // JSON 응답만 필요한 메서드에 @ResponseBody 추가
     public ResponseEntity<Boolean> checkEmail(@PathVariable String email) {
         return ResponseEntity.ok(userService.isDuplicateEmail(email));
-    }
-
-    //=====================================================================================
-
-    // 유저 로그인
-    @PostMapping("/login")
-    public String login(@ModelAttribute AddUserRequest addUserRequest,
-                        HttpServletRequest httpServletRequest,
-                        Model model) {
-        UserResponse userResponse = userService.loginUser(addUserRequest);
-        return null;
     }
 }
