@@ -31,6 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/").hasRole("GUEST")      // 준회원이 접근할 수 있는 페이지 설정
                         .requestMatchers("/").hasRole("USER")       // 정회원
                         .requestMatchers("/").hasRole("ELITE")      // 우수회원
@@ -41,7 +42,7 @@ public class SecurityConfig {
                 )
                 .formLogin(auth -> auth
                         .loginPage("/login") // 로그인 페이지 URL
-                        .defaultSuccessUrl("/main") // 로그인 성공시 자동으로 이동할 페이지 URL
+                        .defaultSuccessUrl("/") // 로그인 성공시 자동으로 이동할 페이지 URL
                 )
                 .logout(auth -> auth
                         .logoutSuccessUrl("/logout") // 로그아웃 성공시 자동으로 이동할 페이지 URL

@@ -9,20 +9,23 @@ import lombok.Getter;
 public class AddUserRequest {
     private String userId;
     private String userPw;
-    private String nickName;
+    private String nickname;
     private String post;
     private String address;
     private String addressDetail;
     private String email;
 
+    // 기본 회원 toEntity
     public User toEntity(String encodedPassword) {
         return User.builder()
                 .userId(this.userId)
                 .userPw(encodedPassword)
-                .nickname(this.nickName)
+                .nickname(this.nickname)
                 .address("(" + this.post + ")" + " " + this.address)
-                .addressDetail(this.addressDetail)
+                .addressDetail(this.addressDetail == null ? "" : this.addressDetail)
                 .email(this.email)
+                .role(1)
+                .state(1)
                 .build();
     }
 
@@ -33,7 +36,7 @@ public class AddUserRequest {
         if (this.userPw == null || this.userPw.isEmpty()) {
             throw new IllegalArgumentException("비밀번호는 필수 입력값입니다.");
         }
-        if (this.nickName == null || this.nickName.isEmpty()) {
+        if (this.nickname == null || this.nickname.isEmpty()) {
             throw new IllegalArgumentException("닉네임은 필수 입력값입니다.");
         }
         if (this.post == null || this.post.isEmpty()) {
