@@ -1,11 +1,13 @@
 package com.estsoft.oreumifancafe.service.admin;
 
+import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.admin.*;
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.domain.help.Help;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
+import com.estsoft.oreumifancafe.repository.board.BoardRepository;
 import com.estsoft.oreumifancafe.repository.help.HelpRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -19,6 +21,7 @@ import java.util.List;
 public class AdminService {
     private final UserRepository userRepository;
     private final HelpRepository helpRepository;
+    private final BoardRepository boardRepository;
 
     // ID로 사용자 조회
     public UserResponse findUserById(String userId) {
@@ -80,7 +83,12 @@ public class AdminService {
 
     // 게시글 숨기기
     public BoardResponse updateBoardState(Long id, UpdateBoardStateRequest request) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id + ""));
 
+        board.updateState(request.getState());
+
+        return board.toBoardResponse();
     }
 
     // 게시글 삭제
