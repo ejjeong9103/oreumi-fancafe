@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
 
@@ -30,7 +29,7 @@ public class Board {
     private String content;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
@@ -59,5 +58,9 @@ public class Board {
         this.boardType = boardType;
         this.boardCategoryName = boardCategoryName;
         this.state = state;
+    }
+
+    public Board() {
+        this.createdAt = LocalDateTime.now();
     }
 }
