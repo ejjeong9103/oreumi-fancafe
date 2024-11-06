@@ -3,12 +3,12 @@
 <th:block th:fragment="nav">
 	<link rel="stylesheet" th:href="@{../css/nav.css}">
 		<nav class="--nav">
-			<div class="before-login-container">
+			<div th:if="${session.user == null}" class="before-login-container">
 				<div class="login-container">
 					<form class="login-form" id="login-form">
-						<input class="login-input" name="userId" id="id" type="text" placeholder="아이디"/>
-						<input class="login-input" name="userPw" id="pw" type="password" placeholder="비밀번호"/>
-						<button onclick="login(event)" class="login-button" id="login">로그인</button>
+						<input class="login-input" name="userId" id="userId" type="text" placeholder="아이디"/>
+						<input class="login-input" name="userPw" id="userPw" type="password" placeholder="비밀번호"/>
+						<button class="login-button" id="login" type="button">로그인</button>
 					</form>
 				</div>
 				<div class="signup-container">
@@ -20,9 +20,11 @@
 					<button class="naver-login-button sns-button">네이버</button>
 				</div>
 			</div>
+			<div th:if="${session.user != null}">로그인 후 구역</div>
 			<div class="board">
 				게시판 목록
 			</div>
 		</nav>
+<script th:src="@{/js/nav.js}" defer></script>
 </th:block>
 </html>
