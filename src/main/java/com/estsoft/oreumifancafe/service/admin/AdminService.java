@@ -1,12 +1,14 @@
 package com.estsoft.oreumifancafe.service.admin;
 
-import com.estsoft.oreumifancafe.domain.dto.admin.UserInfoResponse;
+import com.estsoft.oreumifancafe.domain.dto.admin.*;
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.domain.help.Help;
+import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
 import com.estsoft.oreumifancafe.repository.help.HelpRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,4 +53,35 @@ public class AdminService {
                 .orElseThrow(() -> new UserNotFoundException(userId))
                 .toUserInfoResponse();
     }
+
+    // 사용자 상태 변경
+    @Transactional
+    public UserResponse updateUserState(String userId, UpdateStateRequest request) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        user.updateState(request.getState());
+
+        return user.toUserResponse();
+    }
+
+    // 사용자 등급 변경
+    @Transactional
+    public UserResponse updateUserRank(String userId, UpdateRoleRequest request) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        user.updateRole(request.getRole());
+
+        return user.toUserResponse();
+    }
+
+    // 신고 및 문의 사항 답변
+
+    // 게시글 숨기기
+    public BoardResponse updateBoardState(Long id, UpdateBoardStateRequest request) {
+
+    }
+
+    // 게시글 삭제
 }

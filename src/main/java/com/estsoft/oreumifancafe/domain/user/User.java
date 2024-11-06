@@ -131,4 +131,14 @@ public class User implements UserDetails {
                 .profileImageAddress(this.profileImageAddress)
                 .build();
     }
+
+    // 사용자 상태 변경
+    public void updateState(int state) {
+        this.state = state;
+    }
+
+    // 사용자 등급 변경
+    public void updateRole(int role) {
+        this.role = role;
+    }
 }
