@@ -5,6 +5,8 @@ import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,54 +15,56 @@ import java.util.List;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private static final int PAGE_SIZE = 30;
 
     public BoardService(BoardRepository boardRepository, UserRepository userRepository) {
         this.boardRepository = boardRepository;
         this.userRepository = userRepository;
     }
 
-    public Board createBoard(AddBoardRequest request, User user) {
-        Board board;
-        if(request.getBoardType() == 1 ) { // 등업게시판만 말머리를 쓰니까 등업게시판의 boardType이 1로 설정된 경우
-            board = Board.builder()
-                    .title(request.getTitle())
-                    .content(request.getContent())
-                    .user(user)
-                    .boardType(request.getBoardType())
-                    .boardCategoryName(request.getBoardCategoryName())
-                    .state(1)
-                    .build();
-        } else {
-            board = Board.builder()
-                    .title(request.getTitle())
-                    .content(request.getContent())
-                    .user(user)
-                    .boardType(request.getBoardType())
-                    .boardCategoryName(null)
-                    .state(0)
-                    .build();
-        }
+    public Board writeBoard(AddBoardRequest request, User user) {
+        Board board = Board.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .user(user)
+                .boardType(request.getBoardType())
+                .boardCategoryName(request.getBoardCategoryName())
+                .state(request.getBoardType() == 1 ? 1: 0)
+                .build();
+
         return boardRepository.save(board);
     }
 
-    public List<Board> findAllBoards() {
-        return boardRepository.findAll();
+    public long boardPageCount(int boardType, Pageable pageable) {
+        long totalCount = boardRepository.countByBoardType(boardType);
+        return (totalCount + pageable.getPageSize() -1 ) / pageable.getPageSize();
     }
 
-    public List<Board> findBoardById(String userId) {
-        return boardRepository.findByUserUserId(userId);
+    public Page<Board> getAllBoard(int boardType, Pageable pageable) {
+        return boardRepository.findAllByBoardType(boardType, pageable);
     }
 
-    public void deleteBy(Long id) {
-        boardRepository.deleteById(id);
+    public Page<Board> findBoardByTitle(String title, Pageable pageable) {
+        return boardRepository.findByTitleContaining(title, pageable);
     }
 
+    public Page<Board> findBoardByNickname(String nickname, Pageable pageable) {
+        return boardRepository.findByUserNickname(nickname, pageable);
+    }
 
+    public Page<Board> findBoardByKeyword(String keyword, Pageable pageable) {
+        return boardRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+    }
+
+    public Board findById(Long id) {
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없음"));
+    }
+
+//    public void deleteBy(Long id) {
+//        if (!boardRepository.existsById(id)) {
+//            throw new IllegalArgumentException("게시물이 없음");
+//        }
+//        boardRepository.deleteById(id);
+//    }
 }
-
-
-// 게시판 목록 페이지로 가는 기능
-//-> 유저랑 페이지를 가라데이터를 넣는다
-//->
-// 작성 -> 포스트맵핑 리퀘스트 dto 받아서
-//
