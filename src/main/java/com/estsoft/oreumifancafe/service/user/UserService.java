@@ -86,6 +86,23 @@ public class UserService {
 
     // 유저 로그인
     public UserResponse loginUser(AddUserRequest addUserRequest) {
+        // 로그인 값 empty확인
+        addUserRequest.loginValidate();
+
+        // userId로 유저 정보 조회
+        User user = userRepository.findByUserId(addUserRequest.getUserId()).orElseThrow(
+                () -> new IllegalArgumentException("아이디 또는 비밀번호를 확인해주세요."));
+
+        // 비밀번호 대칭
+        checkPassword(user, addUserRequest.getUserPw());
+
         return null;
+    }
+
+    // 유저의 비밀번호 대칭
+    public void checkPassword(User user, String password) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("아이디 또는 비밀번호를 확인해주세요.");
+        }
     }
 }

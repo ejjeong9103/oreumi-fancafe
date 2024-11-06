@@ -1,6 +1,7 @@
 package com.estsoft.oreumifancafe.controller.user;
 
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
+import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +55,11 @@ public class UserController {
     //=====================================================================================
 
     // 유저 로그인
-    @PostMapping
-    public String login(@RequestBody AddUserRequest addUserRequest,
+    @PostMapping("/login")
+    public String login(@ModelAttribute AddUserRequest addUserRequest,
                         HttpServletRequest httpServletRequest,
                         Model model) {
+        UserResponse userResponse = userService.loginUser(addUserRequest);
         return null;
     }
 }
