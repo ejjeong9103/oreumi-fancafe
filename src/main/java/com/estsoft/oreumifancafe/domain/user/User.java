@@ -124,7 +124,6 @@ public class User implements UserDetails {
                 .nickname(this.nickname)
                 .address(this.address)
                 .createdAt(this.createdAt)
-                .role(this.role)
                 .state(this.state)
                 .profileImageAddress(this.profileImageAddress)
                 .build();
@@ -137,6 +136,5 @@ public class User implements UserDetails {
 
     // 사용자 등급 변경
     public void updateRole(int role) {
-        this.role = role;
     }
 }

@@ -44,22 +44,6 @@ CREATE TABLE `board` (
                          PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `user`;
-
-CREATE TABLE `user` (
-                        `user_id`	varchar(100)	NOT NULL,
-                        `user_pw`	varchar(2000)	NOT NULL,
-                        `address`	varchar(2000)	NOT NULL,
-                        `address_detail`	varchar(2000)	NOT NULL,
-                        `email`	varchar(2000)	NOT NULL,
-                        `created_at`	timestamp	NOT NULL,
-                        `state`	int	NOT NULL	DEFAULT 1,
-                        `profile_image_address`	varchar(2000)	NOT NULL,
-                        `nickname` varchar(100) NOT NULL,
-                        PRIMARY KEY (`user_id`)
-);
-
-
 
 DROP TABLE IF EXISTS `board_category`;
 
@@ -79,6 +63,13 @@ CREATE TABLE `board_type` (
                               PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `USER_ROLE`;
+
+CREATE TABLE `USER_ROLE` (
+                             `user_id`	varchar(100)	NOT NULL,
+                             `role_id`	int	NOT NULL
+);
+
 DROP TABLE IF EXISTS `ROLE`;
 
 CREATE TABLE `ROLE` (
@@ -87,12 +78,21 @@ CREATE TABLE `ROLE` (
                         PRIMARY KEY (`role_id`)
 );
 
-DROP TABLE IF EXISTS `USER_ROLE`;
+DROP TABLE IF EXISTS `user`;
 
-CREATE TABLE `USER_ROLE` (
-                             `user_id`	varchar(100)	NOT NULL,
-                             `role_id`	int	NOT NULL
+CREATE TABLE `user` (
+                        `user_id`	varchar(100)	NOT NULL,
+                        `user_pw`	varchar(2000)	NOT NULL,
+                        `address`	varchar(2000)	NOT NULL,
+                        `address_detail`	varchar(2000)	NOT NULL,
+                        `email`	varchar(2000)	NOT NULL,
+                        `created_at`	timestamp	NOT NULL,
+                        `state`	int	NOT NULL	DEFAULT 1,
+                        `profile_image_address`	varchar(2000)	NOT NULL,
+                        `nickname` varchar(100) NOT NULL,
+                        PRIMARY KEY (`user_id`)
 );
+
 
 ALTER TABLE `board` ADD CONSTRAINT `FK_user_TO_board_1` FOREIGN KEY (
                                                                      `user_id`
