@@ -1,8 +1,7 @@
 .--nav {
     width: 320px;
-    height: 420px;
     /*height: auto;*/
-    background-color: #D9D9D9;
+    /*background-color: #D9D9D9;*/
 }
 
 .profile {
@@ -17,6 +16,9 @@
 }
 
 .before-login-container {
+    border: 1px solid #999;
+    border-radius: 5px;
+    height: 420px;
     display: flex;
     flex-direction: column;
 }
