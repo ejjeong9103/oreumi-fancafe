@@ -17,7 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -49,8 +51,14 @@ public class User implements UserDetails {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @Column(name = "role")
-    private int role;
+    // 역할을 저장할 컬렉션 필드 추가
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USER_ROLE",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Collection<Role> roles = new HashSet<>();
 
     @Column(name = "state")
     private int state;
@@ -63,23 +71,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == 1) {
-            return List.of(new SimpleGrantedAuthority("guest")); // ROLE_GUEST : 준회원
-        }
-        else if (this.role == 2) {
-            return List.of(new SimpleGrantedAuthority("user")); // ROLE_USER : 정회원
-        }
-        else if (this.role == 3) {
-            return List.of(new SimpleGrantedAuthority("elite")); // ROLE_ELITE : 우수회원
-        }
-        else if (this.role == 4) {
-            return List.of(new SimpleGrantedAuthority("celebrity")); // ROLE_CELEBRITY : 연예인
-        }
-        else if (this.role == 5) {
-            return List.of(new SimpleGrantedAuthority("admin")); // ROLE_ADMIN : 관리자
-        }
-
-        return Collections.emptyList();
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
