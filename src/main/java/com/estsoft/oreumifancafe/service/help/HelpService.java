@@ -67,7 +67,7 @@ public class HelpService {
     // 유저 - 내가 쓴 문의글 조회
     // 문의글 1 신고글 2로 가정하고 코드를 넣었습니다. 확인 부탁드립니다.
     // 이 둘을 아예 하나의 코드로 합치는 것도 괜찮을 것 같습니다.
-    public List<Help> findMyInquiryByUserId(String userId){
+    public List<Help> findInquiryByUserId(String userId){
         String currentUserId = "id";
         if(!currentUserId.equals(userId) && !isAdmin()){
             throw new IllegalArgumentException("권한이 없습니다.");
