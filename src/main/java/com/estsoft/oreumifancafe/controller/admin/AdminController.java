@@ -1,9 +1,13 @@
 package com.estsoft.oreumifancafe.controller.admin;
 
+import com.estsoft.oreumifancafe.service.admin.AdminService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RequestMapping("/admin")
-@RestController
+@Controller
 public class AdminController {
+    private final AdminService adminService;
 }
