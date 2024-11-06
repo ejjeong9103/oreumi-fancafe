@@ -81,7 +81,8 @@ public class AdminService {
 
     // 신고 및 문의 사항 답변
 
-    // 게시글 숨기기
+    // 게시글 상태 변경 (게시글 숨기기)
+    @Transactional
     public BoardResponse updateBoardState(Long id, UpdateBoardStateRequest request) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id + ""));
@@ -92,4 +93,13 @@ public class AdminService {
     }
 
     // 게시글 삭제
+    public boolean deleteBoard(Long id) {
+        if (boardRepository.findById(id) == null) {
+            return false;
+        }
+
+        boardRepository.deleteById(id);
+
+        return true;
+    }
 }
