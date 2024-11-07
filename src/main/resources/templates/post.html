@@ -23,7 +23,7 @@
             <div class="info-writer">
                 <div class="row info-writer-detail">
                     <div class="col-md-auto align-items-start"><p style="font-weight: bold"
-                                                                  th:text="${user.userId}"></p></div>
+                                                                  th:text="${user.nickname}"></p></div>
                     <!--          게시글 작성 시 회원 등급을 받지 않는다면 이 부분은 삭제해도 됩니다          -->
 <!--                    <div class="col-md-auto align-items-end user-rank" th:text="${article.userRank}"><p></p></div>-->
                 </div>
@@ -35,14 +35,14 @@
                         <p th:if="${article.updatedAt == article.createdAt}"
                            th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
                     </div>
-                    <div class="col-md-auto delete-update">
+                    <div class="col-md-auto delete-update" th:if="${isMyBoard}">
                         <button class="btn btn-secondary btn-update"
-                                th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|">
+                                th:onclick="|location.href='@{/board/article/edit/{id}(id=${article.id})}'|">
                             수정
                         </button>
-                        <form action="/board/{id}" method="post">
+                        <form th:action="@{/board/{id}(id=${article.id})}" method="post" onsubmit="return confirmDelete()">
                             <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit">삭제</button>
+                            <button type="submit" class="btn btn-danger">삭제</button>
                         </form>
                     </div>
                 </div>
@@ -103,6 +103,12 @@
         </div>
     </article>
 </div>
+
+<script>
+    function confirmDelete() {
+        return confirm("삭제하시겠습니까?");
+    }
+</script>
 
 </body>
 </html>
