@@ -19,7 +19,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private static final int PAGE_SIZE = 30;
-    private static final int MY_PAGE_SIZE = 10;
+    private static final int MY_PAGE_SIZE = 3;
 
     public BoardService(BoardRepository boardRepository, UserRepository userRepository) {
         this.boardRepository = boardRepository;
@@ -72,13 +72,13 @@ public class BoardService {
 //        boardRepository.deleteById(id);
 //    }
 
-    private Pageable createPageRequest(int pageNum) {
-        return PageRequest.of(pageNum - 1, MY_PAGE_SIZE);
+    private Pageable createPageRequest(int pageNum, int pageSize) {
+        return PageRequest.of(pageNum - 1, pageSize);
     }
 
     // 해당 유저의 글 목록
     public List<BoardResponse> findByUserId(User user, int pageNum) {
-        return boardRepository.findBoardByUser(user, createPageRequest(pageNum))
+        return boardRepository.findBoardByUser(user, createPageRequest(pageNum, MY_PAGE_SIZE))
                 .stream()
                 .map(Board::toBoardResponse)
                 .collect(Collectors.toList());
