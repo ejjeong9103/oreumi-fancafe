@@ -122,6 +122,7 @@ public class BoardController {
         Pageable pageRequest = PageRequest.of(pageNum -1 , 30); // pageNum과 페이지 크기 30 설정
 
         Page<Board> boardPage = boardService.getAllBoard(boardType, pageRequest);
+
         model.addAttribute("boardPage", boardPage); // 페이징된 게시글 데이터를 뷰로 전달
         model.addAttribute("boardType", boardType); // 현재 게시물 타입도 전달
 
@@ -133,12 +134,14 @@ public class BoardController {
             @PathVariable String title,
             @PathVariable int pageNum,
             Model model) {
+
         Pageable pageable = PageRequest.of(pageNum -1, 30);
+
         Page<Board> boardPage = boardService.findBoardByTitle(title,pageable);
+
         model.addAttribute("boardPage", boardPage);
-        model.addAttribute("title",title);
-        int boardType = boardPage.getContent().get(0).getBoardType();
-        model.addAttribute("boardType",boardType);
+        model.addAttribute("title", title);
+
         return "board_search";
     }
 
@@ -147,12 +150,14 @@ public class BoardController {
             @PathVariable String nickname,
             @PathVariable int pageNum,
             Model model) {
+
         Pageable pageable = PageRequest.of(pageNum - 1, 30);
+
         Page<Board> boardPage = boardService.findBoardByNickname(nickname, pageable);
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("nickname", nickname);
-        int boardType = boardPage.getContent().get(0).getBoardType();
-        model.addAttribute("boardType",boardType);
+
         return "board_search";
     }
 
@@ -161,12 +166,14 @@ public class BoardController {
             @PathVariable String keyword,
             @PathVariable int pageNum,
             Model model) {
+
         Pageable pageable = PageRequest.of(pageNum - 1, 30);
+
         Page<Board> boardPage = boardService.findBoardByKeyword(keyword, pageable);
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("keyword", keyword);
-        int boardType = boardPage.getContent().get(0).getBoardType();
-        model.addAttribute("boardType",boardType);
+
         return "board_search";
     }
 }
