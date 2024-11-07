@@ -67,3 +67,8 @@
     background-color: #CAF0F8;
     text-align: left !important;
 }
+
+.paging {
+    display: flex;
+    justify-content: center;
+}

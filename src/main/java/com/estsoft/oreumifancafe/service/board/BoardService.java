@@ -77,10 +77,7 @@ public class BoardService {
     }
 
     // 해당 유저의 글 목록
-    public List<BoardResponse> findByUserId(User user, int pageNum) {
-        return boardRepository.findBoardByUser(user, createPageRequest(pageNum, MY_PAGE_SIZE))
-                .stream()
-                .map(Board::toBoardResponse)
-                .collect(Collectors.toList());
+    public Page<BoardResponse> findByUserId(User user, int pageNum) {
+        return boardRepository.findBoardByUser(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
     }
 }

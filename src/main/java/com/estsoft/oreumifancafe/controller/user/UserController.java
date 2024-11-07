@@ -1,10 +1,17 @@
 package com.estsoft.oreumifancafe.controller.user;
 
+import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
+import com.estsoft.oreumifancafe.domain.user.User;
+import com.estsoft.oreumifancafe.service.board.BoardService;
 import com.estsoft.oreumifancafe.service.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final BoardService boardService;
 
     // 회원가입 페이지 이동
     @GetMapping("/signup")
@@ -47,5 +55,22 @@ public class UserController {
     @ResponseBody // JSON 응답만 필요한 메서드에 @ResponseBody 추가
     public ResponseEntity<Boolean> checkEmail(@PathVariable String email) {
         return ResponseEntity.ok(userService.isDuplicateEmail(email));
+    }
+
+    @GetMapping("/myPage")
+    public String myPage(HttpServletRequest request, Model model,
+                         @RequestParam(defaultValue = "1") int boardPageNum,
+                         @RequestParam(defaultValue = "1") int replyPageNum,
+                         @RequestParam(defaultValue = "1") int qaPageNum,
+                         @RequestParam(defaultValue = "1") int reportPageNum) {
+        // 세션에 있는 유저를 꺼내옴
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        // 내 글 목록
+        Page<BoardResponse> boardResponseList = boardService.findByUserId(user, boardPageNum);
+
+        model.addAttribute("myBoard", boardResponseList);
+        return "myPage";
     }
 }
