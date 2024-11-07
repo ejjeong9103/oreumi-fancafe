@@ -22,7 +22,7 @@ public class AdminService {
     private final HelpRepository helpRepository;
     private final BoardRepository boardRepository;
 
-    // ID로 사용자 조회
+    // 사용자 ID 조회
     public UserResponse findUserById(String userId) {
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId))
