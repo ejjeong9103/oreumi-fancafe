@@ -35,7 +35,7 @@
                 <a th:href="@{/board/article/{boardType}/{id}(boardType=${boardType}, id=${item.id})}"
                    th:text="${item.title}"></a>
             </td>
-            <td th:text="${item.user.userId}"></td>
+            <td th:text="${item.user.nickname}"></td>
             <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
         </tr>
         </tbody>
