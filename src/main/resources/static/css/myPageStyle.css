@@ -54,6 +54,7 @@
 }
 
 .table {
+    font-size: 14px;
     border-collapse: collapse;
     border-radius: 5px;
     border-style: hidden;
@@ -62,6 +63,7 @@
 }
 
 .text-center {
+    font-weight: bold;
     background-color: #CAF0F8;
-    text-align: left !important; /* 강제로 덮어쓰기 */
+    text-align: left !important;
 }
