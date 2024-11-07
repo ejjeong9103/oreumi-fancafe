@@ -21,10 +21,10 @@
 				</div>
 			</div>
 			<div th:if="${session.user != null}" class="after-login-container">
-				<img class="profile-img" th:src="@{/img/defaultProfileImage.jpeg}"/>
+				<img class="profile-img" th:src="${session.user.profileImageAddress}"/>
 				<span class="my-id-nickname" th:text="${session.user.userId} + ' / ' + ${session.user.nickname}"></span>
 				<div class="my-container">
-					<button class="my-page-button my-button">마이페이지</button>
+					<button class="my-page-button my-button"><a href="/user/myPage">마이페이지</a></button>
 					<button class="update-my-info my-button">회원정보수정</button>
 				</div>
 			</div>
