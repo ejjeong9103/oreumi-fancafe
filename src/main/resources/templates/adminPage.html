@@ -40,7 +40,29 @@
         <button class="btn btn-primary admin-manage-btn" type="submit">조회하기</button>
     </div>
 
-    <div id="user-search-modal"></div>
+    <div id="user-search-modal">
+        <p class="user-id" th:text="'아이디: ' + ${user.userId}">아이디: abc</p>
+        <p class="user-nickname" th:text="'닉네임: ' + ${user.nickname}">닉네임: 오르미</p>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+            <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+            <label class="btn btn-outline-primary" for="btncheck1">사용자 상세 정보</label>
+
+            <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+            <label class="btn btn-outline-primary" for="btncheck2">사용자 등급 변경</label>
+
+            <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
+            <label class="btn btn-outline-primary" for="btncheck3">사용자 상태 변경</label>
+        </div>
+
+        <div class="user-info">
+            <p th:text="'이메일: ' + ${userDetail.email}">이메일: </p>
+            <p th:text="'주소: ' + ${userDetail.address}">주소: </p>
+            <p th:text="'가입날짜: ' + ${userDetail.createdAt}">가입날짜: </p>
+            <p th:text="'등급: ' + ${userDetail.role}">등급: </p>
+        </div>
+
+        <div class="change-role"></div>
+    </div>
 
     <div id="all-user-modal"></div>
 
