@@ -19,8 +19,9 @@
     </p>
 
     <table class="table">
-        <thead class="text-center">
+        <thead class="text-left">
         <tr>
+            <th>번호</th>
             <th>제목</th>
             <th>글쓴이</th>
             <th>작성일</th>
@@ -28,6 +29,7 @@
         </thead>
         <tbody>
         <tr th:each="board : ${boardPage.content}">
+            <td th:text="${board.id}"></td>
             <td><a th:href="@{/board/article/{boardType}/{id}(boardType=${boardType}, id=${board.id})}"
                    th:text="${board.title}"></a>
             <td th:text="${board.user.nickname}"></td>
@@ -37,9 +39,7 @@
     </table>
 
     <nav aria-label="Page navigation">
-        <ul class="pagination">
-
-
+        <ul class="pagination justify-content-center">
             <!-- 이전 페이지 버튼 -->
             <li th:classappend="${boardPage.hasPrevious()} ? 'page-item' : 'page-item disabled'">
                 <!-- title 조건 -->
@@ -125,12 +125,12 @@
         </ul>
     </nav>
 
-    <div class="write-btn-div">
+    <div class="write-btn-div d-flex justify-content-end">
         <button class="btn btn-secondary write-btn" th:onclick="|location.href='@{/board/new-article}'|">글 작성</button>
     </div>
 </div>
 <nav class="navbar bg-light">
-    <div class="container-fluid">
+    <div class="container-fluid justify-content-center">
         <form class="d-flex" role="search" method="get" onsubmit="return setSearchAction(this)">
             <!-- 말머리 선택 드롭다운 -->
             <select id="filterSelect" class="form-select me-2" aria-label="말머리 선택">

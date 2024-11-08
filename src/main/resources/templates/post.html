@@ -79,8 +79,8 @@
             <form class="comment-create bg-light">
                 <div>
                     <!--         user의 아이디(또는 닉네임) 받아와야 함. 번거로울 시 label은 삭제합시다           -->
-                    <label for="commentbox" th:text="${user.userId}"></label><br>
-                    <textarea class="bg-light" id="commentbox" name="commentbox" cols="30" rows="10" spellcheck="false"
+                    <label for="commentbox" th:text="${user.nickname}"></label><br>
+                    <textarea class="bg-light" id="commentbox" name="commentbox" cols="60" rows="3" spellcheck="false"
                               style="resize: none;"></textarea>
                 </div>
                 <div>
