@@ -74,6 +74,7 @@ public class Board {
                 .boardType(this.boardType)
                 .boardCategoryName(this.boardCategoryName)
                 .state(this.state)
+                .createdAt(this.createdAt)
                 .build();
     }
   
