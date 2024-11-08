@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("login").addEventListener("click", function (event) {
         login(event);
     })
-    document.getElementById("my-page-button").addEventListener("click", function (event) {
-        location.href="/user/myPage";
-    })
+    // document.getElementById("my-page-button").addEventListener("click", function (event) {
+    //     location.href="/user/myPage";
+    // })
 });
