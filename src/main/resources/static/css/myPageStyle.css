@@ -1,0 +1,74 @@
+.--section {
+    padding-bottom: 100px;
+}
+
+.info-container {
+    margin-top: 90px;
+    width: 710px;
+    margin-left: 100px;
+    display: flex;
+    justify-content: center;
+    gap: 200px;
+}
+
+.my-page-info {
+    width: 260px;
+    height: 180px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.my-page-info > li {
+    font-weight: bold;
+}
+
+.my-page-profile-img {
+    width: 260px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.write-container {
+    margin-left: 100px;
+    margin-top: 80px;
+    width: 710px;
+    background-color: #FFFFFF;
+}
+
+.my-posts-label,
+.my-comments-label {
+    font-weight: bold;
+}
+
+.my-posts-list,
+.my-comments-list {
+    border: 1px solid #999;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.table {
+    font-size: 14px;
+    border-collapse: collapse;
+    border-radius: 5px;
+    border-style: hidden;
+    box-shadow: 0 0 0 1px #999;
+    margin-top: 10px;
+}
+
+.text-center {
+    font-weight: bold;
+    background-color: #CAF0F8;
+    text-align: left !important;
+}
+
+.paging {
+    display: flex;
+    justify-content: center;
+}
