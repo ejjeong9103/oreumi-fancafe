@@ -1,21 +1,25 @@
 package com.estsoft.oreumifancafe.service.board;
 
 import com.estsoft.oreumifancafe.domain.board.Board;
+import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private static final int PAGE_SIZE = 30;
+    private static final int MY_PAGE_SIZE = 3;
 
     public BoardService(BoardRepository boardRepository, UserRepository userRepository) {
         this.boardRepository = boardRepository;
@@ -61,10 +65,43 @@ public class BoardService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없음"));
     }
 
-//    public void deleteBy(Long id) {
-//        if (!boardRepository.existsById(id)) {
-//            throw new IllegalArgumentException("게시물이 없음");
-//        }
-//        boardRepository.deleteById(id);
-//    }
+    public void updateBoard(Long id, AddBoardRequest request, User user) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        // 게시글 작성자와 현재 사용자 확인
+        if (!board.getUser().getUserId().equals(user.getUserId())) {
+            throw new SecurityException("수정 권한이 없습니다.");
+        }
+
+        // 게시글 내용 수정
+        board.setTitle(request.getTitle());
+        board.setContent(request.getContent());
+        board.setBoardType(request.getBoardType());
+        board.setBoardCategoryName(request.getBoardCategoryName());
+
+        boardRepository.save(board);
+    }
+
+    public int deleteBoard(Long id, User user) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+
+        // 작성자와 현재 로그인된 사용자 비교
+        if (!board.getUser().getUserId().equals(user.getUserId())) {
+            throw new SecurityException("삭제 권한이 없습니다.");
+        }
+        int boardType = board.getBoardType();
+        boardRepository.deleteById(id);
+        return boardType;
+    }
+
+    private Pageable createPageRequest(int pageNum, int pageSize) {
+        return PageRequest.of(pageNum - 1, pageSize);
+    }
+
+    // 해당 유저의 글 목록
+    public Page<BoardResponse> findByUserId(User user, int pageNum) {
+        return boardRepository.findBoardByUser(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
+    }
 }

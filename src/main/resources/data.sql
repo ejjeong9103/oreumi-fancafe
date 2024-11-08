@@ -88,7 +88,7 @@ CREATE TABLE `user` (
                         `email`	varchar(2000)	NOT NULL,
                         `created_at`	timestamp	NOT NULL,
                         `state`	int	NOT NULL	DEFAULT 1,
-                        `profile_image_address`	varchar(2000)	NOT NULL,
+                        `profile_image_address`	varchar(2000)	NOT NULL DEFAULT `/img/defaultProfileImage.jpeg`,
                         `nickname` varchar(100) NOT NULL,
                         PRIMARY KEY (`user_id`)
 );

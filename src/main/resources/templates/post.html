@@ -7,102 +7,96 @@
     <link rel="stylesheet" href="../static/css/post.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
 </head>
 <body>
-<!--타임리프 내의 링크는 모두 임의로 넣었으니 실제 작업할 때 링크 경로를 수정해주세요-->
 <div class="container">
     <h1 th:text="${article.boardType == 1 ? '등업게시판' : (article.boardType == 2 ? '자유게시판' : (article.boardType == 3 ? '정모게시판' : '기타 게시판'))}"></h1>
     <p class="text-muted" th:text="${article.boardType == 1 ? '등업 게시판에 오신 것을 환영합니다.' :
                            (article.boardType == 2 ? '자유 게시판에 오신 것을 환영합니다.' :
                            (article.boardType == 3 ? '정모 게시판에 오신 것을 환영합니다.' :
                            '기타 게시판입니다.'))}">게시판 설명</p>
-    <article class="board-page">
-        <div class="article-header">
-            <h1 class="title" th:text="${article.title}"></h1>
-            <div class="info-writer">
-                <div class="row info-writer-detail">
-                    <div class="col-md-auto align-items-start"><p style="font-weight: bold"
-                                                                  th:text="${user.userId}"></p></div>
-                    <!--          게시글 작성 시 회원 등급을 받지 않는다면 이 부분은 삭제해도 됩니다          -->
-<!--                    <div class="col-md-auto align-items-end user-rank" th:text="${article.userRank}"><p></p></div>-->
-                </div>
-                <div class="row info-writer-detail2">
-                    <div class="col-md-auto text-secondary">
-                        <!-- 수정 시간 나타내는 조건 수정함(작성 시간과 수정 시간이 같을 경우 작성 시간으로 받아오고, 다를 경우 수정 시간으로 받아오게) -->
-                        <p th:if="${article.updatedAt != article.createdAt}"
-                           th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')+' 수정됨'}"></p>
-                        <p th:if="${article.updatedAt == article.createdAt}"
-                           th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
-                    </div>
-                    <div class="col-md-auto delete-update">
-                        <button class="btn btn-secondary btn-update"
-                                th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|">
-                            수정
-                        </button>
-                        <form action="/board/{id}" method="post">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit">삭제</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
+    <!-- 수정 및 삭제 버튼을 오른쪽 끝에 배치 -->
+    <div class="d-flex justify-content-end mb-2" th:if="${isMyBoard}">
+        <button class="btn btn-secondary btn-update me-2"
+                th:onclick="|location.href='@{/board/article/edit/{id}(id=${article.id})}'|">
+            수정
+        </button>
+        <form th:action="@{/board/{id}(id=${article.id})}" method="post" onsubmit="return confirmDelete()">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
+    </div>
+
+    <article class="board-page">
+        <!-- 작성자와 작성일을 같은 줄에 배치 -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <p style="font-weight: bold;" th:text="${user.nickname}"></p>
+            <p class="text-secondary mb-0">
+                <span th:if="${article.updatedAt != article.createdAt}"
+                      th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm') + ' 수정됨'}"></span>
+                <span th:if="${article.updatedAt == article.createdAt}"
+                      th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+            </p>
         </div>
+
         <hr>
+
         <div class="article-body">
             <p class="article-body-text text-break" th:text="${article.content}"></p>
         </div>
+
         <div class="article-comment">
-            <!--      댓글 갯수 받아오는 것을 구현한다면 n 부분에 타임리프를 넣고, 아니라면 n을 삭제합니다.      -->
             <p class="comment-count">댓글 n</p>
             <hr>
             <div class="comment-list d-block" th:if="${comment}">
-                <!--        thymeleaf로 댓글 갯수만큼 반복        -->
-                <!--        hierarchy가 1일시 들여쓰기 적용        -->
-                <div class="col comment"
-                     th:each="item:${comment}"
-                     th:classappend="${comment.hierarchy == 1} ? 'padding-left' : ''">
+                <div class="col comment" th:each="item:${comment}" th:classappend="${comment.hierarchy == 1} ? 'padding-left' : ''">
                     <div class="row comment-pic-box">
-                        <!--     디폴트 프로필 사진 설정 후 경로 수정해주세요                   -->
                         <img class="comment-pic" th:classappend="${item} ? '' : 'd-flex'"
                              th:src="${item.userPic != null} ? @{${item.userPic}} : @{ '임시프로필사진.jpg' }" alt="프로필 사진">
                     </div>
                     <div class="row comment-context">
                         <p class="comment-writer" th:text="${item.userId}"></p>
                         <p class="comment-body text-break" th:text="${item.context}"></p>
-                        <p class="comment-createdAt text-secondary"
-                           th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
+                        <p class="comment-createdAt text-secondary" th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
                     </div>
                 </div>
             </div>
-            <form class="comment-create bg-light">
+            <form class="comment-create bg-light" style="padding: 0 30px;">
                 <div>
-                    <!--         user의 아이디(또는 닉네임) 받아와야 함. 번거로울 시 label은 삭제합시다           -->
-                    <label for="commentbox" th:text="${user.userId}"></label><br>
-                    <textarea class="bg-light" id="commentbox" name="commentbox" cols="30" rows="10" spellcheck="false"
-                              style="resize: none;"></textarea>
+                    <label for="commentbox" th:text="${loggedInUser != null ? loggedInUser.nickname : ''}"></label><br>
+                    <textarea class="w-100" id="commentbox" name="commentbox" rows="3" spellcheck="false" maxlength="600" style="resize: none; background-color: white; border: none; width: 100%;"></textarea>
                 </div>
-                <div>
-                    <button class="btn btn-light comment-write-btn" type="submit">작성</button>
+                <div class="d-flex justify-content-end align-items-center">
+                    <span id="charCount" class="text-muted">0/600</span>
+                    <button class="btn btn-light comment-write-btn me-2" type="submit">작성</button>
                 </div>
-
-
             </form>
         </div>
-        <div class="page-button-list">
+
+        <div class="page-button-list d-flex justify-content-between">
             <div>
                 <a th:href="@{/board/{boardType}/1(boardType=${boardType})}">
                     <button class="btn btn-secondary board-btn" type="button">목록</button>
                 </a>
             </div>
-            <div class="write-btn-div">
+            <div class="write-btn-div d-flex justify-content-end">
                 <button class="btn btn-secondary write-btn" th:onclick="|location.href='@{/board/new-article}'|">글 작성</button>
             </div>
-
         </div>
     </article>
 </div>
+
+<script>
+    document.getElementById('commentbox').addEventListener('input', function() {
+        const maxLength = 600;
+        const currentLength = this.value.length;
+        document.getElementById('charCount').textContent = `${currentLength}/${maxLength}`;
+    });
+    function confirmDelete() {
+        return confirm("삭제하시겠습니까?");
+    }
+</script>
 
 </body>
 </html>

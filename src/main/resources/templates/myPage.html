@@ -4,38 +4,178 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Oreumi Fancafe</title>
-    <link rel="stylesheet" href="/static/reset.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/section.css}">
     <link rel="stylesheet" href="/css/myPageStyle.css" />
   </head>
   <body>
-    <section id="my-page">
-      <h2 class="my-page-heading">오르미 팬카페 메인페이지</h2>
-      <div class="container-one">
+  <th:block th:replace="header/header :: header"></th:block>
+
+
+  <main class="--main">
+    <th:block th:replace="nav/nav :: nav"></th:block>
+    <section class="--section">
+      <div class="info-container">
         <ul class="my-page-info" id="my-page-info">
-          <li th:text="'아이디 : ' + ${info.user_id}">아이디: 오르미</li>
-          <li th:text="'닉네임 : ' + ${}">닉네임: 영웅좋아</li>
-          <li th:text="'이메일 : ' + ${info.email}">이메일: n@naver.com</li>
-          <li th:text="'사이트 후원 : ' + ${} + '원'">사이트 후원: 1000원</li>
-          <li th:text="'기부 모금 : ' + ${} + '원'">기부 모금: 1000원</li>
+<!--          <li th:text="'아이디 : ' + ${session.user.userId}">아이디: 오르미</li>-->
+<!--          <li th:text="'닉네임 : ' + ${session.user.nickname}">닉네임: 영웅좋아</li>-->
+<!--          <li th:text="'이메일 : ' + ${session.user.email}">이메일: n@naver.com</li>-->
+                    <li>아이디: 오르미</li>
+                    <li>닉네임: 영웅좋아</li>
+                    <li>이메일: n@naver.com</li>
+          <li>사이트 후원: 1000원</li>
+          <li>기부 모금: 1000원</li>
         </ul>
-        <img th:src="@{}" class="my-page-profile-img" />
+<!--        <img th:src="${session.user.profileImageAddress}" class="my-page-profile-img" />-->
+        <img th:src="@{/img/defaultProfileImage.jpeg}" class="my-page-profile-img" />
       </div>
-      <div class="container-two">
+      <div class="write-container">
         <label class="my-posts-label">내 글</label>
-        <ul class="my-posts-list" id="my-posts-list" th:each="title : ${}">
-          <li th:text="${title.title}">제목 1</li>
-          <li>제목 2</li>
-          <li>제목 3</li>
-        </ul>
+        <table class="table">
+          <thead class="text-center">
+            <tr class="caption text-nowrap">
+              <th>번호</th>
+              <th>제목</th>
+              <th>닉네임</th>
+              <th>작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr class="board_body" th:each="item : ${myBoard.content}">
+            <td th:text="${item.id}">
+            </td>
+            <td>
+              <a th:href="@{/board/article/{boardType}/{id}(boardType=${item.boardType}, id=${item.id})}"
+                 th:text="${item.title}"></a>
+            </td>
+            <td th:text="${item.user.nickname}"></td>
+            <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+          </tr>
+          </tbody>
+        </table>
+        <nav aria-label="Page navigation" class="paging">
+          <ul class="pagination">
+
+            <!-- 이전 페이지 그룹 버튼 -->
+            <li th:classappend="${myBoard.number >= 5} ? 'page-item' : 'page-item disabled'">
+              <a class="page-link" th:href="@{/user/myPage(boardPageNum=${(myBoard.number / 5 - 1) * 5 + 1})}" aria-label="Previous Group">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+
+            <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
+            <li th:each="pageNum : ${#numbers.sequence(myBoard.number / 5 * 5, T(java.lang.Math).min(myBoard.totalPages - 1, myBoard.number / 5 * 5 + 4))}"
+                th:classappend="${pageNum == myBoard.number} ? 'page-item active' : 'page-item'">
+              <a class="page-link" th:href="@{/user/myPage(boardPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
+            </li>
+
+            <!-- 다음 페이지 그룹 버튼 -->
+            <li th:if="${myBoard.number / 5 * 5 + 5 < myBoard.totalPages}" class="page-item">
+              <a class="page-link" th:href="@{/user/myPage(boardPageNum=${(myBoard.number / 5 + 1) * 5 + 1})}" aria-label="Next Group">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+
+<!--        <ul class="my-posts-list" id="my-posts-list">-->
+<!--          <li>제목 1</li>-->
+<!--          <li>제목 2</li>-->
+<!--          <li>제목 3</li>-->
+<!--          <li>제목 3</li>-->
+<!--          <li>제목 3</li>-->
+<!--          <li>제목 3</li>-->
+<!--          <li>제목 3</li>-->
+<!--        </ul>-->
       </div>
-      <div class="container-three">
+      <div class="write-container">
         <label class="my-comments-label">내 댓글 (글목록)</label>
-        <ul class="my-comments-list" id="my-comments-list" th:each="comment : ${}">
-          <li th:text="${comment.title}">제목 1</li>
-          <li>제목 2</li>
-          <li>제목 3</li>
-        </ul>
+        <table class="table">
+          <thead class="text-center">
+          <tr class="caption text-nowrap">
+            <th>제목</th>
+            <th>닉네임</th>
+            <th>작성일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="board_body">
+            <td>
+              제목
+            </td>
+            <td>웅깅카</td>
+            <td>2020:11:11 13:45</td>
+          </tr>
+          </tbody>
+        </table>
+
+
+<!--        <ul class="my-comments-list" id="my-comments-list">-->
+<!--          <li>제목 1</li>-->
+<!--          <li>제목 2</li>-->
+<!--          <li>제목 3</li>-->
+<!--        </ul>-->
+      </div>
+      <div class="write-container">
+        <label class="my-comments-label">문의 내역</label>
+        <table class="table">
+          <thead class="text-center">
+          <tr class="caption text-nowrap">
+            <th>제목</th>
+            <th>닉네임</th>
+            <th>작성일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="board_body">
+            <td>
+              제목
+            </td>
+            <td>웅깅카</td>
+            <td>2020:11:11 13:45</td>
+          </tr>
+          </tbody>
+        </table>
+<!--        <ul class="my-comments-list" id="my-qa-list">-->
+<!--          <li>제목 1</li>-->
+<!--          <li>제목 2</li>-->
+<!--          <li>제목 3</li>-->
+<!--        </ul>-->
+      </div>
+      <div class="write-container">
+        <label class="my-comments-label">신고 내역</label>
+        <table class="table">
+          <thead class="text-center">
+          <tr class="caption text-nowrap">
+            <th>제목</th>
+            <th>닉네임</th>
+            <th>작성일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="board_body">
+            <td>
+              제목
+            </td>
+            <td>웅깅카</td>
+            <td>2020:11:11 13:45</td>
+          </tr>
+          </tbody>
+        </table>
+<!--        <ul class="my-comments-list" id="my-report-list">-->
+<!--          <li>제목 1</li>-->
+<!--          <li>제목 2</li>-->
+<!--          <li>제목 3</li>-->
+<!--        </ul>-->
       </div>
     </section>
+  </main>
+
+
+  <th:block th:replace="footer/footer :: footer"></th:block>
   </body>
 </html>

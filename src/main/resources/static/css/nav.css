@@ -79,3 +79,42 @@
     border-radius: 5px;
     color: black;
 }
+
+.after-login-container {
+    height: 420px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.profile-img {
+    width: 260px;
+    height: 200px;
+    object-fit: cover;
+    margin-top: 35px;
+    margin-left: 30px;
+}
+
+.my-id-nickname {
+    height: 50px;
+    margin-left: 30px;
+    line-height: 50px;
+    font-size: 20px;
+}
+
+.my-container {
+    margin: 0 auto;
+    width: 260px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.my-button {
+    width: 115px;
+    height: 50px;
+    border-radius: 5px;
+    background-color: cadetblue;
+}
