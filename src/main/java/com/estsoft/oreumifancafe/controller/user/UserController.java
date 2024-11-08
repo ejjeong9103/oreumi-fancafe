@@ -57,6 +57,7 @@ public class UserController {
         return ResponseEntity.ok(userService.isDuplicateEmail(email));
     }
 
+    // 마이페이지
     @GetMapping("/myPage")
     public String myPage(HttpServletRequest request, Model model,
                          @RequestParam(defaultValue = "1") int boardPageNum,
@@ -72,5 +73,11 @@ public class UserController {
 
         model.addAttribute("myBoard", boardResponseList);
         return "myPage";
+    }
+
+    // 회원정보수정 페이지 이동
+    @GetMapping("/updateInfo")
+    public String updateInfo() {
+        return "editProfile";
     }
 }
