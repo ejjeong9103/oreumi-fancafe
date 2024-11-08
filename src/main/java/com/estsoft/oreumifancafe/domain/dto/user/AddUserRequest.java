@@ -4,6 +4,8 @@ import com.estsoft.oreumifancafe.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.HashSet;
+
 @Getter
 @AllArgsConstructor
 public class AddUserRequest {
@@ -25,6 +27,7 @@ public class AddUserRequest {
                 .addressDetail(this.addressDetail == null ? "" : this.addressDetail)
                 .email(this.email)
                 .state(1)
+                .roles(new HashSet<>())
                 .build();
     }
 
@@ -38,9 +41,6 @@ public class AddUserRequest {
         }
         if (this.address == null || this.address.isEmpty()) {
             throw new IllegalArgumentException("주소는 필수 입력값입니다.");
-        }
-        if (this.addressDetail == null || this.addressDetail.isEmpty()) {
-            throw new IllegalArgumentException("상세 주소는 필수 입력값입니다.");
         }
         if (this.email == null || this.email.isEmpty()) {
             throw new IllegalArgumentException("이메일은 필수 입력값입니다.");

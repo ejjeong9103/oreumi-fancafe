@@ -1,4 +1,4 @@
-package com.estsoft.oreumifancafe.aop;
+package com.estsoft.oreumifancafe.aop.auth;
 
 import com.estsoft.oreumifancafe.domain.user.User;
 import jakarta.servlet.ServletException;

@@ -20,7 +20,15 @@
 					<button class="naver-login-button sns-button">네이버</button>
 				</div>
 			</div>
-			<div th:if="${session.user != null}">로그인 후 구역</div>
+			<div th:if="${session.user != null}" class="after-login-container">
+				<img class="profile-img" th:src="${session.user.profileImageAddress}"/>
+				<span class="my-id-nickname" th:text="${session.user.userId} + ' / ' + ${session.user.nickname}"></span>
+				<div class="my-container">
+					<button class="my-page-button my-button" id="my-page-button">
+						<a th:href="@{/user/myPage}">마이페이지</a></button>
+					<button class="update-my-info my-button">회원정보수정</button>
+				</div>
+			</div>
 			<div class="board">
 				게시판 목록
 			</div>

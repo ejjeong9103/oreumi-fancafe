@@ -1,21 +1,25 @@
 package com.estsoft.oreumifancafe.service.board;
 
 import com.estsoft.oreumifancafe.domain.board.Board;
+import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private static final int PAGE_SIZE = 30;
+    private static final int MY_PAGE_SIZE = 3;
 
     public BoardService(BoardRepository boardRepository, UserRepository userRepository) {
         this.boardRepository = boardRepository;
@@ -90,5 +94,14 @@ public class BoardService {
         int boardType = board.getBoardType();
         boardRepository.deleteById(id);
         return boardType;
+    }
+
+    private Pageable createPageRequest(int pageNum, int pageSize) {
+        return PageRequest.of(pageNum - 1, pageSize);
+    }
+
+    // 해당 유저의 글 목록
+    public Page<BoardResponse> findByUserId(User user, int pageNum) {
+        return boardRepository.findBoardByUser(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
     }
 }
