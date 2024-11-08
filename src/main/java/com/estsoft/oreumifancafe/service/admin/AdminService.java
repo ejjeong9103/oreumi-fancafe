@@ -4,7 +4,6 @@ import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.admin.*;
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
-import com.estsoft.oreumifancafe.domain.help.Help;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
@@ -23,7 +22,7 @@ public class AdminService {
     private final HelpRepository helpRepository;
     private final BoardRepository boardRepository;
 
-    // ID로 사용자 조회
+    // 사용자 ID 조회
     public UserResponse findUserById(String userId) {
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId))
@@ -45,10 +44,31 @@ public class AdminService {
     }
 
     // 게시글 전체 조회
+    public List<BoardResponse> getAllBoard() {
+        List<BoardResponse> list = boardRepository.findAll().stream()
+                .map(Board::toBoardResponse)
+                .toList();
+
+        return list;
+    }
 
     // 특정 게시판 게시글 조회
+    public List<BoardResponse> getAllBoardByType(int boardType) {
+        List<BoardResponse> list = boardRepository.findAllByBoardType(boardType).stream()
+                .map(Board::toBoardResponse)
+                .toList();
+
+        return list;
+    }
 
     // 모든 사용자 조회
+    public List<UserResponse> getAllUser() {
+        List<UserResponse> list = userRepository.findAll().stream()
+                .map(User::toUserResponse)
+                .toList();
+
+        return list;
+    }
     
     // 사용자 정보 조회
     public UserInfoResponse userInfo(String userId) {
@@ -69,19 +89,19 @@ public class AdminService {
     }
 
     // 사용자 등급 변경
-    @Transactional
-    public UserResponse updateUserRank(String userId, UpdateRoleRequest request) {
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-
-        user.updateRole(request.getRole());
-
-        return user.toUserResponse();
-    }
+//    @Transactional
+//    public UserResponse updateUserRank(String userId, UpdateRoleRequest request) {
+//        User user = userRepository.findByUserId(userId)
+//                .orElseThrow(() -> new UserNotFoundException(userId));
+//
+//        user.updateRole(request.getRole());
+//
+//        return user.toUserResponse();
+//    }
 
     // 신고 및 문의 사항 답변
 
-    // 게시글 상태 변경 (게시글 숨기기)
+    // 게시글 상태 변경 (게시글 비공개 처리)
     @Transactional
     public BoardResponse updateBoardState(Long id, UpdateBoardStateRequest request) {
         Board board = boardRepository.findById(id)

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UserInfoResponse {
     private String userId;
-    private String userPw;
     private String nickname;
     private String address;
     private LocalDateTime createdAt;

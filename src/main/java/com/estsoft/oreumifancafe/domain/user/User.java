@@ -120,7 +120,6 @@ public class User implements UserDetails {
     public UserInfoResponse toUserInfoResponse() {
         return UserInfoResponse.builder()
                 .userId(this.userId)
-                .userPw(this.userPw)
                 .nickname(this.nickname)
                 .address(this.address)
                 .createdAt(this.createdAt)

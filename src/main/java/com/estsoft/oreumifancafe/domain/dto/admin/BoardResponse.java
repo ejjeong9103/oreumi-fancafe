@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -14,6 +16,9 @@ import java.time.LocalDateTime;
 public class BoardResponse {
     private Long id;
     private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private User user;
     private int boardType;
     private String boardCategoryName;

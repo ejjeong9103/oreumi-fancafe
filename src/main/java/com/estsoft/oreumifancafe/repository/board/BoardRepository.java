@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board,Long> {
@@ -16,5 +17,6 @@ public interface BoardRepository extends JpaRepository<Board,Long> {
     Page<Board> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword, Pageable pageable);
     Page<Board> findAllByBoardType(int boardType, Pageable pageable);
     long countByBoardType(int boardType);
+    Optional<Board> findAllByBoardType(int boardType);
     Page<Board> findBoardByUser(User user, Pageable pageable);
 }
