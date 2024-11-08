@@ -3,7 +3,6 @@ package com.estsoft.oreumifancafe.controller.admin;
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.admin.UpdateBoardStateRequest;
 import com.estsoft.oreumifancafe.domain.dto.admin.UpdateStateRequest;
-import com.estsoft.oreumifancafe.domain.dto.admin.UserInfoResponse;
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.service.admin.AdminService;
@@ -54,12 +53,6 @@ public class AdminController {
     @GetMapping("/user")
     public ResponseEntity<List<UserResponse>> getAllUser() {
         return ResponseEntity.ok(adminService.getAllUser());
-    }
-
-    // 사용자 정보 조회
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<UserInfoResponse> userInfo(@PathVariable String userId) {
-        return ResponseEntity.ok(adminService.userInfo(userId));
     }
 
     // 사용자 상태 변경
