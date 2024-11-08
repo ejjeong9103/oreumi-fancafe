@@ -8,6 +8,7 @@ import com.estsoft.oreumifancafe.service.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -119,7 +120,7 @@ public class BoardController {
             @PathVariable int pageNum,
             Model model) {
 
-        Pageable pageRequest = PageRequest.of(pageNum -1 , 30); // pageNum과 페이지 크기 30 설정
+        Pageable pageRequest = PageRequest.of(pageNum -1 , 30, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Board> boardPage = boardService.getAllBoard(boardType, pageRequest);
 
@@ -135,7 +136,7 @@ public class BoardController {
             @PathVariable int pageNum,
             Model model) {
 
-        Pageable pageable = PageRequest.of(pageNum -1, 30);
+        Pageable pageable = PageRequest.of(pageNum -1, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Board> boardPage = boardService.findBoardByTitle(title,pageable);
 
@@ -151,7 +152,7 @@ public class BoardController {
             @PathVariable int pageNum,
             Model model) {
 
-        Pageable pageable = PageRequest.of(pageNum - 1, 30);
+        Pageable pageable = PageRequest.of(pageNum - 1, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Board> boardPage = boardService.findBoardByNickname(nickname, pageable);
 
@@ -167,7 +168,7 @@ public class BoardController {
             @PathVariable int pageNum,
             Model model) {
 
-        Pageable pageable = PageRequest.of(pageNum - 1, 30);
+        Pageable pageable = PageRequest.of(pageNum - 1, 30, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Board> boardPage = boardService.findBoardByKeyword(keyword, pageable);
 
