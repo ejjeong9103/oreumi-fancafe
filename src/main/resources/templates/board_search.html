@@ -30,7 +30,7 @@
         <tbody>
         <tr th:each="board : ${boardPage.content}">
             <td th:text="${board.id}"></td>
-            <td><a th:href="@{/board/article/{boardType}/{id}(boardType=${boardType}, id=${board.id})}"
+            <td><a th:href="@{/board/article/{boardType}/{id}(boardType=${board.boardType}, id=${board.id})}"
                    th:text="${board.title}"></a>
             <td th:text="${board.user.nickname}"></td>
             <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
