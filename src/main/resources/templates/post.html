@@ -50,19 +50,39 @@
             <p class="comment-count">댓글 n</p>
             <hr>
             <div class="comment-list d-block" th:if="${comment}">
-                <div class="col comment" th:each="item:${comment}" th:classappend="${comment.hierarchy == 1} ? 'padding-left' : ''">
+                <div class="col comment" th:each="item : ${comment}"
+                     th:style="'margin-left: ' + (${item.hierarchy} * 20) + 'px;'"
+                     th:classappend="${item.hierarchy > 0} ? 'child-comment' : ''"
+                     style="position: relative;">
+
+                    <!-- 프로필 이미지 추가 -->
                     <div class="row comment-pic-box">
-                        <img class="comment-pic" th:classappend="${item} ? '' : 'd-flex'"
-                             th:src="${item.userPic != null} ? @{${item.userPic}} : @{ '임시프로필사진.jpg' }" alt="프로필 사진">
+                        <img class="comment-pic" th:src="${item.user.profileImageAddress != null ? item.user.profileImageAddress : '/images/default-profile.png'}" alt="프로필 사진" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
                     </div>
+
                     <div class="row comment-context">
-                        <p class="comment-writer" th:text="${item.userId}"></p>
-                        <p class="comment-body text-break" th:text="${item.context}"></p>
-                        <p class="comment-createdAt text-secondary" th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
+                        <div class="d-flex align-items-center w-100">
+                            <p class="comment-writer me-2" th:text="${item.user.nickname}" style="font-weight: bold; margin-right: 8px;"></p>
+                            <p class="comment-createdAt text-secondary" th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}" style="margin-right: auto;"></p>
+                            <button class="btn btn-link p-0 reply-btn" th:if="${item.hierarchy == 0}" style="color: #007bff; cursor: pointer; text-decoration: none;"
+                                    th:onclick="|showReplyForm(${item.id})|">답글</button>
+                        </div>
+
+                        <p class="comment-body text-break" th:text="${item.content}"></p>
+                    </div>
+                    <div th:id="'replyForm-' + ${item.id}" class="reply-form" style="display: none; margin-top: 10px;">
+                        <form th:action="@{/board/article/{boardId}/reply(boardId=${article.id})}" method="post">
+                            <input type="hidden" name="parentReplyId" th:value="${item.id}">
+                            <textarea class="form-control mb-2 reply-textarea" name="commentbox" rows="2" placeholder="답글을 입력하세요" maxlength="600"></textarea>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <span class="reply-charCount text-muted ms-2">0/600</span>
+                                <button type="submit" class="btn btn-primary btn-sm" style="background-color: #007bff; border-color: #007bff;">답글 작성</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <form class="comment-create bg-light" style="padding: 0 30px;">
+            <form th:action="@{/board/article/{boardId}/reply(boardId=${article.id})}" method="post" class="comment-create bg-light" style="padding: 0 30px;">
                 <div>
                     <label for="commentbox" th:text="${loggedInUser != null ? loggedInUser.nickname : ''}"></label><br>
                     <textarea class="w-100" id="commentbox" name="commentbox" rows="3" spellcheck="false" maxlength="600" style="resize: none; background-color: white; border: none; width: 100%;"></textarea>
@@ -85,7 +105,7 @@
             </div>
         </div>
     </article>
-</div>
+</div> <!-- 닫는 위치 조정됨 -->
 
 <script>
     document.getElementById('commentbox').addEventListener('input', function() {
@@ -93,8 +113,31 @@
         const currentLength = this.value.length;
         document.getElementById('charCount').textContent = `${currentLength}/${maxLength}`;
     });
+
+    document.querySelectorAll('.reply-textarea').forEach(function(textarea) {
+        textarea.addEventListener('input', function() {
+            const maxLength = 600;
+            const currentLength = this.value.length;
+            const charCountSpan = this.parentNode.querySelector('.reply-charCount');
+            charCountSpan.textContent = `${currentLength}/${maxLength}`;
+        });
+    });
+
     function confirmDelete() {
         return confirm("삭제하시겠습니까?");
+    }
+
+    function showReplyForm(replyId) {
+        document.querySelectorAll('.reply-form').forEach(function(form) {
+            form.style.display = 'none';
+        });
+
+        const replyForm = document.getElementById('replyForm-' + replyId);
+        if (replyForm) {
+            replyForm.style.display = 'block';
+        } else {
+            console.error('Reply form not found for ID:', 'replyForm-' + replyId);
+        }
     }
 </script>
 

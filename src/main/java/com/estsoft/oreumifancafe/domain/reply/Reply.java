@@ -40,7 +40,7 @@ public class Reply {
     @Column(nullable = false)
     private int orders; // 순서
 
-    @Column(nullable = false)
+    @Column(name = "`group`", nullable = false)
     private int group; // 댓글그룹
 
     @ManyToOne
