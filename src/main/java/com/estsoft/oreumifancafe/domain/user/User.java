@@ -122,7 +122,9 @@ public class User implements UserDetails {
                 .userId(this.userId)
                 .nickname(this.nickname)
                 .address(this.address)
+                .addressDetail(this.addressDetail)
                 .createdAt(this.createdAt)
+                .email(this.email)
                 .state(this.state)
                 .profileImageAddress(this.profileImageAddress)
                 .build();
@@ -135,5 +137,18 @@ public class User implements UserDetails {
 
     // 사용자 등급 변경
     public void updateRole(int role) {
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateUserPw(String userPw) {
+        this.userPw = userPw;
+    }
+
+    public void updateAddress(String address, String addressDetail) {
+        this.address = address;
+        this.addressDetail = addressDetail;
     }
 }

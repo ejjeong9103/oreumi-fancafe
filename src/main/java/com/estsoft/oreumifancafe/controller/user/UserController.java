@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,7 +78,28 @@ public class UserController {
 
     // 회원정보수정 페이지 이동
     @GetMapping("/updateInfo")
-    public String updateInfo() {
+    public String updateInfoPage() {
         return "editProfile";
+    }
+
+    // 회원정보 수정
+    @PutMapping("/updateInfo")
+    @ResponseBody
+    public ResponseEntity updateInfo(@ModelAttribute AddUserRequest addUserRequest,
+                             HttpServletRequest request) {
+        // 세션의 유저 아이디와 전달받은 유저의 아이디가 같다면
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("user");
+
+        if (sessionUser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션 유저가 존재하지 않습니다.");
+        } else if (!sessionUser.getUserId().equals(addUserRequest.getUserId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("권한이 없습니다.");
+        } else {
+            // 회원 정보 수정
+            // 세션 업데이트
+            session.setAttribute("user", userService.updateUser(addUserRequest));
+            return ResponseEntity.ok("회원정보 수정이 완료되었습니다.");
+        }
     }
 }

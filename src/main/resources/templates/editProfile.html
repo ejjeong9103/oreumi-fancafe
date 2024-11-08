@@ -28,10 +28,10 @@
             <h2>회원정보수정</h2>
         </div>
 
-        <form class="main-form">
+        <form class="main-form" id="updateForm">
             <div class="mb-3">
                 <label for="userId" class="form-label">아이디</label>
-                <input type="text" class="form-control" id="userId" placeholder="기존아이디 표시" readonly>
+                <input type="text" class="form-control" name="userId" id="userId" th:value="${session.user.userId}" th:placeholder="${session.user.userId}" readonly>
             </div>
             <div class="mb-3">
                 <label for="nickname" class="form-label">닉네임</label>
@@ -66,16 +66,14 @@
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">이메일</label>
-                <input type="email" class="form-control" id="email" placeholder="기존이메일 표시" readonly>
+                <input type="email" class="form-control" id="email" th:value="${session.user.email}" th:placeholder="${session.user.email}" readonly>
             </div>
             <div class="mb-3">
-            <button type="button" class="btn btn-secondary">수정 완료하기</button>
+            <button type="button" class="btn btn-secondary" onclick="preSubmitCheck()">수정 완료하기</button>
             </div>
-
             <div class="mb-3">
                 <button type="button" class="delete-btn">회원 탈퇴하기</button>
             </div>
-
         </form>
     </section>
 </main>

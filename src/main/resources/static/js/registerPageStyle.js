@@ -192,6 +192,7 @@ function validatePw() {
         messagePwSpan.style.color = "red";
         messagePwSpan.textContent = "비밀번호는 영문, 숫자, 특수문자가 최소 1개씩 들어가야합니다. (8~16)";
         pwCheck = false;
+        return;
     } else {
         messagePwSpan.style.display = "";
         messagePwSpan.style.color = "";

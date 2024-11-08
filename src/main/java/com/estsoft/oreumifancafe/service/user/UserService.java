@@ -88,4 +88,28 @@ public class UserService {
     public User findUserById(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
     }
+
+    public User updateUser(AddUserRequest addUserRequest) {
+        User user = findUserById(addUserRequest.getUserId());
+
+        // 닉네임 검사
+        if (addUserRequest.getNickname() != null && !addUserRequest.getNickname().isEmpty()) {
+            duplicateNickName(addUserRequest.getNickname());
+            user.updateNickname(addUserRequest.getNickname());
+        }
+
+        // 비밀번호
+        if (addUserRequest.getUserPw() != null && !addUserRequest.getUserPw().isEmpty()) {
+            user.updateUserPw(bCryptPasswordEncoder.encode(addUserRequest.getUserPw()));
+        }
+
+        // 주소
+        if (addUserRequest.getPost() != null && !addUserRequest.getPost().isEmpty()) {
+            user.updateAddress(
+                    "(" + addUserRequest.getPost() + ")" + " " + addUserRequest.getAddress(),
+                    addUserRequest.getAddress()
+            );
+        }
+        return userRepository.save(user);
+    }
 }

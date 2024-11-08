@@ -2,10 +2,6 @@ let nicknameCheck = false;
 let pwCheck = false;
 let addressCheck = false;
 
-let isEmpty = (txt) => {
-    return txt == null || txt === "";
-}
-
 function execDaumPostcode(event) {
     event.preventDefault(); // 기본 폼 제출 방지
     new daum.Postcode({
@@ -137,6 +133,7 @@ function validatePw() {
         messagePwSpan.style.color = "red";
         messagePwSpan.textContent = "비밀번호는 영문, 숫자, 특수문자가 최소 1개씩 들어가야합니다. (8~16)";
         pwCheck = false;
+        return
     } else {
         messagePwSpan.style.display = "";
         messagePwSpan.style.color = "";
@@ -160,3 +157,43 @@ function validatePw() {
 }
 inputPwField.addEventListener("blur", validatePw);
 inputPwCheckField.addEventListener("blur", validatePw);
+
+function preSubmitCheck() {
+    // 만약 비어있는 값이 있다면 false로 바꾸기
+    if (isEmpty(inputNicknameField.value)) {
+        nicknameCheck = false;
+    }
+
+    if (isEmpty(inputPwField.value) || isEmpty(inputPwCheckField.value)) {
+        pwCheck = false;
+        inputPwField.value = "";
+        inputPwCheckField.value = "";
+    }
+
+    if (!nicknameCheck && !pwCheck && !addressCheck) {
+        alert("변경하려는 내용이 없거나 양식에 맞지 않습니다.");
+    } else {
+        const formData = new FormData(document.getElementById("updateForm"));
+
+        // 비동기 요청
+        fetch("/user/updateInfo", {
+            method: "PUT",
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorMessage => {
+                        throw new Error(errorMessage);  // 에러 메시지를 던져 catch로 전달
+                    });
+                }
+                return response.text(); // 성공 시 응답 텍스트 반환
+            })
+            .then(message => {
+                alert(message);
+                window.location.href = "/";  // 성공 시 메인 페이지로 이동
+            })
+            .catch(error => {
+                alert(error);
+            });
+    }
+}
