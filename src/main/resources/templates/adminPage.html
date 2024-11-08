@@ -18,7 +18,29 @@
         <h3 class="admin-page-title">관리자 기능</h3>
     </div>
 
-    <div></div>
+    <form action="/" method="get" class="user-search-form">
+        <h3 class="user-search-title">사용자 조회</h3>
+        <input type="text" class="user-id-input" id="user-id-input" placeholder="ID 입력" />
+        <button class="btn btn-primary user-id-btn" type="submit">조회하기</button>
+    </form>
+
+    <div class="all-user-container">
+        <h3 class="all-user-title">전체 사용자 조회</h3>
+        <button class="btn btn-primary user-id-btn all-user-btn" type="submit">조회하기</button>
+    </div>
+
+    <form action="/" method="get" class="post-search-form">
+        <h3 class="post-search-title">게시글 조회</h3>
+        <input type="text" class="post-search-input" placeholder="키워드 입력" />
+        <button class="btn btn-primary user-id-btn post-search-btn" type="submit">조회하기</button>
+    </form>
+
+    <div class="admin-manage-container">
+        <h3 class="admin-manage-title">관리자 조회 / 수정</h3>
+        <button class="btn btn-primary user-id-btn admin-manage-btn" type="submit">조회하기</button>
+    </div>
+
+
 
 </section>
 
