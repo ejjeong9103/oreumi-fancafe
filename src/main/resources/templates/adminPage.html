@@ -40,6 +40,7 @@
         <button class="btn btn-primary admin-manage-btn" type="submit">조회하기</button>
     </div>
 
+    <!--사용자 조회 모달창-->
     <div id="user-search-modal">
         <p class="user-id" th:text="'아이디: ' + ${user.userId}">아이디: abc</p>
         <p class="user-nickname" th:text="'닉네임: ' + ${user.nickname}">닉네임: 오르미</p>
@@ -53,7 +54,8 @@
             <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
             <label class="btn btn-outline-primary" for="btncheck3">사용자 상태 변경</label>
         </div>
-
+<!--style="display: none;"-->
+        <!--사용자 상세 정보-->
         <div class="user-info">
             <p th:text="'이메일: ' + ${userDetail.email}">이메일: </p>
             <p th:text="'주소: ' + ${userDetail.address}">주소: </p>
@@ -61,7 +63,19 @@
             <p th:text="'등급: ' + ${userDetail.role}">등급: </p>
         </div>
 
-        <div class="change-role"></div>
+        <!--사용자 등급 변경-->
+        <div class="change-role">
+            <p th:text="'등급: ' + ${
+            userDetail.role == 1? '준회원' :
+            (userDetail.role == 2? '정회원' :
+            (userDetail.role == 3? '우수회원' :
+            (userDetail.role == 4? '연에인' : '관리자')))}">등급: 준회원</p>
+        </div>
+
+        <!--사용자 상태 변경-->
+        <div class="change-state">
+            <p th:text="'상태: ' + ${userDetail.state}">상태: 정상</p>
+        </div>
     </div>
 
     <div id="all-user-modal"></div>
