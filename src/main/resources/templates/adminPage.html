@@ -42,7 +42,7 @@
 
     <!--사용자 조회 모달창-->
     <div id="user-search-modal">
-        <p class="user-id" th:text="'아이디: ' + ${user.userId}">아이디: abc</p>
+        <p class="user-id" th:text="'ID: ' + ${user.userId}">아이디: abc</p>
         <p class="user-nickname" th:text="'닉네임: ' + ${user.nickname}">닉네임: 오르미</p>
         <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
             <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
@@ -78,7 +78,12 @@
         </div>
     </div>
 
-    <div id="all-user-modal"></div>
+    <!--전체 사용자 조회 모달창-->
+    <div id="all-user-modal">
+        <ul class="user-list" th:each="item : ${userList}">
+            <li class="list-item" th:text="'ID: ' + ${item.userId}">ID: abc</li>
+        </ul>
+    </div>
 
     <div id="post-search-modal"></div>
 
