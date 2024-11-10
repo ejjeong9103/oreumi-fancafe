@@ -1,0 +1,95 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+html {
+    width: auto;
+    font-family: Pretendard, "Pretendard Variable", sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    padding: 40px 50px;
+}
+
+.btn-secondary {
+    width: 70px;
+    white-space: nowrap;
+}
+
+.container {
+    padding: 40px 50px;
+}
+
+article {
+    padding: 0;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.board-page {
+    margin-top: 40px;
+    padding: 20px 20px 30px 20px;
+}
+
+.info-writer-detail {
+    vertical-align: bottom;
+    display: flex;
+}
+
+.user-rank {
+    font-size: 0.8rem;
+    align-content: flex-end;
+}
+
+.info-writer-detail2 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.article-body {
+    padding-bottom: 80px;
+}
+
+
+.title {
+    margin-bottom: 20px;
+}
+
+
+.page-button-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.padding-left {
+    padding-left: 70px;
+}
+
+table {
+    padding-bottom: 20px;
+    border-bottom: 1px solid lightgray;
+    display: flex;
+    table-layout: fixed;
+    margin-bottom: 20px;
+}
+
+tr{
+    margin-bottom: 20px;
+}
+th {
+    align-items: center;
+    white-space: nowrap;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+}
+
+td {
+    padding: 15px;
+    white-space: break-spaces;
+}

@@ -23,14 +23,21 @@ public class HelpPageController {
 
 
     // 여기부터
+
+    // 문의 페이지
+    @GetMapping("/help")
+    public String helpForm(Model model) {
+        return "postEditor";
+    }
+
 // POST - 질문 작성하기
-    @PostMapping("/question")
-    public String writeQuestion(@RequestBody AddHelpRequest request, Model model) {
+    @PostMapping("/help")
+    public String writeQuestion(@ModelAttribute AddHelpRequest request, Model model) {
         request.setUserId("id"); // 임시 사용자 ID
         Help question = service.saveQuestion(request);
         HelpResponse response = new HelpResponse(question);
         model.addAttribute("question", response);
-        return "postEditor"; // 반환할 템플릿 이름
+        return "qnadetail"; // 반환할 템플릿 이름
     }
 
     // GET - 내가 쓴 질문 단건 조회
@@ -38,8 +45,8 @@ public class HelpPageController {
     public String findQuestionById(@PathVariable long id, Model model) {
         Help question = service.findQuestionBy(id);
         HelpResponse response = new HelpResponse(question);
-        model.addAttribute("question", response);
-        return "post"; // 반환할 템플릿 이름
+        model.addAttribute("help", response);
+        return "qnadetail"; // 반환할 템플릿 이름
     }
 
     // GET - 내가 쓴 질문 전체 조회
@@ -54,7 +61,7 @@ public class HelpPageController {
 
     // PUT - 답변 작성하기
     @PutMapping("/question/{id}")
-    public String updateAnswer(@PathVariable Long id, @RequestBody AddHelpRequest request, Model model) {
+    public String updateAnswer(@PathVariable Long id, @ModelAttribute AddHelpRequest request, Model model) {
         Help updateHelp = service.updateAnswer(id, request);
         HelpResponse response = new HelpResponse(updateHelp);
         model.addAttribute("question", response);
