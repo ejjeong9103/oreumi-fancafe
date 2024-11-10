@@ -10,4 +10,6 @@ public interface HelpRepository extends JpaRepository<Help, Long> {
     List<Help> findByUserId(String userId);
 
     List<Help> findByUserIdAndHelpType(String userId, int helpType);
+
+    Help findByHelpType(int helpType);
 }
