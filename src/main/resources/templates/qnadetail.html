@@ -46,7 +46,7 @@
             <p class="article-body-text text-break" th:text="${help.content}"></p>
         </div>
         <hr>
-        <div class="help-answer" th:unless="${help.state == 1}">
+        <div class="help-answer" th:classappend="${help.answer == null} ? 'd-none' : ''">
             <table>
                 <tr>
                     <th>답변 내용</th>
