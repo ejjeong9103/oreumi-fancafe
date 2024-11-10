@@ -51,5 +51,17 @@ public class ReplyService {
         return replyRepository.findAllByBoardIdOrderByGroupAscOrdersAsc(boardId);
     }
 
+    public void deleteReply(Long replyId, User user) {
+
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다"));
+
+        // 작성자 확인 (또는 관리자 권한 확인)
+        if (!reply.getUser().getUserId().equals(user.getUserId())) {
+            throw new IllegalArgumentException("댓글을 삭제할 권한이 없습니다");
+        }
+
+        replyRepository.delete(reply);
+    }
 
 }

@@ -66,6 +66,10 @@
                             <p class="comment-createdAt text-secondary" th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}" style="margin-right: auto;"></p>
                             <button class="btn btn-link p-0 reply-btn" th:if="${item.hierarchy == 0}" style="color: #007bff; cursor: pointer; text-decoration: none;"
                                     th:onclick="|showReplyForm(${item.id})|">답글</button>
+                            <form th:action="@{/board/article/{boardId}/reply/{replyId}(boardId=${article.id}, replyId=${item.id})}" method="post" onsubmit="return confirm('정말로 댓글을 삭제하시겠습니까?')">
+                                <input type="hidden" name="_method" value="delete">
+                                <button type="submit">삭제</button>
+                            </form>
                         </div>
 
                         <p class="comment-body text-break" th:text="${item.content}"></p>

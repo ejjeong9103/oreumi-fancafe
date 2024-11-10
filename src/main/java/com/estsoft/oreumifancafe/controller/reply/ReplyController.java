@@ -47,4 +47,19 @@ public class ReplyController {
         // 작성 후 해당 게시글로 리디렉션
         return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
     }
+
+    @DeleteMapping("/article/{boardId}/reply/{replyId}")
+    public String deleteReply(@PathVariable Long boardId,
+                              @PathVariable Long replyId,
+                              @AuthenticationPrincipal User loggedInUser) {
+        // 댓글 삭제 로직 실행
+        replyService.deleteReply(replyId, loggedInUser);
+
+        // boardId를 사용해 boardType 조회
+        Board board = boardService.findById(boardId);
+
+        // boardType과 boardId를 포함하여 리다이렉트 경로 반환
+        return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
+    }
+
 }
