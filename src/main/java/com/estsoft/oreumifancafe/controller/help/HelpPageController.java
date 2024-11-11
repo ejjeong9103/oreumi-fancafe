@@ -63,7 +63,7 @@ public class HelpPageController {
         Help updateHelp = service.updateAnswer(id, request);
         HelpResponse response = new HelpResponse(updateHelp);
         model.addAttribute("question", response);
-        return "postEditor"; // 반환할 템플릿 이름
+        return "myPage"; // 답변 작성 후 관리자 페이지로 넘어가도록 수정
     }
 
     // 관리자 - 전체 질문 조회
