@@ -311,7 +311,7 @@ function preSubmitCheck(event) {
     const formData = new FormData(document.getElementById("signupForm"));
 
     // 비동기 요청
-    fetch("/user/signup", {
+    fetch("/user", {
         method: "POST",
         body: formData
     })
