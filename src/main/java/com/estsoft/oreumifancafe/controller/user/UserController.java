@@ -26,8 +26,14 @@ public class UserController {
 
     // 회원가입 페이지 이동
     @GetMapping("/signup")
-    public String signup() {
-        return "registerPage";
+    public String signup(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null) {
+            throw new UnauthorizedException("로그인 상태에서는 회원가입 진행이 불가능합니다.");
+        } else {
+            return "registerPage";
+        }
     }
 
     // 회원가입
