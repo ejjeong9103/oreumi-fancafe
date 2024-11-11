@@ -73,20 +73,10 @@ public class UserController {
                          @RequestParam(defaultValue = "1") int replyPageNum,
                          @RequestParam(defaultValue = "1") int qaPageNum,
                          @RequestParam(defaultValue = "1") int reportPageNum) {
-        // 세션에 있는 유저를 꺼내옴
-        HttpSession session = request.getSession();
-        User sessionUser = (User) session.getAttribute("user");
-        if (sessionUser == null) {
-            throw new UnauthorizedException("세션 유저가 존재하지 않습니다.");
-        } else if (!sessionUser.getUserId().equals(userId)) {
-            throw new ForbiddenException("권한이 없습니다.");
-        } else {
-            // 내 글 목록
-            Page<BoardResponse> boardResponseList = boardService.findByUserId(userId, boardPageNum);
-
-            model.addAttribute("myBoard", boardResponseList);
-            return "myPage";
-        }
+        // 내 글 목록
+        Page<BoardResponse> boardResponseList = boardService.findByUserId(userId, boardPageNum);
+        model.addAttribute("myBoard", boardResponseList);
+        return "myPage";
     }
 
     // 회원정보수정 페이지 이동
@@ -99,22 +89,14 @@ public class UserController {
     @PutMapping("/{userId}")
     @ResponseBody
     public ResponseEntity updateInfo(@PathVariable String userId
-            ,@ModelAttribute AddUserRequest addUserRequest,
-                             HttpServletRequest request) {
+            , @ModelAttribute AddUserRequest addUserRequest,
+                                     HttpServletRequest request) {
         // 세션의 유저 아이디와 전달받은 유저의 아이디가 같다면
         HttpSession session = request.getSession();
-        User sessionUser = (User) session.getAttribute("user");
-
-        if (sessionUser == null) {
-            throw new UnauthorizedException("세션 유저가 존재하지 않습니다.");
-        } else if (!sessionUser.getUserId().equals(userId)) {
-            throw new ForbiddenException("권한이 없습니다.");
-        } else {
-            // 회원 정보 수정
-            // 세션 업데이트
-            session.setAttribute("user", userService.updateUser(addUserRequest, userId));
-            return ResponseEntity.ok("회원정보 수정이 완료되었습니다.");
-        }
+        // 회원 정보 수정
+        // 세션 업데이트
+        session.setAttribute("user", userService.updateUser(addUserRequest, userId));
+        return ResponseEntity.ok("회원정보 수정이 완료되었습니다.");
     }
 
     @DeleteMapping("/{userId}")
@@ -122,18 +104,10 @@ public class UserController {
     public ResponseEntity deleteUser(@PathVariable String userId,
                                      HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User sessionUser = (User) session.getAttribute("user");
-
-        if (sessionUser == null) {
-            throw new UnauthorizedException("세션 유저가 존재하지 않습니다.");
-        } else if (!sessionUser.getUserId().equals(userId)) {
-            throw new ForbiddenException("권한이 없습니다.");
-        } else {
-            // 회원 탈퇴
-            userService.deleteUser(userId);
-            // 세션 삭제
-            session.invalidate();
-            return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
-        }
+        // 회원 탈퇴
+        userService.deleteUser(userId);
+        // 세션 삭제
+        session.invalidate();
+        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 }

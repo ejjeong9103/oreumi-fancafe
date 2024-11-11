@@ -181,6 +181,11 @@ function preSubmitCheck() {
             body: formData
         })
             .then(response => {
+                if (response.status === 403) {
+                    // 권한 부족 시 바로 accessDenied로 이동하고 이후 체인을 실행하지 않음
+                    window.location.href = '/accessDenied';
+                    throw "ACCESS_DENIED"; // 명시적으로 에러를 던져 이후 흐름 차단
+                }
                 if (!response.ok) {
                     return response.text().then(errorMessage => {
                         throw new Error(errorMessage);  // 에러 메시지를 던져 catch로 전달
@@ -193,7 +198,9 @@ function preSubmitCheck() {
                 window.location.href = "/";  // 성공 시 메인 페이지로 이동
             })
             .catch(error => {
-                alert(error);
+                if (error !== "ACCESS_DENIED") {
+                    alert(error); // 다른 에러만 alert
+                }
             });
     }
 }
@@ -211,6 +218,11 @@ function deleteUser() {
         method: "DELETE",
     })
         .then(response => {
+            if (response.status === 403) {
+                // 권한 부족 시 바로 accessDenied로 이동하고 이후 체인을 실행하지 않음
+                window.location.href = '/accessDenied';
+                throw "ACCESS_DENIED"; // 명시적으로 에러를 던져 이후 흐름 차단
+            }
             if (!response.ok) {
                 return response.text().then(errorMessage => {
                     throw new Error(errorMessage);  // 에러 메시지를 던져 catch로 전달
@@ -223,6 +235,9 @@ function deleteUser() {
             window.location.href = "/";  // 성공 시 메인 페이지로 이동
         })
         .catch(error => {
-            alert(error);
+            // ACCESS_DENIED일 경우 아무 동작도 하지 않음
+            if (error !== "ACCESS_DENIED") {
+                alert(error); // 다른 에러만 alert
+            }
         });
 }

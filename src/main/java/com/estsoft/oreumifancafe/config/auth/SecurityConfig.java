@@ -5,10 +5,12 @@ import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationFailureHandler;
 import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationSuccessHandler;
 import com.estsoft.oreumifancafe.aop.auth.CustomAuthorizationManager;
 import com.estsoft.oreumifancafe.service.auth.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -62,10 +64,19 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                 )
                 .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/accessDenied")
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            if ("DELETE".equalsIgnoreCase(request.getMethod()) || "PUT".equalsIgnoreCase(request.getMethod())) {
+                                // DELETE와 PUT 요청은 리다이렉트 대신 상태 코드 반환
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "권한이 부족합니다.");
+                            } else {
+                                // GET 요청 등은 리다이렉트 처리
+                                response.sendRedirect("/accessDenied");
+                            }
+                        })
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
                 .csrf(auth -> auth.disable()) // CSRF 비활성화
+                .cors(Customizer.withDefaults()) // CORS 활성화
                 .build();
     }
 
