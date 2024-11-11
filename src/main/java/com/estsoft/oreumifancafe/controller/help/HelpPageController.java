@@ -19,9 +19,6 @@ public class HelpPageController {
         this.service = service;
     }
 
-    // 페이지 따라 드롭다운의 메뉴 변경하는 거...
-
-
     // 여기부터
 
     // 문의 페이지
@@ -30,15 +27,6 @@ public class HelpPageController {
         return "qnaEditor";
     }
 
-//// POST - 질문 작성하기
-//    @PostMapping("/help")
-//    public String writeQuestion(@ModelAttribute AddHelpRequest request, Model model) {
-//        request.setUserId("id"); // 임시 사용자 ID
-//        Help question = service.saveQuestion(request);
-//        HelpResponse response = new HelpResponse(question);
-//        model.addAttribute("question", response);
-//        return "redirect:qnadetail"; // 반환할 템플릿 이름
-//    }
 
     // GET - 내가 쓴 질문 단건 조회
     @GetMapping("/question/{id}")
@@ -58,6 +46,16 @@ public class HelpPageController {
 //        model.addAttribute("questions", questionList);
 //        return "mypage"; // 반환할 템플릿 이름
 //    }
+
+    // GET - 답변 페이지
+    @GetMapping("/answer/{id}")
+    public String showAnswerEditor(@PathVariable long id, Model model) {
+        Help question = service.findQuestionBy(id);
+        model.addAttribute("help", question);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("helpType",question.getHelpType());
+        return "qnaEditor";
+    }
 
     // PUT - 답변 작성하기
     @PutMapping("/answer/{id}")

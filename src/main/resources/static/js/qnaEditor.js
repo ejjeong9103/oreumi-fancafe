@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+
     const button = document.querySelector('.dropdown-btn');
     const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
     let hiddenInput = document.getElementById('hiddenValue');
@@ -17,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 글 작성 버튼에 이벤트 리스너 추가
-
     if (createButton) {
         createButton.addEventListener('click', event => {
             fetch('/help/question', {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     content: document.getElementById('content').value,
                     helpType: document.getElementById('hiddenValue').value
                 }),
-            }).then(response=>{
+            }).then(response => {
                 if (!response.ok) {
                     throw new Error('서버 응답이 올바르지 않습니다.');
                 }
@@ -40,10 +40,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('등록 완료되었습니다');
                     location.replace(`/myPage`);
                 })
-                .catch((error)=>{
-                    console.log('오류:',error);
+                .catch((error) => {
+                    console.log('오류:', error);
                 });
         });
+    }
+
+
+    const currentUrl = window.location.href;
+    let helpTypeInput = document.getElementById('helpType');
+    let titleInput = document.getElementById('title');
+    const originalHelpType = helpTypeInput.value;
+    let helpTypeText = originalHelpType === '1' ? '문의' : '신고';
+
+    // 답변 작성시 타입/제목 수정 불가능하게
+    if (currentUrl.includes('/answer/')) {
+        // URL에 "/edit/"이 포함되어 있으면 title 필드, hiddenvalue 고정, dropdown버튼 설정
+        titleInput.value=titleInput.getAttribute('data-title');
+        titleInput.readOnly = true;
+        hiddenInput.value = originalHelpType;
+        button.textContent = helpTypeText;
+
+
+    } else { // URL에 "/edit/"이 포함되어 있지 않으면 title 필드를 편집 가능하게 합니다.
+        titleInput.readOnly = false;
+
     }
 });
 
