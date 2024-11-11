@@ -83,9 +83,10 @@ public class UserController {
     }
 
     // 회원정보 수정
-    @PutMapping("/updateInfo")
+    @PutMapping("/{userId}")
     @ResponseBody
-    public ResponseEntity updateInfo(@ModelAttribute AddUserRequest addUserRequest,
+    public ResponseEntity updateInfo(@PathVariable String userId
+            ,@ModelAttribute AddUserRequest addUserRequest,
                              HttpServletRequest request) {
         // 세션의 유저 아이디와 전달받은 유저의 아이디가 같다면
         HttpSession session = request.getSession();
@@ -93,12 +94,12 @@ public class UserController {
 
         if (sessionUser == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션 유저가 존재하지 않습니다.");
-        } else if (!sessionUser.getUserId().equals(addUserRequest.getUserId())) {
+        } else if (!sessionUser.getUserId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("권한이 없습니다.");
         } else {
             // 회원 정보 수정
             // 세션 업데이트
-            session.setAttribute("user", userService.updateUser(addUserRequest));
+            session.setAttribute("user", userService.updateUser(addUserRequest, userId));
             return ResponseEntity.ok("회원정보 수정이 완료되었습니다.");
         }
     }

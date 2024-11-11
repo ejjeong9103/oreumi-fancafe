@@ -174,9 +174,9 @@ function preSubmitCheck() {
         alert("변경하려는 내용이 없거나 양식에 맞지 않습니다.");
     } else {
         const formData = new FormData(document.getElementById("updateForm"));
-
+        const userId = document.getElementById("userId").value;
         // 비동기 요청
-        fetch("/user/updateInfo", {
+        fetch(`/user/${userId}`, {
             method: "PUT",
             body: formData
         })

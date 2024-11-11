@@ -89,8 +89,8 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
     }
 
-    public User updateUser(AddUserRequest addUserRequest) {
-        User user = findUserById(addUserRequest.getUserId());
+    public User updateUser(AddUserRequest addUserRequest, String userId) {
+        User user = findUserById(userId);
 
         // 닉네임 검사
         if (addUserRequest.getNickname() != null && !addUserRequest.getNickname().isEmpty()) {
