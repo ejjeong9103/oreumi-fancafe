@@ -197,3 +197,31 @@ function preSubmitCheck() {
             });
     }
 }
+
+function deleteUser() {
+    // 확인 팝업 띄우기
+    const isConfirmed = confirm("정말로 삭제하시겠습니까?");
+    if (!isConfirmed) {
+        return; // 사용자가 '아니오'를 선택하면 함수 종료
+    }
+    // 비동기 요청
+    fetch("/user/deleteUser", {
+        method: "PUT",
+        body: formData
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorMessage => {
+                    throw new Error(errorMessage);  // 에러 메시지를 던져 catch로 전달
+                });
+            }
+            return response.text(); // 성공 시 응답 텍스트 반환
+        })
+        .then(message => {
+            alert(message);
+            window.location.href = "/";  // 성공 시 메인 페이지로 이동
+        })
+        .catch(error => {
+            alert(error);
+        });
+}
