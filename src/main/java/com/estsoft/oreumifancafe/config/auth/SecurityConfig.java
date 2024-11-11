@@ -3,6 +3,7 @@ package com.estsoft.oreumifancafe.config.auth;
 import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationEntryPoint;
 import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationFailureHandler;
 import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationSuccessHandler;
+import com.estsoft.oreumifancafe.aop.auth.CustomAuthorizationManager;
 import com.estsoft.oreumifancafe.service.auth.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -38,11 +39,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/").permitAll()
-//                        .requestMatchers("/").hasRole("GUEST")      // 준회원이 접근할 수 있는 페이지 설정
-//                        .requestMatchers("/").hasRole("USER")       // 정회원
-//                        .requestMatchers("/").hasRole("ELITE")      // 우수회원
-//                        .requestMatchers("/").hasRole("CELEBRITY")  // 연예인
+                                // 회원가입 페이지, 회원가입은 누구나 가능
+                                .requestMatchers("/user/signup", "/user").permitAll()
+                                // 회원정보 수정 페이지는 게스트만
+                                .requestMatchers("/user/updateInfo").hasRole("GUEST")
+                                // 회원정보에대한 수정, 조회, 삭제는 자기 자신인지 검사하는 access에 걸림
+                                .requestMatchers("/user/{userId}")
+                                .access(new CustomAuthorizationManager())
                         .requestMatchers("/admin/**").hasRole("ADMIN")      // 관리자
 //                        .requestMatchers("/").hasAnyRole("CELEBRITY", "ADMIN") // 연예인과 관리자가 접근할 수 있는 페이지 설정
                         .anyRequest().permitAll()

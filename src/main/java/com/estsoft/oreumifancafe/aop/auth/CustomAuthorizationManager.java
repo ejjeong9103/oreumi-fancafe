@@ -12,7 +12,6 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext context) {
         Authentication auth = authentication.get();
-        System.out.println(auth.getName());
         String userId = context.getVariables().get("userId").toString();
 
         // 인증 객체에서 유저 아이디 확인
