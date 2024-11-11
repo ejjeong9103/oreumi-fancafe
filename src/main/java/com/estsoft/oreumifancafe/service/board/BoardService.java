@@ -4,15 +4,13 @@ import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
+import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
@@ -101,7 +99,8 @@ public class BoardService {
     }
 
     // 해당 유저의 글 목록
-    public Page<BoardResponse> findByUserId(User user, int pageNum) {
+    public Page<BoardResponse> findByUserId(String userId, int pageNum) {
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("유저가 존재하지 않습니다."));
         return boardRepository.findBoardByUser(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
     }
 }

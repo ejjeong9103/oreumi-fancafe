@@ -3,13 +3,14 @@ package com.estsoft.oreumifancafe.controller.user;
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
+import com.estsoft.oreumifancafe.exceptions.ForbiddenException;
+import com.estsoft.oreumifancafe.exceptions.UnauthorizedException;
 import com.estsoft.oreumifancafe.service.board.BoardService;
 import com.estsoft.oreumifancafe.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     // 회원가입
-    @PostMapping("/signup")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<String> signup(@ModelAttribute AddUserRequest addUserRequest) {
         userService.saveUser(addUserRequest);
@@ -59,21 +60,27 @@ public class UserController {
     }
 
     // 마이페이지
-    @GetMapping("/myPage")
+    @GetMapping("/{userId}")
     public String myPage(HttpServletRequest request, Model model,
+                         @PathVariable String userId,
                          @RequestParam(defaultValue = "1") int boardPageNum,
                          @RequestParam(defaultValue = "1") int replyPageNum,
                          @RequestParam(defaultValue = "1") int qaPageNum,
                          @RequestParam(defaultValue = "1") int reportPageNum) {
         // 세션에 있는 유저를 꺼내옴
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser == null) {
+            throw new UnauthorizedException("세션 유저가 존재하지 않습니다.");
+        } else if (!sessionUser.getUserId().equals(userId)) {
+            throw new ForbiddenException("권한이 없습니다.");
+        } else {
+            // 내 글 목록
+            Page<BoardResponse> boardResponseList = boardService.findByUserId(userId, boardPageNum);
 
-        // 내 글 목록
-        Page<BoardResponse> boardResponseList = boardService.findByUserId(user, boardPageNum);
-
-        model.addAttribute("myBoard", boardResponseList);
-        return "myPage";
+            model.addAttribute("myBoard", boardResponseList);
+            return "myPage";
+        }
     }
 
     // 회원정보수정 페이지 이동
@@ -93,9 +100,9 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("user");
 
         if (sessionUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션 유저가 존재하지 않습니다.");
+            throw new UnauthorizedException("세션 유저가 존재하지 않습니다.");
         } else if (!sessionUser.getUserId().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("권한이 없습니다.");
+            throw new ForbiddenException("권한이 없습니다.");
         } else {
             // 회원 정보 수정
             // 세션 업데이트
@@ -112,9 +119,9 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("user");
 
         if (sessionUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션 유저가 존재하지 않습니다.");
+            throw new UnauthorizedException("세션 유저가 존재하지 않습니다.");
         } else if (!sessionUser.getUserId().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("권한이 없습니다.");
+            throw new ForbiddenException("권한이 없습니다.");
         } else {
             // 회원 탈퇴
             userService.deleteUser(userId);
