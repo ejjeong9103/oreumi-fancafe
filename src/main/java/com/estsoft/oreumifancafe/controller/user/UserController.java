@@ -103,4 +103,24 @@ public class UserController {
             return ResponseEntity.ok("회원정보 수정이 완료되었습니다.");
         }
     }
+
+    @DeleteMapping("/{userId}")
+    @ResponseBody
+    public ResponseEntity deleteUser(@PathVariable String userId,
+                                     HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("user");
+
+        if (sessionUser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션 유저가 존재하지 않습니다.");
+        } else if (!sessionUser.getUserId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("권한이 없습니다.");
+        } else {
+            // 회원 탈퇴
+            userService.deleteUser(userId);
+            // 세션 삭제
+            session.invalidate();
+            return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+        }
+    }
 }

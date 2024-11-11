@@ -204,10 +204,11 @@ function deleteUser() {
     if (!isConfirmed) {
         return; // 사용자가 '아니오'를 선택하면 함수 종료
     }
+
+    const userId = document.getElementById("userId").value;
     // 비동기 요청
-    fetch("/user/deleteUser", {
-        method: "PUT",
-        body: formData
+    fetch(`/user/${userId}`, {
+        method: "DELETE",
     })
         .then(response => {
             if (!response.ok) {

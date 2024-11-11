@@ -151,4 +151,8 @@ public class User implements UserDetails {
         this.address = address;
         this.addressDetail = addressDetail;
     }
+
+    public void deleteUser() {
+        this.state = 0;
+    }
 }

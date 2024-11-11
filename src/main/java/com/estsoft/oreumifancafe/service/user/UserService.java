@@ -112,4 +112,11 @@ public class UserService {
         }
         return userRepository.save(user);
     }
+
+    public void deleteUser(String userId) {
+        User user = findUserById(userId);
+
+        // 상태 변경
+        user.deleteUser();
+    }
 }
