@@ -19,8 +19,6 @@ public class HelpPageController {
         this.service = service;
     }
 
-    // 여기부터
-
     // 문의 페이지
     @GetMapping("/help")
     public String helpForm(Model model) {
@@ -51,6 +49,8 @@ public class HelpPageController {
     @GetMapping("/answer/{id}")
     public String showAnswerEditor(@PathVariable long id, Model model) {
         Help question = service.findQuestionBy(id);
+        // 임시 어드민
+        question.setAdminId("admin");
         model.addAttribute("help", question);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("helpType",question.getHelpType());

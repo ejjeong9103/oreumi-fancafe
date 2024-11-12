@@ -27,7 +27,7 @@ public class HelpController {
         // 임시 사용자 id로 넣어두었으나 스프링 시큐리티 적용 시 글 작성자 아이디 받아올 수 있도록 하기
         request.setUserId("id");
         Help question = service.saveQuestion(request);
-        HelpResponse response = new HelpResponse(question);
+        HelpResponse response = new HelpResponse(question.getId(),question);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -51,7 +51,7 @@ public class HelpController {
     }
 
     // PUT - 답변 작성하기
-    @PutMapping("/question/{id}")
+    @PutMapping("/answer/{id}")
     public ResponseEntity<HelpResponse> updateAnswer(@PathVariable Long id, @RequestBody AddHelpRequest request) {
         Help updateHelp = service.updateAnswer(id, request);
         HelpResponse response = new HelpResponse(updateHelp);
