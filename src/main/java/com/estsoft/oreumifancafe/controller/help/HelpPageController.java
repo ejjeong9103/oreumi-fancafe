@@ -10,7 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,16 +53,6 @@ public class HelpPageController {
         return "qnadetail"; // 반환할 템플릿 이름
     }
 
-    // GET - 내가 쓴 질문 전체 조회
-//    @GetMapping("/question")
-//    public String findAllQuestionsByUser(Model model) {
-//        List<HelpResponse> questionList = service.findAllQuestionByUser().stream()
-//                .map(HelpResponse::new)
-//                .collect(Collectors.toList());
-//        model.addAttribute("questions", questionList);
-//        return "mypage"; // 반환할 템플릿 이름
-//    }
-
     // GET - 답변 페이지
     @GetMapping("/answer/{id}")
     public String showAnswerEditor(@PathVariable long id, Model model) {
@@ -75,6 +68,7 @@ public class HelpPageController {
     // PUT - 답변 작성하기
     @PutMapping("/answer/{id}")
     public String updateAnswer(@PathVariable Long id, @ModelAttribute AddHelpRequest request, Model model) {
+
         Help updateHelp = service.updateAnswer(id, request);
         HelpResponse response = new HelpResponse(updateHelp);
         model.addAttribute("question", response);
@@ -110,15 +104,5 @@ public class HelpPageController {
         return "myPage"; // 반환할 템플릿 이름
     }
 
-    // 유저 - 내가 쓴 신고글 조회
-//    @GetMapping("/declaration/{userId}")
-//    public String findDeclarationByUser(@PathVariable String userId, Model model) {
-//        List<HelpResponse> declarationList = service.findDeclarationByUserId(userId)
-//                .stream()
-//                .map(HelpResponse::new)
-//                .collect(Collectors.toList());
-//        model.addAttribute("declarations", declarationList);
-//        return "myPage"; // 반환할 템플릿 이름
-//    }
 }
 

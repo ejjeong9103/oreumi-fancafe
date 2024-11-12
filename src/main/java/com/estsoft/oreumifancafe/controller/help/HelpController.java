@@ -49,7 +49,6 @@ public class HelpController {
         return ResponseEntity.ok(questionList);
     }
 
-    // 관리자 권한은... 어떻게 하지?
 
     // PUT - 답변 작성하기 (관리자 권한)
     @PutMapping("/answer/{id}")
