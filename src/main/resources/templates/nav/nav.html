@@ -12,13 +12,13 @@
 					</form>
 				</div>
 				<div class="signup-container">
-					<a href="/user/signup">회원가입</a>
-					<a href="#">아아디 찾기 / 비밀번호 찾기</a>
+					<a class="signup" href="/user/signup">회원가입</a>
+<!--					<a href="#">아아디 찾기 / 비밀번호 찾기</a>-->
 				</div>
-				<div class="sns-login-container">
-					<button class="kakao-login-button sns-button">카카오</button>
-					<button class="naver-login-button sns-button">네이버</button>
-				</div>
+<!--				<div class="sns-login-container">-->
+<!--					<button class="kakao-login-button sns-button">카카오</button>-->
+<!--					<button class="naver-login-button sns-button">네이버</button>-->
+<!--				</div>-->
 			</div>
 			<div th:if="${session.user != null}" class="after-login-container">
 				<img class="profile-img" th:src="${session.user.profileImageAddress}"/>
@@ -31,9 +31,23 @@
 						<a th:href="@{/user/updateInfo}">회원정보수정</a>
 					</button>
 				</div>
+				<div class="logout-container">
+					<a th:href="@{/user/logout}">로그아웃</a>
+				</div>
 			</div>
-			<div class="board">
-				게시판 목록
+			<div class="board-container">
+				<div class="board">
+					<a th:href="@{/board/{boardType}/{pageNum}(boardType=1, pageNum=1)}"
+					   th:text="'등업 게시판'"></a>
+					<a th:href="@{/board/{boardType}/{pageNum}(boardType=2, pageNum=1)}"
+					   th:text="'자유 게시판'"></a>
+					<a th:href="@{/board/{boardType}/{pageNum}(boardType=3, pageNum=1)}"
+					   th:text="'정모 게시판'"></a>
+				</div>
+				<div class="help">
+					<a th:href="@{/help}"
+					   th:text="'신고/문의하기'"></a>
+				</div>
 			</div>
 		</nav>
 <script th:src="@{/js/nav.js}" defer></script>

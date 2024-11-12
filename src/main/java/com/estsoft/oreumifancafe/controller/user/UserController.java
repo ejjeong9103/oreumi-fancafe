@@ -1,11 +1,12 @@
 package com.estsoft.oreumifancafe.controller.user;
 
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
+import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
-import com.estsoft.oreumifancafe.exceptions.ForbiddenException;
 import com.estsoft.oreumifancafe.exceptions.UnauthorizedException;
 import com.estsoft.oreumifancafe.service.board.BoardService;
+import com.estsoft.oreumifancafe.service.help.HelpService;
 import com.estsoft.oreumifancafe.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -23,6 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private final BoardService boardService;
+    private final HelpService helpService;
 
     // 회원가입 페이지 이동
     @GetMapping("/signup")
@@ -73,9 +75,16 @@ public class UserController {
                          @RequestParam(defaultValue = "1") int replyPageNum,
                          @RequestParam(defaultValue = "1") int qaPageNum,
                          @RequestParam(defaultValue = "1") int reportPageNum) {
+        User user = userService.findUserById(userId);
         // 내 글 목록
-        Page<BoardResponse> boardResponseList = boardService.findByUserId(userId, boardPageNum);
+        Page<BoardResponse> boardResponseList = boardService.findByUserId(user, boardPageNum);
+        Page<BoardResponse> replyBoardResponseList = boardService.findDistinctBoardsByUserComments(user, replyPageNum);
+        Page<HelpResponse> qaList = helpService.findByUserAndHelpType(user, qaPageNum, 1);
+        Page<HelpResponse> reportList = helpService.findByUserAndHelpType(user, reportPageNum, 2);
         model.addAttribute("myBoard", boardResponseList);
+        model.addAttribute("myReply", replyBoardResponseList);
+        model.addAttribute("myQa", qaList);
+        model.addAttribute("myReport", reportList);
         return "myPage";
     }
 
@@ -109,5 +118,13 @@ public class UserController {
         // 세션 삭제
         session.invalidate();
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        // 세션 삭제
+        session.invalidate();
+        return "redirect:/";
     }
 }

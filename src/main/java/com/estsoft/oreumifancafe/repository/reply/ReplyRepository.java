@@ -1,6 +1,9 @@
 package com.estsoft.oreumifancafe.repository.reply;
 
 import com.estsoft.oreumifancafe.domain.reply.Reply;
+import com.estsoft.oreumifancafe.domain.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +23,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     @Query("SELECT r FROM Reply r WHERE r.board.id = :boardId ORDER BY r.group ASC, r.orders ASC")
     List<Reply> findAllByBoardIdOrderByGroupAscOrdersAsc(@Param("boardId") Long boardId);
+
+    @Query("SELECT DISTINCT r.board.id FROM Reply r WHERE r.user = :user")
+    Page<Long> findDistinctBoardIdsByUser(@Param("user") User user, Pageable pageable);
 }

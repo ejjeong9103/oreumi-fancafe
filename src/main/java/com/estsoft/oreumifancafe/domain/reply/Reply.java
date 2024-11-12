@@ -1,6 +1,7 @@
 package com.estsoft.oreumifancafe.domain.reply;
 
 import com.estsoft.oreumifancafe.domain.board.Board;
+import com.estsoft.oreumifancafe.domain.dto.reply.ReplyResponse;
 import com.estsoft.oreumifancafe.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -58,5 +59,11 @@ public class Reply {
         this.group = group;
         this.board = board;
         this.user = user;
+    }
+
+    public ReplyResponse toResponse() {
+        return ReplyResponse.builder()
+                .boardResponse(this.board.toBoardResponse())
+                .build();
     }
 }

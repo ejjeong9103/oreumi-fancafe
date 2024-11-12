@@ -42,7 +42,7 @@ public class SecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
                                 // 회원가입 페이지, 회원가입은 누구나 가능
-                                .requestMatchers("/user/signup", "/user").permitAll()
+                                .requestMatchers("/user/signup", "/user", "/user/logout").permitAll()
                                 // 회원정보 수정 페이지는 게스트만
                                 .requestMatchers("/user/updateInfo").hasRole("GUEST")
                                 // 회원정보에대한 수정, 조회, 삭제는 자기 자신인지 검사하는 access에 걸림

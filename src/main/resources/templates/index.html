@@ -6,20 +6,25 @@
 	<link rel="stylesheet" th:href="@{/reset.css}">
 	<link rel="stylesheet" th:href="@{/css/main.css}">
 	<link rel="stylesheet" th:href="@{/css/section.css}">
+	<link rel="stylesheet" th:href="@{/css/index.css}">
 	<!-- section.css를 index.css로 바뀌서 작업해야함 -->
 </head>
 <style>
 </style>
 <body>
-	<th:block th:replace="header/header :: header"></th:block>
+<th:block th:replace="header/header :: header"></th:block>
 
-	<main class="--main">
-		<th:block th:replace="nav/nav :: nav"></th:block>
-		<section class="--section">
-			글 작성
-		</section>
-	</main>
+<main class="--main">
+	<th:block th:replace="nav/nav :: nav"></th:block>
+	<section class="--section">
+		<div class="section-container">
+			<img class="section-img" th:src="@{/img/section1.jpg}"/>
+			<img class="section-img" th:src="@{/img/section2.jpg}"/>
+			<img class="section-img" th:src="@{/img/section3.jpg}"/>
+		</div>
+	</section>
+</main>
 
-	<th:block th:replace="footer/footer :: footer"></th:block>
+<th:block th:replace="footer/footer :: footer"></th:block>
 </body>
 </html>
