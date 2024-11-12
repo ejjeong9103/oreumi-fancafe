@@ -110,4 +110,12 @@ public class UserController {
         session.invalidate();
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        // 세션 삭제
+        session.invalidate();
+        return "redirect:/";
+    }
 }
