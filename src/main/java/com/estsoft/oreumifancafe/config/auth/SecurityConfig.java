@@ -1,14 +1,13 @@
 package com.estsoft.oreumifancafe.config.auth;
 
-import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationEntryPoint;
-import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationFailureHandler;
-import com.estsoft.oreumifancafe.aop.auth.CustomAuthenticationSuccessHandler;
-import com.estsoft.oreumifancafe.aop.auth.CustomAuthorizationManager;
+import com.estsoft.oreumifancafe.aop.auth.*;
 import com.estsoft.oreumifancafe.service.auth.CustomUserDetailsService;
+import com.estsoft.oreumifancafe.service.board.BoardService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -38,19 +37,25 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, BoardService boardService) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                                // 회원가입 페이지, 회원가입은 누구나 가능
+                                // 회원가입 페이지, 회원가입 누구나 가능
+                                // 로그아웃은 session이 없어도 그냥 통과되게
                                 .requestMatchers("/user/signup", "/user", "/user/logout").permitAll()
-                                // 회원정보 수정 페이지는 게스트만
+                                // 게스트만
                                 .requestMatchers("/user/updateInfo").hasRole("GUEST")
+                                .requestMatchers(HttpMethod.POST, "/board").hasRole("GUEST")
                                 // 회원정보에대한 수정, 조회, 삭제는 자기 자신인지 검사하는 access에 걸림
                                 .requestMatchers("/user/{userId}")
                                 .access(new CustomAuthorizationManager())
-                        .requestMatchers("/admin/**").hasRole("ADMIN")      // 관리자
+                                .requestMatchers(HttpMethod.DELETE,"/board/{id}")
+                                .access(new CustomAuthorizationBoardManager(boardService))
+                                .requestMatchers(HttpMethod.PUT, "/board/article/edit/{id}")
+                                .access(new CustomAuthorizationBoardManager(boardService))
+                                .requestMatchers("/admin/**").hasRole("ADMIN")      // 관리자
 //                        .requestMatchers("/").hasAnyRole("CELEBRITY", "ADMIN") // 연예인과 관리자가 접근할 수 있는 페이지 설정
-                        .anyRequest().permitAll()
+                                .anyRequest().permitAll()
                 )
                 .formLogin(auth -> auth
                         .loginProcessingUrl("/user/login")
