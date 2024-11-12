@@ -31,6 +31,16 @@ public class AdminController {
         return "adminPage";
     }
 
+    // 모든 사용자 조회
+    @GetMapping("/user")
+    public String getAllUser(Model model) {
+        List<UserInfoResponse> users = adminService.getAllUser();
+
+        model.addAttribute("userList", users);
+
+        return "adminPage";
+    }
+
     // 신고 및 문의 전체 조회
     @GetMapping("/help/{userId}")
     public String getAllHelp(@PathVariable String userId, Model model) {
@@ -58,24 +68,12 @@ public class AdminController {
         return "adminPage";
     }
 
-    // 모든 사용자 조회
-    @GetMapping("/user")
-    public String getAllUser(Model model) {
-        List<UserInfoResponse> users = adminService.getAllUser();
-
-        model.addAttribute("userList", users);
-
-        return "adminPage";
-    }
-
     // 사용자 상태 변경
     @PutMapping("/user/{userId}/userState")
     public ResponseEntity<UserResponse> updateUserState(@PathVariable String userId,
                                                         @RequestBody UpdateStateRequest request) {
         return ResponseEntity.ok(adminService.updateUserState(userId, request));
     }
-
-    // 신고 및 문의 사항 답변
 
     // 게시글 상태 변경 (게시글 비공개 처리)
     @PutMapping("/board/{boardId}")
