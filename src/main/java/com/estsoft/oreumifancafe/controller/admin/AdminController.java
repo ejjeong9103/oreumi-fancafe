@@ -21,6 +21,11 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
 
+    @GetMapping
+    public String getAdminPage() {
+        return "adminPage";
+    }
+
     // 사용자 ID 조회
     @GetMapping("/user/{userId}")
     public String findUserById(@PathVariable String userId, Model model) {
@@ -83,7 +88,7 @@ public class AdminController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("board/{boardId}")
+    @DeleteMapping("board/deleteBoard/{boardId}")
     public ResponseEntity<Void> deleteBoard(@PathVariable Long id) {
         boolean valid = adminService.deleteBoard(id);
 
