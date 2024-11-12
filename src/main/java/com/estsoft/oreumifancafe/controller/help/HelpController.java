@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 @RequestMapping("/help")
 @RestController
@@ -51,7 +50,6 @@ public class HelpController {
         return ResponseEntity.ok(questionList);
     }
 
-
     // PUT - 답변 작성하기
     @PutMapping("/question/{id}")
     public ResponseEntity<HelpResponse> updateAnswer(@PathVariable Long id, @RequestBody AddHelpRequest request) {
@@ -62,14 +60,31 @@ public class HelpController {
 
     // 관리자 - 전체 질문 조회
     @GetMapping("/question/admin")
-    public ResponseEntity<List<HelpResponse>> findAllQuestion(){
-        List<HelpResponse> questionList=service.findAllQuestion().stream()
+    public ResponseEntity<List<HelpResponse>> findAllQuestion() {
+        List<HelpResponse> questionList = service.findAllQuestion().stream()
                 .map(HelpResponse::new)
                 .collect(Collectors.toList());
-      return ResponseEntity.ok(questionList);
+        return ResponseEntity.ok(questionList);
     }
 
     // 유저 - 내가 쓴 문의글 조회
+    @GetMapping("/inquiry/{userId}")
+    public ResponseEntity<List<HelpResponse>> findInquiryByUser(@PathVariable String userId) {
+        List<HelpResponse> inquiryList = service.findInquiryByUserId(userId)
+                .stream()
+                .map(HelpResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(inquiryList);
+    }
+
     // 유저 - 내가 쓴 신고글 조회
+    @GetMapping("/declaration/{userId}")
+    public ResponseEntity<List<HelpResponse>> findDeclarationByUser(@PathVariable String userId) {
+        List<HelpResponse> declarationList = service.findDeclarationByUserId(userId)
+                .stream()
+                .map(HelpResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(declarationList);
+    }
 
 }
