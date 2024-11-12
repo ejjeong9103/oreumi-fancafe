@@ -35,8 +35,19 @@
 					<a th:href="@{/user/logout}">로그아웃</a>
 				</div>
 			</div>
-			<div class="board">
-				게시판 목록
+			<div class="board-container">
+				<div class="board">
+					<a th:href="@{/board/{boardType}/{pageNum}(boardType=1, pageNum=1)}"
+					   th:text="'등업 게시판'"></a>
+					<a th:href="@{/board/{boardType}/{pageNum}(boardType=2, pageNum=1)}"
+					   th:text="'자유 게시판'"></a>
+					<a th:href="@{/board/{boardType}/{pageNum}(boardType=3, pageNum=1)}"
+					   th:text="'정모 게시판'"></a>
+				</div>
+				<div class="help">
+					<a th:href="@{/help}"
+					   th:text="'신고/문의하기'"></a>
+				</div>
 			</div>
 		</nav>
 <script th:src="@{/js/nav.js}" defer></script>
