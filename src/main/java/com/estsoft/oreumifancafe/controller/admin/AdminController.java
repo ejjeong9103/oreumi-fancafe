@@ -21,12 +21,27 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
 
+    @GetMapping
+    public String getAdminPage() {
+        return "adminPage";
+    }
+
     // 사용자 ID 조회
     @GetMapping("/user/{userId}")
     public String findUserById(@PathVariable String userId, Model model) {
         UserInfoResponse user = adminService.findUserById(userId);
 
         model.addAttribute("user", user);
+
+        return "adminPage";
+    }
+
+    // 모든 사용자 조회
+    @GetMapping("/user")
+    public String getAllUser(Model model) {
+        List<UserInfoResponse> users = adminService.getAllUser();
+
+        model.addAttribute("userList", users);
 
         return "adminPage";
     }
@@ -58,24 +73,12 @@ public class AdminController {
         return "adminPage";
     }
 
-    // 모든 사용자 조회
-    @GetMapping("/user")
-    public String getAllUser(Model model) {
-        List<UserInfoResponse> users = adminService.getAllUser();
-
-        model.addAttribute("userList", users);
-
-        return "adminPage";
-    }
-
     // 사용자 상태 변경
     @PutMapping("/user/{userId}/userState")
     public ResponseEntity<UserResponse> updateUserState(@PathVariable String userId,
                                                         @RequestBody UpdateStateRequest request) {
         return ResponseEntity.ok(adminService.updateUserState(userId, request));
     }
-
-    // 신고 및 문의 사항 답변
 
     // 게시글 상태 변경 (게시글 비공개 처리)
     @PutMapping("/board/{boardId}")
@@ -85,7 +88,7 @@ public class AdminController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("board/{boardId}")
+    @DeleteMapping("board/deleteBoard/{boardId}")
     public ResponseEntity<Void> deleteBoard(@PathVariable Long id) {
         boolean valid = adminService.deleteBoard(id);
 

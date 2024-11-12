@@ -32,9 +32,9 @@
 
     <div class="all-user-container">
         <h3 class="all-user-title">전체 사용자 조회</h3>
-        <button type="button" class="btn btn-primary" id="all-user-btn" data-bs-toggle="modal" data-bs-target="#all-user-modal">
+        <a class="btn btn-primary" id="all-user-btn" th:href="@{/admin/user}" role="button" data-bs-toggle="modal" data-bs-target="#all-user-modal">
             조회하기
-        </button>
+        </a>
     </div>
 
     <hr>
@@ -88,18 +88,17 @@
                     </div>
 
                     <!--사용자 상세 정보-->
-                    <div class="user-info">
+                    <div class="user-info" style="display: none;">
+
                         <p th:text="'이메일: ' + ${user.email}">이메일: </p>
                         <p th:text="'주소: ' + ${user.address}">주소: </p>
                         <p th:text="'가입날짜: ' + ${user.createdAt}">가입날짜: </p>
                         <p th:text="'등급: ' + ${user.role}">등급: </p>
+
                     </div>
 
                     <!--신고 및 문의 내역 조회-->
-                    <div class="find-help">
-                        <ul class="help-list" th:each="item : ${helpList}">
-                            <li class="help-item" th:text="${item.helpType == 1 ? '문의' : (item.helpType == 2 ? '신고' : '')}">문의 작성날짜</li>
-                        </ul>
+                    <div class="find-help" style="display: none;">
 
                         <table class="table help-table">
                             <thead>
@@ -115,7 +114,11 @@
                                 <th scope="row" th:text="${item.id}">1</th>
                                 <td th:text="${item.helpType == 1 ? '문의' : (item.helpType == 2 ? '신고' : '')}">문의</td>
                                 <td th:text="${item.createdAt}">2024:11:11 13:47</td>
-                                <td th:text="${item.title}">도움</td>
+                                <td>
+                                    <button type="button"
+                                            th:onclick="|location.href='@{/question/{id}(id=${item.id})}'|"
+                                            th:text="${item.title}">도움</button>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -123,7 +126,7 @@
                     </div>
 
                     <!--사용자 등급 변경-->
-                    <div class="change-role">
+                    <div class="change-role" style="display: none;">
                         <p th:text="'등급: ' + ${
                             user.role == 1? '준회원' :
                             (user.role == 2? '정회원' :
@@ -132,8 +135,13 @@
                     </div>
 
                     <!--사용자 상태 변경-->
-                    <div class="change-state">
-                        <p th:text="'상태: ' + ${user.state == 0 ? '정상' : (user.state == 1 ? '징계' : '')}">상태: 정상</p>
+                    <div class="change-state" style="display: none;">
+                        <p th:text="'상태: ' + ${user.state == 0 ? '탈퇴' : (user.state == 1 ? '회원' : '')}">상태: 회원</p>
+                        <select name="state" id="change-state-select">
+                            <option value="1">회원</option>
+                            <option value="0">탈퇴</option>
+                        </select>
+                        <button type="button" class="btn btn-primary" id="change-state-btn">변경</button>
                     </div>
 
                 </div>
@@ -180,7 +188,7 @@
                             (item.role == 2? '정회원' :
                             (item.role == 3? '우수회원' :
                             (item.role == 4? '연에인' : '관리자')))}">준회원</td>
-                            <td th:text="${item.state == 0 ? '정상' : (item.state == 1 ? '징계' : '')}">정상</td>
+                            <td th:text="${item.state == 0 ? '탈퇴' : (item.state == 1 ? '회원' : '')}">회원</td>
                         </tr>
                         </tbody>
                     </table>
@@ -211,7 +219,7 @@
 
                 <div class="modal-body">
 
-                    <form th:action="/admin/board" method="get">
+                    <form th:action="@{/admin/board}" method="get">
                         <select name="boardType" id="board-type-select">
                             <option value="">전체게시판</option>
                             <option value="1">등업게시판</option>
@@ -236,7 +244,11 @@
                             <th scope="row" th:text="${item.id}">1</th>
                             <td th:text="${item.user.nickname}">오르미</td>
                             <td th:text="${item.createdAt}">2024:11:11 17:30</td>
-                            <td th:text="${item.title}">안녕하세요</td>
+                            <td>
+                                <button type="button"
+                                        th:onclick="|location.href='@{board/article/{boardType}/{id}(boardType=${item.boardType}, id=${item.id})}'|"
+                                        th:text="${item.title}">안녕하세요</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
