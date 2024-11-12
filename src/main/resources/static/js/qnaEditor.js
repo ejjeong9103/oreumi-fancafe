@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+
     const currentUrl = window.location.href;
     let helpTypeInput = document.getElementById('helpType');
     let titleInput = document.getElementById('title');
@@ -66,6 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         console.error('오류:', error);
                     })
             } else {
+                if (!hiddenInput.value){
+                    alert('문의 유형을 선택해주세요.');
+                    return;
+                }
                 fetch('/help/question', {
                     method: 'POST',
                     headers: {
