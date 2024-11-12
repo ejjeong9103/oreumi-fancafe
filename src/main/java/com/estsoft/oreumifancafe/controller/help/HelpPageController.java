@@ -35,6 +35,12 @@ public class HelpPageController {
     public String findQuestionById(@PathVariable long id, Model model) {
         User currentUser=(User)session.getAttribute("user");
         Help question = service.findQuestionBy(id);
+
+        if(!question.getUserId().equals(currentUser.getUserId())){
+            model.addAttribute("alertMessage","해당 글을 볼 권한이 없습니다.");
+            return "alert";
+        }
+
         HelpResponse response = new HelpResponse(question);
         model.addAttribute("help", response);
         model.addAttribute("user",currentUser);

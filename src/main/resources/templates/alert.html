@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Alert</title>
+    <script type="text/javascript">
+        // 페이지 로드 시 alert 메시지를 표시하고, 이전 페이지로 이동
+        function showAlertAndRedirect(message) {
+            alert(message);
+            window.history.back();
+        }
+    </script>
+</head>
+<body onload="showAlertAndRedirect('접근 권한이 없습니다.')">
+</body>
+</html>
