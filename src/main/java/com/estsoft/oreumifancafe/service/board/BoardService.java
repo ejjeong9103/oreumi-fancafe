@@ -108,7 +108,7 @@ public class BoardService {
 
     // 해당 유저의 글 목록
     public Page<BoardResponse> findByUserId(User user, int pageNum) {
-        return boardRepository.findBoardByUser(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
+        return boardRepository.findBoardByUserOrderByIdDesc(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
     }
 
     // 해당 유저가 남긴 댓글의 게시물을 가져오기
@@ -116,7 +116,7 @@ public class BoardService {
 
         Page<Long> boardIds = replyRepository.findDistinctBoardIdsByUser(user, createPageRequest(pageNum, MY_PAGE_SIZE));
 
-        List<Board> boards = boardRepository.findByIdIn(boardIds.getContent());
+        List<Board> boards = boardRepository.findByIdInOrderByIdDesc(boardIds.getContent());
 
         // 3. Board 엔터티를 DTO로 변환
         List<BoardResponse> boardResponses = boards.stream()

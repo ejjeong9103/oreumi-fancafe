@@ -121,6 +121,6 @@ public class HelpService {
 
     // 마이 페이지 내 문의/신고내역 페이징
     public Page<HelpResponse> findByUserAndHelpType(User user, int pageNum, int helpType) {
-        return repository.findHelpByUserIdAndHelpType(user.getUserId(),  helpType, createPageRequest(pageNum, MY_PAGE_SIZE)).map(Help::toResponse);
+        return repository.findHelpByUserIdAndHelpTypeOrderByIdDesc(user.getUserId(),  helpType, createPageRequest(pageNum, MY_PAGE_SIZE)).map(Help::toResponse);
     }
 }
