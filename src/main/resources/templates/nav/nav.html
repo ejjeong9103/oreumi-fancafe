@@ -12,13 +12,13 @@
 					</form>
 				</div>
 				<div class="signup-container">
-					<a href="/user/signup">회원가입</a>
-					<a href="#">아아디 찾기 / 비밀번호 찾기</a>
+					<a class="signup" href="/user/signup">회원가입</a>
+<!--					<a href="#">아아디 찾기 / 비밀번호 찾기</a>-->
 				</div>
-				<div class="sns-login-container">
-					<button class="kakao-login-button sns-button">카카오</button>
-					<button class="naver-login-button sns-button">네이버</button>
-				</div>
+<!--				<div class="sns-login-container">-->
+<!--					<button class="kakao-login-button sns-button">카카오</button>-->
+<!--					<button class="naver-login-button sns-button">네이버</button>-->
+<!--				</div>-->
 			</div>
 			<div th:if="${session.user != null}" class="after-login-container">
 				<img class="profile-img" th:src="${session.user.profileImageAddress}"/>
@@ -30,6 +30,9 @@
 					<button class="update-my-info my-button">
 						<a th:href="@{/user/updateInfo}">회원정보수정</a>
 					</button>
+				</div>
+				<div class="logout-container">
+					<a th:href="@{/user/logout}">로그아웃</a>
 				</div>
 			</div>
 			<div class="board">
