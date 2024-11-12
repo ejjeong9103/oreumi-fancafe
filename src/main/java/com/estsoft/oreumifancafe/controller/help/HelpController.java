@@ -38,14 +38,6 @@ public class HelpController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-//    // GET - 내가 쓴 질문 단건 조회
-//    @GetMapping("/question/{id}")
-//    public ResponseEntity<HelpResponse> findQuestionById(@PathVariable long id) {
-//        Help question = service.findQuestionBy(id);
-//        HelpResponse response = new HelpResponse(question);
-//        return ResponseEntity.ok(response);
-//    }
-
     // GET - 내가 쓴 질문 전체 조회
     // service에서 받아온 현재 유저의 아이디와 일치하는 질문 전체 조회
     @GetMapping("/question/all")
@@ -62,6 +54,9 @@ public class HelpController {
     // PUT - 답변 작성하기 (관리자 권한)
     @PutMapping("/answer/{id}")
     public ResponseEntity<HelpResponse> updateAnswer(@PathVariable Long id, @RequestBody AddHelpRequest request) {
+        User currentUser = (User) session.getAttribute("user");
+        request.setAdminId(currentUser.getUserId());
+
         Help updateHelp = service.updateAnswer(id, request);
         HelpResponse response = new HelpResponse(updateHelp);
         return ResponseEntity.ok(response);
