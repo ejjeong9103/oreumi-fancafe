@@ -1,14 +1,13 @@
 package com.estsoft.oreumifancafe.domain.help;
 
+import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,7 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DynamicInsert
 public class Help {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,9 +56,15 @@ public class Help {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
         }
-        if (this.state == 0) {
-            this.state = 1;
-        }
+    }
+
+    // 생성자
+    @Builder
+    public Help(String title, String content, String userId, int helpType) {
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+        this.helpType = helpType;
     }
 
 }
