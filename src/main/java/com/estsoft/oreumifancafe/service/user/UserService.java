@@ -4,6 +4,7 @@ import com.estsoft.oreumifancafe.constans.user.Regx;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.domain.user.User;
+import com.estsoft.oreumifancafe.repository.user.RoleRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -28,7 +30,7 @@ public class UserService {
         // 아이디 중복 체크
         duplicateUserId(addUserRequest.getUserId());
         // 닉네임 중복 체크
-        duplicateNickName(addUserRequest.getNickName());
+        duplicateNickName(addUserRequest.getNickname());
         // 이메일 중복 체크
         duplicateEmail(addUserRequest.getEmail());
         // 비밀번호 정규식 체크
@@ -36,6 +38,9 @@ public class UserService {
 
         // dto to entity
         User user = addUserRequest.toEntity(bCryptPasswordEncoder.encode(addUserRequest.getUserPw()));
+
+        // 권한 추가
+        user.getRoles().add(roleRepository.findByName("ROLE_GUEST"));
 
         return userRepository.save(user).toUserResponse();
     }

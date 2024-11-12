@@ -10,6 +10,7 @@ CREATE TABLE `help` (
                         `answer`	text	NULL,
                         `state`	int	NOT NULL,
                         `answered_at`	timestamp	NULL,
+                        `help_type` INT NOT NULL ,
                         PRIMARY KEY (`id`)
 );
 
@@ -43,23 +44,6 @@ CREATE TABLE `board` (
                          PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `user`;
-
-CREATE TABLE `user` (
-                        `user_id`	varchar(100)	NOT NULL,
-                        `user_pw`	varchar(2000)	NOT NULL,
-                        `address`	varchar(2000)	NOT NULL,
-                        `address_detail`	varchar(2000)	NOT NULL,
-                        `email`	varchar(2000)	NOT NULL,
-                        `created_at`	timestamp	NOT NULL,
-                        `role`	int	NOT NULL	DEFAULT 1,
-                        `state`	int	NOT NULL	DEFAULT 1,
-                        `profile_image_address`	varchar(2000)	NOT NULL,
-                        `nickname` varchar(100) NOT NULL,
-                        PRIMARY KEY (`user_id`)
-);
-
-
 
 DROP TABLE IF EXISTS `board_category`;
 
@@ -78,6 +62,37 @@ CREATE TABLE `board_type` (
                               `board_type`	int	NOT NULL,
                               PRIMARY KEY (`id`)
 );
+
+DROP TABLE IF EXISTS `USER_ROLE`;
+
+CREATE TABLE `USER_ROLE` (
+                             `user_id`	varchar(100)	NOT NULL,
+                             `role_id`	int	NOT NULL
+);
+
+DROP TABLE IF EXISTS `ROLE`;
+
+CREATE TABLE `ROLE` (
+                        `role_id`	int	NOT NULL AUTO_INCREMENT,
+                        `name`	varchar(100)	NOT NULL,
+                        PRIMARY KEY (`role_id`)
+);
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+                        `user_id`	varchar(100)	NOT NULL,
+                        `user_pw`	varchar(2000)	NOT NULL,
+                        `address`	varchar(2000)	NOT NULL,
+                        `address_detail`	varchar(2000)	NOT NULL,
+                        `email`	varchar(2000)	NOT NULL,
+                        `created_at`	timestamp	NOT NULL,
+                        `state`	int	NOT NULL	DEFAULT 1,
+                        `profile_image_address`	varchar(2000)	NOT NULL DEFAULT `/img/defaultProfileImage.jpeg`,
+                        `nickname` varchar(100) NOT NULL,
+                        PRIMARY KEY (`user_id`)
+);
+
 
 ALTER TABLE `board` ADD CONSTRAINT `FK_user_TO_board_1` FOREIGN KEY (
                                                                      `user_id`
@@ -113,3 +128,12 @@ ALTER TABLE `board_category` ADD CONSTRAINT `FK_board_type_TO_board_category_1` 
     REFERENCES `board_type` (
                              `id`
         );
+
+ALTER TABLE `USER_ROLE`
+    ADD CONSTRAINT `FK_user_TO_USER_ROLE_1` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`);
+
+ALTER TABLE `USER_ROLE`
+    ADD CONSTRAINT `FK_ROLE_TO_USER_ROLE_1` FOREIGN KEY (`role_id`) REFERENCES `ROLE`(`role_id`);
+
+ALTER TABLE `USER_ROLE`
+    ADD CONSTRAINT `PK_USER_ROLE` PRIMARY KEY (`user_id`, `role_id`);

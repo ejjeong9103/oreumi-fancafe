@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="nav">
-	<link rel="stylesheet" th:href="@{../css/nav.css}">
+	<link rel="stylesheet" th:href="@{/css/nav.css}">
 		<nav class="--nav">
-			<div class="profile">
-				프로필
+			<div th:if="${session.user == null}" class="before-login-container">
+				<div class="login-container">
+					<form class="login-form" id="login-form">
+						<input class="login-input" name="userId" id="userId" type="text" placeholder="아이디"/>
+						<input class="login-input" name="userPw" id="userPw" type="password" placeholder="비밀번호"/>
+						<button class="login-button" id="login" type="button">로그인</button>
+					</form>
+				</div>
+				<div class="signup-container">
+					<a href="/user/signup">회원가입</a>
+					<a href="#">아아디 찾기 / 비밀번호 찾기</a>
+				</div>
+				<div class="sns-login-container">
+					<button class="kakao-login-button sns-button">카카오</button>
+					<button class="naver-login-button sns-button">네이버</button>
+				</div>
+			</div>
+			<div th:if="${session.user != null}" class="after-login-container">
+				<img class="profile-img" th:src="${session.user.profileImageAddress}"/>
+				<span class="my-id-nickname" th:text="${session.user.userId} + ' / ' + ${session.user.nickname}"></span>
+				<div class="my-container">
+					<button class="my-page-button my-button" id="my-page-button">
+						<a th:href="@{/user/myPage}">마이페이지</a></button>
+					<button class="update-my-info my-button">회원정보수정</button>
+				</div>
 			</div>
 			<div class="board">
 				게시판 목록
 			</div>
 		</nav>
+<script th:src="@{/js/nav.js}" defer></script>
 </th:block>
 </html>

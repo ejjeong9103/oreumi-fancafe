@@ -1,11 +1,13 @@
 package com.estsoft.oreumifancafe.domain.board;
 
 
+import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
 
@@ -30,7 +32,7 @@ public class Board {
     private String content;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
@@ -59,5 +61,29 @@ public class Board {
         this.boardType = boardType;
         this.boardCategoryName = boardCategoryName;
         this.state = state;
+    }
+
+    // 게시판 상태 변경
+    public void updateState(int state) {
+        this.state = state;
+    }
+
+    public BoardResponse toBoardResponse() {
+        return BoardResponse.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .createdAt(this.createdAt)
+                .updatedAt(this.updatedAt)
+                .user(this.user)
+                .boardType(this.boardType)
+                .boardCategoryName(this.boardCategoryName)
+                .state(this.state)
+                .createdAt(this.createdAt)
+                .build();
+    }
+  
+    public Board() {
+        this.createdAt = LocalDateTime.now();
     }
 }

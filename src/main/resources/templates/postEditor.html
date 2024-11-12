@@ -2,13 +2,11 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-
   <link rel="stylesheet" href="../static/css/reset.css">
   <link rel="stylesheet" href="../static/css/postEditor.css">
+  <title>글쓰기/수정</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -17,44 +15,126 @@
 <body>
 <main class="main-content">
   <div class="container">
-    <div class="main-container1">
-      <div class="dropdown">
-        <button class="dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          게시판 선택
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">게시판1</a></li>
-          <li><a class="dropdown-item" href="#">게시판2</a></li>
-          <li><a class="dropdown-item" href="#">게시판3</a></li>
-        </ul>
-      </div>
-      <div class="dropdown">
-        <button class="dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          말머리 선택
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">말머리1</a></li>
-          <li><a class="dropdown-item" href="#">말머리2</a></li>
-          <li><a class="dropdown-item" href="#">말머리3</a></li>
-        </ul>
-      </div>
-    </div>
+    <form th:action="${request.id != null ? '/board/article/edit/' + request.id : '/board'}"
+          method="post" th:object="${request}">
+      <input type="hidden" name="_method" th:value="${request.id != null ? 'put' : 'post'}">
 
-    <div class="title-div">
-      <label for="title" class="form-label"></label>
-      <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요.">
-    </div>
-    <label for="content"></label>
-    <textarea id="content" name="content"
-              placeholder="권리침해, 욕설, 비하, 명예훼손, 혐오, 불법촬영물 등의 내용을 게시하면 운영정책 및 관련 법률에 의해 제재될 수 있습니다."></textarea>
-    <div class="btn-div">
-      <button type="button" class="btn btn-success">글등록</button>
-    </div>
+      <div class="main-container1">
+        <div class="dropdown">
+          <button id="boardTypeBtn" class="dropdown-btn btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  th:text="${request.boardType == 1 ? '등업게시판' : (request.boardType == 2 ? '자유게시판' : (request.boardType == 3 ? '정모게시판' : '게시판 선택'))}">
+            게시판 선택
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" onclick="setBoardType(1, '등업게시판'); return false;">등업게시판</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setBoardType(2, '자유게시판'); return false;">자유게시판</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setBoardType(3, '정모게시판'); return false;">정모게시판</a></li>
+          </ul>
+        </div>
+        <input type="hidden" th:field="*{boardType}" id="boardType" th:value="${request.boardType}" />
 
+        <div class="dropdown" id="categoryDropdown" th:style="${request.boardType == 1 || request.boardType == 3 ? 'display: block;' : 'display: none;'}">
+          <button id="categoryBtn" class="dropdown-btn btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  th:text="${request.boardCategoryName != null ? request.boardCategoryName : '말머리 선택'}">
+            말머리 선택
+          </button>
+          <ul class="dropdown-menu" id="categoryOptions">
+            <!-- JavaScript에서 동적으로 옵션을 추가합니다 -->
+          </ul>
+        </div>
+        <input type="hidden" th:field="*{boardCategoryName}" id="boardCategoryName" th:value="${request.boardCategoryName}" />
+      </div>
+
+      <div class="title-div">
+        <label for="title" class="form-label"></label>
+        <input type="text" class="form-control" th:field="*{title}" id="title" placeholder="제목을 입력하세요." th:value="${request.title}">
+      </div>
+      <label for="content"></label>
+      <textarea id="content" class="form-control" th:field="*{content}"
+                placeholder="권리침해, 욕설, 비하, 명예훼손, 혐오, 불법촬영물 등의 내용을 게시하면 운영정책 및 관련 법률에 의해 제재될 수 있습니다.">${request.content}</textarea>
+      <div class="btn-div">
+        <button type="submit" class="btn btn-success" th:text="${request.id != null ? '수정완료' : '글등록'}"></button>
+      </div>
+    </form>
   </div>
 </main>
 
+<script>
+  function setBoardType(type, boardName) {
+    console.log("setBoardType called with type:", type, "and boardName:", boardName); // 함수 호출 로그
 
+    const boardTypeInput = document.getElementById("boardType");
+    const boardTypeBtn = document.getElementById("boardTypeBtn");
+    const categoryDropdown = document.getElementById("categoryDropdown");
+    const categoryOptions = document.getElementById("categoryOptions");
+    const boardCategoryNameInput = document.getElementById("boardCategoryName");
+
+    boardTypeInput.value = type;
+    boardTypeBtn.textContent = boardName;
+    console.log("boardType set to:", boardTypeInput.value); // boardType 값 설정 확인
+
+    // boardType이 1 또는 3일 때만 카테고리 표시 및 설정
+    if (type === 1) {
+      console.log("boardType is 1: showing category options for boardType 1");
+      categoryDropdown.style.display = "block";
+      categoryOptions.innerHTML = `
+            <li><a class="dropdown-item" href="#" onclick="setCategory('정회원신청'); return false;">정회원신청</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('우수회원신청'); return false;">우수회원신청</a></li>
+        `;
+    } else if (type === 3) {
+      console.log("boardType is 3: showing category options for boardType 3");
+      categoryDropdown.style.display = "block";
+      categoryOptions.innerHTML = `
+            <li><a class="dropdown-item" href="#" onclick="setCategory('서울'); return false;">서울</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('경기'); return false;">경기</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('인천'); return false;">인천</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('강원'); return false;">강원</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('충북'); return false;">충북</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('충남'); return false;">충남</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('대전'); return false;">대전</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('전북'); return false;">전북</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('전남'); return false;">전남</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('광주'); return false;">광주</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('경북'); return false;">경북</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('경남'); return false;">경남</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('대구'); return false;">대구</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('부산'); return false;">부산</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setCategory('제주'); return false;">제주</a></li>
+        `;
+    } else {
+      console.log("boardType is not 1 or 3: hiding category options");
+      categoryDropdown.style.display = "none";
+    }
+
+    // boardType이 1에서 3으로, 또는 3에서 1로 변경될 때 categoryName 초기화
+    if (type !== 2) {
+      console.log("Resetting boardCategoryNameInput and categoryBtn text");
+      boardCategoryNameInput.value = ""; // 말머리 초기화
+      document.getElementById("categoryBtn").textContent = "말머리 선택"; // 버튼 텍스트 초기화
+    }
+  }
+
+
+
+  function setCategory(category) {
+    const boardCategoryNameInput = document.getElementById("boardCategoryName");
+    boardCategoryNameInput.value = category;
+    document.getElementById("categoryBtn").textContent = category;
+  }
+
+  document.querySelector('form').addEventListener('submit', function (event) {
+    const boardTypeInput = document.getElementById("boardType");
+    const boardCategoryNameInput = document.getElementById("boardCategoryName");
+
+    if ((boardTypeInput.value === "1" || boardTypeInput.value === "3") && !boardCategoryNameInput.value.trim()) {
+      alert("말머리를 선택해주세요.");
+      event.preventDefault();
+    }
+
+    if (!boardTypeInput.value || boardTypeInput.value === "0") {
+      alert("게시판을 선택해주세요.");
+      event.preventDefault();
+    }
+  });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

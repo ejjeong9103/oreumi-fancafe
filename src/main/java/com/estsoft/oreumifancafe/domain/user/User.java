@@ -1,12 +1,15 @@
 package com.estsoft.oreumifancafe.domain.user;
 
+import com.estsoft.oreumifancafe.domain.dto.admin.UserInfoResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +18,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -23,6 +28,8 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "user")
 @Entity
+@DynamicInsert
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
     @Id
     @Column(name = "user_id", nullable = false, updatable = false)
@@ -45,13 +52,19 @@ public class User implements UserDetails {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @Column(nullable = false, columnDefinition = "int default 1")
-    private int role;
+    // 역할을 저장할 컬렉션 필드 추가
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USER_ROLE",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Collection<Role> roles = new HashSet<>();
 
-    @Column(nullable = false, columnDefinition = "int default 1")
+    @Column(name = "state")
     private int state;
 
-    @Column(name = "profile_image_address", nullable = false)
+    @Column(name = "profileImageAddress")
     private String profileImageAddress;
 
     @Column(nullable = false)
@@ -59,23 +72,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == 1) {
-            return List.of(new SimpleGrantedAuthority("guest")); // ROLE_GUEST : 준회원
-        }
-        else if (this.role == 2) {
-            return List.of(new SimpleGrantedAuthority("user")); // ROLE_USER : 정회원
-        }
-        else if (this.role == 3) {
-            return List.of(new SimpleGrantedAuthority("elite")); // ROLE_ELITE : 우수회원
-        }
-        else if (this.role == 4) {
-            return List.of(new SimpleGrantedAuthority("celebrity")); // ROLE_CELEBRITY : 연예인
-        }
-        else if (this.role == 5) {
-            return List.of(new SimpleGrantedAuthority("admin")); // ROLE_ADMIN : 관리자
-        }
-
-        return Collections.emptyList();
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -115,5 +114,26 @@ public class User implements UserDetails {
     @Transient
     public UserResponse toUserResponse() {
         return new UserResponse(this.userId, this.nickname);
+    }
+
+    @Transient
+    public UserInfoResponse toUserInfoResponse() {
+        return UserInfoResponse.builder()
+                .userId(this.userId)
+                .nickname(this.nickname)
+                .address(this.address)
+                .createdAt(this.createdAt)
+                .state(this.state)
+                .profileImageAddress(this.profileImageAddress)
+                .build();
+    }
+
+    // 사용자 상태 변경
+    public void updateState(int state) {
+        this.state = state;
+    }
+
+    // 사용자 등급 변경
+    public void updateRole(int role) {
     }
 }

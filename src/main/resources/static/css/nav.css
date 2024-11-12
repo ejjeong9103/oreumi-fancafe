@@ -1,14 +1,120 @@
 .--nav {
     width: 320px;
     /*height: auto;*/
-    background-color: black;
+    /*background-color: #D9D9D9;*/
 }
+
 .profile {
     height: 420px;
     background-color: #D9D9D9;
 }
+
 .board {
     margin-top: 32px;
     /*height: auto;*/
     background-color: #D9D9D9;
+}
+
+.before-login-container {
+    border: 1px solid #999;
+    border-radius: 5px;
+    height: 420px;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form {
+    margin: 0 auto;
+    margin-top: 42px;
+    width: 260px;
+    height: 190px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.login-input {
+    height: 40px;
+    border-radius: 5px;
+}
+
+.login-button {
+    height: 60px;
+    background-color: black;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
+}
+
+.signup-container {
+    width: 260px;
+    height: 58px;
+    margin: 0 auto;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sns-login-container {
+    width: 260px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kakao-login-button {
+    background-color: yellow;
+}
+
+.naver-login-button {
+    background-color: limegreen;
+}
+
+.sns-button {
+    width: 115px;
+    height: 50px;
+    border-radius: 5px;
+    color: black;
+}
+
+.after-login-container {
+    height: 420px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.profile-img {
+    width: 260px;
+    height: 200px;
+    object-fit: cover;
+    margin-top: 35px;
+    margin-left: 30px;
+}
+
+.my-id-nickname {
+    height: 50px;
+    margin-left: 30px;
+    line-height: 50px;
+    font-size: 20px;
+}
+
+.my-container {
+    margin: 0 auto;
+    width: 260px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.my-button {
+    width: 115px;
+    height: 50px;
+    border-radius: 5px;
+    background-color: cadetblue;
 }
