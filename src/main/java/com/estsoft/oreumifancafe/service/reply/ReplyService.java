@@ -64,4 +64,17 @@ public class ReplyService {
         replyRepository.delete(reply);
     }
 
+    public Reply updateReply(Long replyId, String updatedContent, User user) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다"));
+
+        // 작성자 확인 (또는 관리자 권한 확인)
+        if (!reply.getUser().getUserId().equals(user.getUserId())) {
+            throw new IllegalArgumentException("댓글을 수정할 권한이 없습니다");
+        }
+
+        reply.setContent(updatedContent);
+        return replyRepository.save(reply);
+    }
+
 }

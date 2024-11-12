@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/board")
@@ -59,6 +60,17 @@ public class ReplyController {
         Board board = boardService.findById(boardId);
 
         // boardType과 boardId를 포함하여 리다이렉트 경로 반환
+        return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
+    }
+
+    @PostMapping("/article/{boardId}/reply/update/{replyId}")
+    public String updateReply(@PathVariable Long boardId,
+                              @PathVariable Long replyId,
+                              @RequestParam("updatedContent") String updatedContent,
+                              @AuthenticationPrincipal User loggedInUser) {
+        System.out.println("Updated Content: " + updatedContent); // 디버그용
+        replyService.updateReply(replyId, updatedContent, loggedInUser);
+        Board board = boardService.findById(boardId);
         return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
     }
 
