@@ -211,7 +211,7 @@
 
                 <div class="modal-body">
 
-                    <form action="" method="get">
+                    <form th:action="/admin/board" method="get">
                         <select name="boardType" id="board-type-select">
                             <option value="">전체게시판</option>
                             <option value="1">등업게시판</option>
@@ -219,10 +219,10 @@
                             <option value="3">정보게시판</option>
                             <option value="4">기타게시판</option>
                         </select>
-                        <button type="submit" id="board-type-btn">조회</button>
+                        <button type="submit" class="btn btn-primary" id="board-type-btn">조회</button>
                     </form>
 
-                    <table class="table">
+                    <table class="table board-table">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -232,11 +232,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="post-row">
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
+                        <tr class="post-row" th:each="item : ${boardList}">
+                            <th scope="row" th:text="${item.id}">1</th>
+                            <td th:text="${item.user.nickname}">오르미</td>
+                            <td th:text="${item.createdAt}">2024:11:11 17:30</td>
+                            <td th:text="${item.title}">안녕하세요</td>
                         </tr>
                         </tbody>
                     </table>
