@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<input id="errorMessage" type="hidden" th:value="${message}"/>
+<script>
+    window.onload = function() {
+        const alertMessage = document.getElementById("errorMessage").value; // message가 모델에서 렌더링됨
+        console.log(alertMessage)
+        if (alertMessage) {
+            alert(alertMessage); // 경고창 띄우기
+            location.href = "/";
+        }
+    };
+</script>
+</body>
+</html>
