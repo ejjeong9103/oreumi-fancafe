@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(data => {
                         alert('답변이 성공적으로 작성되었습니다.');
                         // 관리자 페이지로 수정해주세요.
-                        location.replace(`/question/${id}`);
+                        location.replace(`/help/question/${id}`);
                     })
                     .catch((error) => {
                         console.error('오류:', error);
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(data => {
                         const questionId = data.id;
                         alert('등록 완료되었습니다.');
-                        location.replace(`/question/${questionId}`);
+                        location.replace(`/help/question/${questionId}`);
                     })
                     .catch((error) => {
                         console.log('오류:', error);
