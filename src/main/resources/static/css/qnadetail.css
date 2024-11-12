@@ -62,7 +62,6 @@ hr {
 .page-button-list {
     margin-top: 20px;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
 }
 
@@ -92,4 +91,10 @@ th {
 td {
     padding: 15px;
     white-space: break-spaces;
+}
+.button-list2{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    gap: 10px;
 }

@@ -41,15 +41,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (createButton) {
         createButton.addEventListener('click', event => {
             if (currentUrl.includes('/answer/')) {
-                const id=parseInt(currentUrl.split('/answer/')[1],10);
-                fetch(`/answer/${id}`, {
+                const id = parseInt(currentUrl.split('/answer/')[1], 10);
+                fetch(`/help/answer/${id}`, {
                     method: 'PUT',
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        answer: document.getElementById('content').value
-                    //     시큐리티 연결 후 admin id도 받아오도록
+                        answer: document.querySelector('.content').value
+                        //     시큐리티 연결 후 admin id도 받아오도록
                     }),
                 }).then(response => {
                     if (!response.ok) {
@@ -57,10 +57,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return response.json();
                 })
-                    .then(() => {
+                    .then(data => {
                         alert('답변이 성공적으로 작성되었습니다.');
                         // 관리자 페이지로 수정해주세요.
-                        location.replace(`/myPage`);
+                        location.replace(`/help/question/${id}`);
                     })
                     .catch((error) => {
                         console.error('오류:', error);
@@ -82,9 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return response.json();
                 })
-                    .then(() => {
+                    .then(data => {
+                        const questionId = data.id;
                         alert('등록 완료되었습니다.');
-                        location.replace(`/myPage`);
+                        location.replace(`/help/question/${questionId}`);
                     })
                     .catch((error) => {
                         console.log('오류:', error);
