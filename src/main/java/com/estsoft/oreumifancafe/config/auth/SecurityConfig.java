@@ -44,8 +44,9 @@ public class SecurityConfig {
                                 // 로그아웃은 session이 없어도 그냥 통과되게
                                 .requestMatchers("/user/signup", "/user", "/user/logout").permitAll()
                                 // 게스트만
-                                .requestMatchers("/user/updateInfo").hasRole("GUEST")
-                                .requestMatchers(HttpMethod.POST, "/board").hasRole("GUEST")
+                                .requestMatchers("/user/updateInfo", "/board/new-article").hasRole("GUEST")
+                                .requestMatchers(HttpMethod.GET, "/help").hasRole("GUEST")
+                                .requestMatchers(HttpMethod.POST, "/board", "/help/question").hasRole("GUEST")
                                 // 회원정보에대한 수정, 조회, 삭제는 자기 자신인지 검사하는 access에 걸림
                                 .requestMatchers("/user/{userId}")
                                 .access(new CustomAuthorizationManager())
