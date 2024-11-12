@@ -88,7 +88,7 @@ CREATE TABLE `user` (
                         `email`	varchar(2000)	NOT NULL,
                         `created_at`	timestamp	NOT NULL,
                         `state`	int	NOT NULL	DEFAULT 1,
-                        `profile_image_address`	varchar(2000)	NOT NULL DEFAULT `/img/defaultProfileImage.jpeg`,
+                        `profile_image_address`	varchar(2000)	NOT NULL DEFAULT  '/img/defaultProfileImage.jpeg',
                         `nickname` varchar(100) NOT NULL,
                         PRIMARY KEY (`user_id`)
 );
@@ -137,3 +137,12 @@ ALTER TABLE `USER_ROLE`
 
 ALTER TABLE `USER_ROLE`
     ADD CONSTRAINT `PK_USER_ROLE` PRIMARY KEY (`user_id`, `role_id`);
+
+ALTER TABLE `reply`
+DROP FOREIGN KEY `FK_board_TO_reply_1`;
+
+ALTER TABLE `reply`
+    ADD CONSTRAINT `FK_board_TO_reply_1`
+        FOREIGN KEY (`board_id`)
+            REFERENCES `board`(`id`)
+            ON DELETE CASCADE;
