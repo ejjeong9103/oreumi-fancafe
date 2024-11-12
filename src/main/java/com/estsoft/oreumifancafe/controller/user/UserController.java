@@ -1,10 +1,12 @@
 package com.estsoft.oreumifancafe.controller.user;
 
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
+import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.AddUserRequest;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.exceptions.UnauthorizedException;
 import com.estsoft.oreumifancafe.service.board.BoardService;
+import com.estsoft.oreumifancafe.service.help.HelpService;
 import com.estsoft.oreumifancafe.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private final BoardService boardService;
+    private final HelpService helpService;
 
     // 회원가입 페이지 이동
     @GetMapping("/signup")
@@ -76,8 +79,10 @@ public class UserController {
         // 내 글 목록
         Page<BoardResponse> boardResponseList = boardService.findByUserId(user, boardPageNum);
         Page<BoardResponse> replyBoardResponseList = boardService.findDistinctBoardsByUserComments(user, replyPageNum);
+        Page<HelpResponse> qaList = helpService.findByUserAndHelpType(user, qaPageNum, 1);
         model.addAttribute("myBoard", boardResponseList);
         model.addAttribute("myReply", replyBoardResponseList);
+        model.addAttribute("myQa", qaList);
         return "myPage";
     }
 

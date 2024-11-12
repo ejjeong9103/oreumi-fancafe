@@ -1,16 +1,15 @@
 package com.estsoft.oreumifancafe.domain.dto.help;
 
 import com.estsoft.oreumifancafe.domain.help.Help;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
-
+@AllArgsConstructor
+@Builder
 public class HelpResponse {
     private Long id;
     private String title;
