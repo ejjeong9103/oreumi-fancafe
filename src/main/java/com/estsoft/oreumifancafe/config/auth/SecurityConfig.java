@@ -51,6 +51,8 @@ public class SecurityConfig {
                                 .access(new CustomAuthorizationManager())
                                 .requestMatchers(HttpMethod.DELETE,"/board/{id}")
                                 .access(new CustomAuthorizationBoardManager(boardService))
+                                .requestMatchers(HttpMethod.GET, "/board/article/edit/{id}")
+                                .access(new CustomAuthorizationBoardManager(boardService))
                                 .requestMatchers(HttpMethod.PUT, "/board/article/edit/{id}")
                                 .access(new CustomAuthorizationBoardManager(boardService))
                                 .requestMatchers("/admin/**").hasRole("ADMIN")      // 관리자
@@ -70,13 +72,13 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            if ("DELETE".equalsIgnoreCase(request.getMethod()) || "PUT".equalsIgnoreCase(request.getMethod())) {
+//                            if ("DELETE".equalsIgnoreCase(request.getMethod()) || "PUT".equalsIgnoreCase(request.getMethod())) {
                                 // DELETE와 PUT 요청은 리다이렉트 대신 상태 코드 반환
-                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "권한이 부족합니다.");
-                            } else {
+//                                response.sendRedirect("/accessDenied");
+//                            } else {
                                 // GET 요청 등은 리다이렉트 처리
                                 response.sendRedirect("/accessDenied");
-                            }
+//                            }
                         })
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
