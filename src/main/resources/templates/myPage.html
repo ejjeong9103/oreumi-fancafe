@@ -61,7 +61,7 @@
 
             <!-- 이전 페이지 그룹 버튼 -->
             <li th:classappend="${myBoard.number >= 5} ? 'page-item' : 'page-item disabled'">
-              <a class="page-link" th:href="@{/user/myPage(boardPageNum=${(myBoard.number / 5 - 1) * 5 + 1})}" aria-label="Previous Group">
+              <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId}, boardPageNum=${(myBoard.number / 5 - 1) * 5 + 1})}" aria-label="Previous Group">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
@@ -69,56 +69,77 @@
             <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
             <li th:each="pageNum : ${#numbers.sequence(myBoard.number / 5 * 5, T(java.lang.Math).min(myBoard.totalPages - 1, myBoard.number / 5 * 5 + 4))}"
                 th:classappend="${pageNum == myBoard.number} ? 'page-item active' : 'page-item'">
-              <a class="page-link" th:href="@{/user/myPage(boardPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
+              <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},boardPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
             </li>
 
             <!-- 다음 페이지 그룹 버튼 -->
-            <li th:if="${myBoard.number / 5 * 5 + 5 < myBoard.totalPages}" class="page-item">
-              <a class="page-link" th:href="@{/user/myPage(boardPageNum=${(myBoard.number / 5 + 1) * 5 + 1})}" aria-label="Next Group">
+            <li th:if="${myBoard.number / 5 < (myBoard.totalPages - 1) / 5}" class="page-item">
+              <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},boardPageNum=${(myBoard.number / 5 + 1) * 5 + 1})}" aria-label="Next Group">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
-
+            <li th:unless="${myBoard.number / 5 < (myBoard.totalPages - 1) / 5}" class="page-item disabled">
+              <a class="page-link" href="javascript:void(0);" aria-label="Next Group">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
           </ul>
         </nav>
-
-<!--        <ul class="my-posts-list" id="my-posts-list">-->
-<!--          <li>제목 1</li>-->
-<!--          <li>제목 2</li>-->
-<!--          <li>제목 3</li>-->
-<!--          <li>제목 3</li>-->
-<!--          <li>제목 3</li>-->
-<!--          <li>제목 3</li>-->
-<!--          <li>제목 3</li>-->
-<!--        </ul>-->
       </div>
       <div class="write-container">
-        <label class="my-comments-label">내 댓글 (글목록)</label>
+        <label class="my-posts-label">내 글</label>
         <table class="table">
           <thead class="text-center">
           <tr class="caption text-nowrap">
+            <th>번호</th>
             <th>제목</th>
             <th>닉네임</th>
             <th>작성일</th>
           </tr>
           </thead>
           <tbody>
-          <tr class="board_body">
-            <td>
-              제목
+          <tr class="board_body" th:each="item : ${myReply.content}">
+            <td th:text="${item.id}">
             </td>
-            <td>웅깅카</td>
-            <td>2020:11:11 13:45</td>
+            <td>
+              <a th:href="@{/board/article/{boardType}/{id}(boardType=${item.boardType}, id=${item.id})}"
+                 th:text="${item.title}"></a>
+            </td>
+            <td th:text="${item.user.nickname}"></td>
+            <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
           </tr>
           </tbody>
         </table>
+        <nav aria-label="Page navigation" class="paging">
+          <ul class="pagination">
 
+            <!-- 이전 페이지 그룹 버튼 -->
+            <li th:classappend="${myReply.number >= 5} ? 'page-item' : 'page-item disabled'">
+              <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},replyPageNum=${(myReply.number / 5 - 1) * 5 + 1})}" aria-label="Previous Group">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
 
-<!--        <ul class="my-comments-list" id="my-comments-list">-->
-<!--          <li>제목 1</li>-->
-<!--          <li>제목 2</li>-->
-<!--          <li>제목 3</li>-->
-<!--        </ul>-->
+            <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
+            <li th:each="pageNum : ${#numbers.sequence(myReply.number / 5 * 5, T(java.lang.Math).min(myReply.totalPages - 1, myReply.number / 5 * 5 + 4))}"
+                th:classappend="${pageNum == myReply.number} ? 'page-item active' : 'page-item'">
+              <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},replyPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
+            </li>
+
+            <!-- 다음 페이지 그룹 버튼 -->
+            <li th:if="${myReply.number / 5 < (myReply.totalPages - 1) / 5}" class="page-item">
+              <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},replyPageNum=${(myBoard.number / 5 + 1) * 5 + 1})}" aria-label="Next Group">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            <li th:unless="${myReply.number / 5 < (myReply.totalPages - 1) / 5}" class="page-item disabled">
+              <a class="page-link" href="javascript:void(0);" aria-label="Next Group">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+
+          </ul>
+        </nav>
       </div>
       <div class="write-container">
         <label class="my-comments-label">문의 내역</label>
