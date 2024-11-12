@@ -32,17 +32,17 @@ public class HelpController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // GET - 내가 쓴 질문 단건 조회
-    @GetMapping("/question/{id}")
-    public ResponseEntity<HelpResponse> findQuestionById(@PathVariable long id) {
-        Help question = service.findQuestionBy(id);
-        HelpResponse response = new HelpResponse(question);
-        return ResponseEntity.ok(response);
-    }
+//    // GET - 내가 쓴 질문 단건 조회
+//    @GetMapping("/question/{id}")
+//    public ResponseEntity<HelpResponse> findQuestionById(@PathVariable long id) {
+//        Help question = service.findQuestionBy(id);
+//        HelpResponse response = new HelpResponse(question);
+//        return ResponseEntity.ok(response);
+//    }
 
     // GET - 내가 쓴 질문 전체 조회
     // service에서 받아온 현재 유저의 아이디와 일치하는 질문 전체 조회
-    @GetMapping("/question")
+    @GetMapping("/question/all")
     public ResponseEntity<List<HelpResponse>> findAllQuestionsByUser() {
         List<HelpResponse> questionList = service.findAllQuestionByUser().stream()
                 .map(HelpResponse::new)

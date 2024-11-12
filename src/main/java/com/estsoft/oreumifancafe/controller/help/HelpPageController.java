@@ -27,7 +27,7 @@ public class HelpPageController {
 
 
     // GET - 내가 쓴 질문 단건 조회
-    @GetMapping("/question/{id}")
+    @GetMapping("/help/question/{id}")
     public String findQuestionById(@PathVariable long id, Model model) {
         Help question = service.findQuestionBy(id);
         HelpResponse response = new HelpResponse(question);
