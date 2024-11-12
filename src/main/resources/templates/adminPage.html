@@ -18,35 +18,266 @@
         <h3 class="admin-page-title">관리자 기능</h3>
     </div>
 
-    <form action="/" method="get" class="user-search-form">
+    <hr>
+
+    <div class="user-search-container">
         <h3 class="user-search-title">사용자 조회</h3>
         <input type="text" class="user-id-input" id="user-id-input" placeholder="ID 입력" />
-        <button class="btn btn-primary user-id-btn" type="submit">조회하기</button>
-    </form>
+        <button type="button" class="btn btn-primary" id="user-search-btn" data-bs-toggle="modal" data-bs-target="#user-search-modal">
+            조회하기
+        </button>
+    </div>
+
+    <hr>
 
     <div class="all-user-container">
         <h3 class="all-user-title">전체 사용자 조회</h3>
-        <button class="btn btn-primary all-user-btn" type="submit">조회하기</button>
+        <button type="button" class="btn btn-primary" id="all-user-btn" data-bs-toggle="modal" data-bs-target="#all-user-modal">
+            조회하기
+        </button>
     </div>
 
-    <form action="/" method="get" class="post-search-form">
-        <h3 class="post-search-title">게시글 조회</h3>
-        <input type="text" class="post-search-input" placeholder="키워드 입력" />
-        <button class="btn btn-primary post-search-btn" type="submit">조회하기</button>
-    </form>
+    <hr>
+
+    <div class="post-search-container">
+        <h3 class="post-search-title">게시글 관리</h3>
+        <button type="button" class="btn btn-primary" id="post-search-btn" data-bs-toggle="modal" data-bs-target="#post-manage-modal">
+            관리하기
+        </button>
+    </div>
+
+    <hr>
 
     <div class="admin-manage-container">
         <h3 class="admin-manage-title">관리자 조회 / 수정</h3>
-        <button class="btn btn-primary admin-manage-btn" type="submit">조회하기</button>
+        <button type="button" class="btn btn-primary" id="admin-manage-btn" data-bs-toggle="modal" data-bs-target="#admin-manage-modal">
+            조회 / 수정하기
+        </button>
     </div>
 
-    <div id="user-search-modal"></div>
+    <!-- ==================================================================================== -->
 
-    <div id="all-user-modal"></div>
+    <!--사용자 조회 모달창-->
+    <div class="modal fade modal-dialog modal-xl" id="user-search-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
-    <div id="post-search-modal"></div>
+        <div class="modal-dialog">
 
-    <div id="admin-manage-modal"></div>
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="user-search-label">사용자 조회</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <p class="user-id" th:text="'ID: ' + ${user.userId}">아이디: abc</p>
+                    <p class="user-nickname" th:text="'닉네임: ' + ${user.nickName}">닉네임: 오르미</p>
+                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btncheck1">사용자 상세 정보</label>
+
+                        <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btncheck2">신고 및 문의 내역</label>
+
+                        <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btncheck3">사용자 등급 변경</label>
+
+                        <input type="checkbox" class="btn-check" id="btncheck4" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btncheck4">사용자 상태 변경</label>
+                    </div>
+
+                    <!--사용자 상세 정보-->
+                    <div class="user-info">
+                        <p th:text="'이메일: ' + ${user.email}">이메일: </p>
+                        <p th:text="'주소: ' + ${user.address}">주소: </p>
+                        <p th:text="'가입날짜: ' + ${user.createdAt}">가입날짜: </p>
+                        <p th:text="'등급: ' + ${user.role}">등급: </p>
+                    </div>
+
+                    <!--신고 및 문의 내역 조회-->
+                    <div class="find-help">
+                        <ul class="help-list" th:each="item : ${helpList}">
+                            <li class="help-item" th:text="${item.helpType == 1 ? '문의' : (item.helpType == 2 ? '신고' : '')}">문의 작성날짜</li>
+                        </ul>
+
+                        <table class="table help-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">구분</th>
+                                <th scope="col">작성날짜</th>
+                                <th scope="col">제목</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="help-row" th:each="item : ${helpList}">
+                                <th scope="row" th:text="${item.id}">1</th>
+                                <td th:text="${item.helpType == 1 ? '문의' : (item.helpType == 2 ? '신고' : '')}">문의</td>
+                                <td th:text="${item.createdAt}">2024:11:11 13:47</td>
+                                <td th:text="${item.title}">도움</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <!--사용자 등급 변경-->
+                    <div class="change-role">
+                        <p th:text="'등급: ' + ${
+                            user.role == 1? '준회원' :
+                            (user.role == 2? '정회원' :
+                            (user.role == 3? '우수회원' :
+                            (user.role == 4? '연에인' : '관리자')))}">등급: 준회원</p>
+                    </div>
+
+                    <!--사용자 상태 변경-->
+                    <div class="change-state">
+                        <p th:text="'상태: ' + ${user.state == 0 ? '정상' : (user.state == 1 ? '징계' : '')}">상태: 정상</p>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--전체 사용자 조회 모달창-->
+    <div class="modal fade modal-dialog modal-xl" id="all-user-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="all-user-label">전체 사용자 조회</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <table class="table users-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">닉네임</th>
+                            <th scope="col">가입날짜</th>
+                            <th scope="col">등급</th>
+                            <th scope="col">상태</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="user-row" th:each="item : ${userList}">
+                            <th scope="row" th:text="${item.userId}">abc</th>
+                            <td th:text="${item.nickname}">오르미</td>
+                            <td th:text="${item.createdAt}">2024:11:11 14:32</td>
+                            <td th:text="${
+                            item.role == 1? '준회원' :
+                            (item.role == 2? '정회원' :
+                            (item.role == 3? '우수회원' :
+                            (item.role == 4? '연에인' : '관리자')))}">준회원</td>
+                            <td th:text="${item.state == 0 ? '정상' : (item.state == 1 ? '징계' : '')}">정상</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--게시글 관리 모달창-->
+    <div class="modal fade modal-dialog modal-xl" id="post-manage-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="post-search-label">게시글 조회</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form th:action="/admin/board" method="get">
+                        <select name="boardType" id="board-type-select">
+                            <option value="">전체게시판</option>
+                            <option value="1">등업게시판</option>
+                            <option value="2">자유게시판</option>
+                            <option value="3">정보게시판</option>
+                            <option value="4">기타게시판</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary" id="board-type-btn">조회</button>
+                    </form>
+
+                    <table class="table board-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">닉네임</th>
+                            <th scope="col">작성날짜</th>
+                            <th scope="col">제목</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="post-row" th:each="item : ${boardList}">
+                            <th scope="row" th:text="${item.id}">1</th>
+                            <td th:text="${item.user.nickname}">오르미</td>
+                            <td th:text="${item.createdAt}">2024:11:11 17:30</td>
+                            <td th:text="${item.title}">안녕하세요</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--관리자 수정 모달창-->
+    <div class="modal fade modal-dialog modal-xl" id="admin-manage-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="admin-manage-label">관리자 조회 / 수정</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    ...
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </section>
 

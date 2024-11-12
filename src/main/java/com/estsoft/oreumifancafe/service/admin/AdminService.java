@@ -23,11 +23,25 @@ public class AdminService {
     private final BoardRepository boardRepository;
 
     // 사용자 ID 조회
-    public UserResponse findUserById(String userId) {
+    public UserInfoResponse findUserById(String userId) {
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId))
-                .toUserResponse();
+                .toUserInfoResponse();
     }
+
+    // 모든 사용자 조회
+    public List<UserInfoResponse> getAllUser() {
+        return userRepository.findAll().stream()
+                .map(User::toUserInfoResponse)
+                .toList();
+    }
+
+    // 사용자 정보 조회
+//    public UserInfoResponse userInfo(String userId) {
+//        return userRepository.findByUserId(userId)
+//                .orElseThrow(() -> new UserNotFoundException(userId))
+//                .toUserInfoResponse();
+//    }
 
     // 신고 및 문의 전체 조회
     public List<HelpResponse> getAllHelp(String userId) {
@@ -59,22 +73,6 @@ public class AdminService {
                 .toList();
 
         return list;
-    }
-
-    // 모든 사용자 조회
-    public List<UserResponse> getAllUser() {
-        List<UserResponse> list = userRepository.findAll().stream()
-                .map(User::toUserResponse)
-                .toList();
-
-        return list;
-    }
-    
-    // 사용자 정보 조회
-    public UserInfoResponse userInfo(String userId) {
-        return userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId))
-                .toUserInfoResponse();
     }
 
     // 사용자 상태 변경
