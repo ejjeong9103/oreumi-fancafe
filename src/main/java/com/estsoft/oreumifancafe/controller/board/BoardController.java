@@ -2,15 +2,16 @@ package com.estsoft.oreumifancafe.controller.board;
 
 import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
+import com.estsoft.oreumifancafe.domain.reply.Reply;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.service.board.BoardService;
+import com.estsoft.oreumifancafe.service.reply.ReplyService;
 import com.estsoft.oreumifancafe.service.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +24,12 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final UserService userService;
+    private final ReplyService replyService;
 
-    public BoardController(BoardService boardService, UserService userService) {
+    public BoardController(BoardService boardService, UserService userService, ReplyService replyService) {
         this.boardService = boardService;
         this.userService = userService;
+        this.replyService = replyService;
     }
 
     @GetMapping("/new-article")
@@ -55,24 +58,20 @@ public class BoardController {
     @GetMapping("/article/{boardType}/{id}")
     public String viewPost(@PathVariable int boardType,
                            @PathVariable Long id,
-                           @AuthenticationPrincipal User loggedInUser, // 로그인된 사용자 정보 추가
+                           @AuthenticationPrincipal User loggedInUser,
                            Model model) {
-        Board board = boardService.findById(id); // ID를 통해 Board 객체 조회
-        User user = board.getUser(); // 게시글 작성자 정보
+        Board board = boardService.findById(id);
+        User user = board.getUser();
+        List<Reply> comments = replyService.getRepliesByBoardId(id);
 
-        System.out.println("게시글 작성자 ID: " + user.getUserId());
-        System.out.println("로그인된 사용자 ID: " + (loggedInUser != null ? loggedInUser.getUserId() : "로그인되지 않음"));
-
-        boolean isMyBoard = false;
-        if (loggedInUser != null && user.getUserId().equals(loggedInUser.getUserId())) {
-            isMyBoard = true;
-        }
+        boolean isMyBoard = loggedInUser != null && user.getUserId().equals(loggedInUser.getUserId());
 
         model.addAttribute("article", board);
         model.addAttribute("user", user);
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("isMyBoard", isMyBoard);
-        model.addAttribute("boardType", boardType); // boardType을 모델에 추가하여 템플릿에서 사용 가능
+        model.addAttribute("boardType", boardType);
+        model.addAttribute("comment", comments);
 
         return "post"; // post.html 렌더링
     }
