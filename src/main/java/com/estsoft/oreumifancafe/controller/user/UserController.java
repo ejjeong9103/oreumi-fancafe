@@ -80,9 +80,11 @@ public class UserController {
         Page<BoardResponse> boardResponseList = boardService.findByUserId(user, boardPageNum);
         Page<BoardResponse> replyBoardResponseList = boardService.findDistinctBoardsByUserComments(user, replyPageNum);
         Page<HelpResponse> qaList = helpService.findByUserAndHelpType(user, qaPageNum, 1);
+        Page<HelpResponse> reportList = helpService.findByUserAndHelpType(user, reportPageNum, 2);
         model.addAttribute("myBoard", boardResponseList);
         model.addAttribute("myReply", replyBoardResponseList);
         model.addAttribute("myQa", qaList);
+        model.addAttribute("myReport", reportList);
         return "myPage";
     }
 
