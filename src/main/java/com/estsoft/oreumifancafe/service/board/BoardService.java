@@ -113,10 +113,21 @@ public class BoardService {
 
     // 해당 유저가 남긴 댓글의 게시물을 가져오기
     public Page<BoardResponse> findDistinctBoardsByUserComments(User user, int pageNum) {
+        // 토탈 페이지를 가져오기 위함
+        Page<Long> longs = replyRepository.findDistinctBoardIdsByUser(user, createPageRequest(pageNum, MY_PAGE_SIZE));
 
-        Page<Long> boardIds = replyRepository.findDistinctBoardIdsByUser(user, createPageRequest(pageNum, MY_PAGE_SIZE));
+        // 보드 아이디와 리플레이 아이디 (리플레이 아이디를 기준으로 정렬)
+        Page<Object[]> replyPage = replyRepository.findDistinctBoardIdsByUserOrder(user, createPageRequest(pageNum, MY_PAGE_SIZE));
 
-        List<Board> boards = boardRepository.findByIdInOrderByIdDesc(boardIds.getContent());
+        // 보드 아이디 중복 제거
+        List<Long> boardIds = replyPage.getContent().stream()
+                .map(row -> (Long) row[0])
+                .distinct()
+                .toList();
+
+        List<Board> boards = boardIds.stream()
+                .map(this::findById) // boardId로 Board를 조회
+                .toList();
 
         // 3. Board 엔터티를 DTO로 변환
         List<BoardResponse> boardResponses = boards.stream()
@@ -124,6 +135,6 @@ public class BoardService {
                 .toList();
 
         // 4. Page 객체 반환
-        return new PageImpl<>(boardResponses, createPageRequest(pageNum, MY_PAGE_SIZE), boardIds.getTotalElements());
+        return new PageImpl<>(boardResponses, createPageRequest(pageNum, MY_PAGE_SIZE), longs.getTotalElements());
     }
 }
