@@ -92,3 +92,9 @@ td {
     padding: 15px;
     white-space: break-spaces;
 }
+.button-list2{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    gap: 10px;
+}

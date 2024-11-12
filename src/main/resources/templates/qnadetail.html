@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="../static/css/reset.css"/>
-    <link rel="stylesheet" href="../static/css/qnadetail.css">
+    <link rel="stylesheet" th:href="@{/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/qnadetail.css}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="/js/qnaDetail.js"></script>
 
 </head>
 <body>
 <!--타임리프 내의 링크는 모두 임의로 넣었으니 실제 작업할 때 링크 경로를 수정해주세요-->
 <div class="container">
-    <h1>게시판 이름</h1>
-    <p class="text-muted">게시판 설명</p>
+    <h1>고객센터</h1>
+    <p class="text-muted">무엇을 도와드릴까요?</p>
     <article class="board-page">
         <div class="article-header">
             <input id="qna-id" th:value="${help.id}" type="hidden">
@@ -57,14 +58,16 @@
         </div>
         <div class="page-button-list">
             <div>
-                <button class="btn btn-secondary board-btn" type="button">목록</button>
+                <button class="btn btn-secondary board-btn" type="button" onclick="location.href='/myPage'">목록</button>
             </div>
-            <div>
-                <button class="btn btn-secondary go-to-write-btn" type="button">글쓰기</button>
-            </div>
-            <!--      관리자에게만 권한 부여되게      -->
-            <div>
-                <button class="btn btn-secondary answer-btn" type="button">답변하기</button>
+            <div class="button-list2">
+                <div>
+                    <button class="btn btn-secondary go-to-write-btn" type="button" onclick="location.href='/help'">글쓰기</button>
+                </div>
+                <!--      관리자에게만 권한 부여되게      -->
+                <div>
+                    <button class="btn btn-secondary answer-btn" type="button">답변</button>
+                </div>
             </div>
 
         </div>

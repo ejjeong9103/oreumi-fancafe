@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
-    <link rel="stylesheet" href="/reset.css">
-    <link rel="stylesheet" href="/css/qnaEditor.css">
+    <link rel="stylesheet" th:href="@{/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/qnaEditor.css}">
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -19,7 +19,7 @@
 <main class="main-content">
     <div class="container">
         <h1>고객센터</h1>
-        <p>무엇을 도와드릴까요?</p>
+        <p  class="text-muted">무엇을 도와드릴까요?</p>
         <div class="main-container1">
             <div class="dropdown">
                 <button class="dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
