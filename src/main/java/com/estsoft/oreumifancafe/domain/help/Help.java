@@ -1,5 +1,6 @@
 package com.estsoft.oreumifancafe.domain.help;
 
+import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

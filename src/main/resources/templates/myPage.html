@@ -67,9 +67,15 @@
             </li>
 
             <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
-            <li th:each="pageNum : ${#numbers.sequence(myBoard.number / 5 * 5, T(java.lang.Math).min(myBoard.totalPages - 1, myBoard.number / 5 * 5 + 4))}"
+            <li th:if="${myBoard.totalPages > 0}"
+                    th:each="pageNum : ${#numbers.sequence(myBoard.number / 5 * 5, T(java.lang.Math).min(myBoard.totalPages - 1, myBoard.number / 5 * 5 + 4))}"
                 th:classappend="${pageNum == myBoard.number} ? 'page-item active' : 'page-item'">
               <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},boardPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
+            </li>
+
+            <!-- DB가 비어있는 경우 페이지 번호 1 표시 -->
+            <li th:if="${myBoard.totalPages == 0}" class="page-item active">
+              <a class="page-link">1</a>
             </li>
 
             <!-- 다음 페이지 그룹 버튼 -->
@@ -121,9 +127,15 @@
             </li>
 
             <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
-            <li th:each="pageNum : ${#numbers.sequence(myReply.number / 5 * 5, T(java.lang.Math).min(myReply.totalPages - 1, myReply.number / 5 * 5 + 4))}"
+            <li th:if="${myReply.totalPages > 0}"
+                    th:each="pageNum : ${#numbers.sequence(myReply.number / 5 * 5, T(java.lang.Math).min(myReply.totalPages - 1, myReply.number / 5 * 5 + 4))}"
                 th:classappend="${pageNum == myReply.number} ? 'page-item active' : 'page-item'">
               <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},replyPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
+            </li>
+
+            <!-- DB가 비어있는 경우 페이지 번호 1 표시 -->
+            <li th:if="${myReply.totalPages == 0}" class="page-item active">
+              <a class="page-link">1</a>
             </li>
 
             <!-- 다음 페이지 그룹 버튼 -->
@@ -176,9 +188,15 @@
             </li>
 
             <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
-            <li th:each="pageNum : ${#numbers.sequence(myQa.number / 5 * 5, T(java.lang.Math).min(myQa.totalPages - 1, myQa.number / 5 * 5 + 4))}"
+            <li th:if="${myQa.totalPages > 0}"
+                    th:each="pageNum : ${#numbers.sequence(myQa.number / 5 * 5, T(java.lang.Math).min(myQa.totalPages - 1, myQa.number / 5 * 5 + 4))}"
                 th:classappend="${pageNum == myQa.number} ? 'page-item active' : 'page-item'">
               <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},qaPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
+            </li>
+
+            <!-- DB가 비어있는 경우 페이지 번호 1 표시 -->
+            <li th:if="${myQa.totalPages == 0}" class="page-item active">
+              <a class="page-link">1</a>
             </li>
 
             <!-- 다음 페이지 그룹 버튼 -->
@@ -231,9 +249,15 @@
             </li>
 
             <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
-            <li th:each="pageNum : ${#numbers.sequence(myReport.number / 5 * 5, T(java.lang.Math).min(myReport.totalPages - 1, myReport.number / 5 * 5 + 4))}"
+            <li th:if="${myReport.totalPages > 0}"
+                    th:each="pageNum : ${#numbers.sequence(myReport.number / 5 * 5, T(java.lang.Math).min(myReport.totalPages - 1, myReport.number / 5 * 5 + 4))}"
                 th:classappend="${pageNum == myReport.number} ? 'page-item active' : 'page-item'">
               <a class="page-link" th:href="@{/user/{userId}(userId=${session.user.userId},reportPageNum=${pageNum + 1})}" th:text="${pageNum + 1}"></a>
+            </li>
+
+            <!-- DB가 비어있는 경우 페이지 번호 1 표시 -->
+            <li th:if="${myReport.totalPages == 0}" class="page-item active">
+              <a class="page-link">1</a>
             </li>
 
             <!-- 다음 페이지 그룹 버튼 -->
