@@ -4,6 +4,7 @@ import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.admin.*;
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
+import com.estsoft.oreumifancafe.domain.help.Help;
 import com.estsoft.oreumifancafe.domain.user.Role;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -105,6 +107,22 @@ public class AdminService {
     }
 
 
+    // 신고 문의 글 가져오기
+    public Page<Help> getHelpPaging(int helpPageNum, int helpType) {
+        Pageable pageable = createPageRequest(helpPageNum, PAGE_SIZE);
+        Page<Help> helps = helpRepository.findHelpsByHelpType(helpType, pageable);
+        return helps;
+    }
+
+
+    public Help answerHelp(long helpId, String answer, String adminId) {
+        Help help = helpRepository.findById(helpId).orElseThrow();
+        help.setAnswer(answer);
+        help.setAdminId(adminId);
+        help.setAnsweredAt(LocalDateTime.now());
+        help.setState(1);
+        return helpRepository.save(help);
+    }
 
 
 

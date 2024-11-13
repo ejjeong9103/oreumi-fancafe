@@ -86,6 +86,22 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    // 신고 문의
+    @GetMapping("/help")
+    public String getHelpPage(Model model,
+                       @RequestParam(defaultValue = "1") int helpPageNum,
+                       @RequestParam(defaultValue = "1") int helpType) {
+        model.addAttribute("help", adminService.getHelpPaging(helpPageNum, helpType));
+        model.addAttribute("helpType", helpType);
+        return "/admin/adminHelp";
+    }
+
+    @PutMapping("/help/answer")
+    public ResponseEntity answerHelp(@RequestParam long helpId, @RequestParam String answer, @RequestParam String adminId) {
+        adminService.answerHelp(helpId, answer, adminId);
+        return ResponseEntity.ok().build();
+    }
+
     // 사용자 ID 조회
     @GetMapping("/user/{userId}")
     public String findUserById(@PathVariable String userId, Model model) {

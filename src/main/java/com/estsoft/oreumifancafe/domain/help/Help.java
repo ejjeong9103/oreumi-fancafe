@@ -1,6 +1,7 @@
 package com.estsoft.oreumifancafe.domain.help;
 
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
+import com.estsoft.oreumifancafe.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Help {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +52,12 @@ public class Help {
 
     @Column(nullable = false)
     private int helpType;
+
+    @Transient
+    private User user;
+
+    @Transient
+    private User adminUser;
 
     @PrePersist
     protected void onCreate() {
