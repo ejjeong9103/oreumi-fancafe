@@ -108,7 +108,7 @@ public class User implements UserDetails {
     // 계정 사용 가능 여부
     @Override
     public boolean isEnabled() {
-        return true; // true : 사용 가능
+        return this.state == 1; // true : 사용 가능
     }
 
     @Transient

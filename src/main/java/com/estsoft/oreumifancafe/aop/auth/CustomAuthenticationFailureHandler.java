@@ -25,14 +25,20 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
 
+        exception.printStackTrace();
+        System.out.println("Exception type: " + exception.getClass().getName());
+        if (exception.getCause() != null) {
+            System.out.println("Cause type: " + exception.getCause().getClass().getName());
+        }
+
         String errorMessage;
-        if(exception instanceof BadCredentialsException || exception instanceof InternalAuthenticationServiceException){
+        if (exception instanceof DisabledException || (exception.getCause() instanceof DisabledException)) {
+            errorMessage = "탈퇴한 계정입니다.";
+        } else if (exception instanceof BadCredentialsException || exception instanceof InternalAuthenticationServiceException) {
             errorMessage = "아이디 또는 비밀번호를 확인해주세요.";
-        }else if(exception instanceof DisabledException){
-            errorMessage = "계정이 비활성화 되었습니다. 관리자에게 문의하세요.";
-        }else if(exception instanceof CredentialsExpiredException){
+        } else if (exception instanceof CredentialsExpiredException) {
             errorMessage = "비밀번호 유효기간이 만료 되었습니다. 관리자에게 문의하세요.";
-        }else{
+        } else {
             errorMessage = "알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요.";
         }
 
