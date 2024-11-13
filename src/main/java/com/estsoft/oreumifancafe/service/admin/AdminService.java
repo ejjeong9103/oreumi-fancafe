@@ -64,7 +64,7 @@ public class AdminService {
         } else if (!content.isEmpty()) {
             return boardRepository.findBoardByBoardTypeAndContentContaining(boardType, content, pageable);
         } else if (!titleOrContent.isEmpty()) {
-            return boardRepository.findBoardByBoardTypeAndTitleContainingOrContentContaining(boardType, titleOrContent, titleOrContent, pageable);
+            return boardRepository.findBoardByBoardTypeAndTitleOrContent(boardType, titleOrContent, pageable);
         } else {
             return boardRepository.findBoardByBoardType(boardType, pageable);
         }

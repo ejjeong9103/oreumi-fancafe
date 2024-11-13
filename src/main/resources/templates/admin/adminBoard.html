@@ -94,7 +94,7 @@
 					     nickname=${nickname},
 					     title=${title},
 					     content=${content},
-					     titleAndContent=${titleOrContent},
+					     titleOrContent=${titleOrContent},
 					     boardType=${boardType})}"
 					   aria-label="Previous Group">
 						<span aria-hidden="true">&laquo;</span>
@@ -110,7 +110,7 @@
 					     nickname=${nickname},
 					     title=${title},
 					     content=${content},
-					     titleAndContent=${titleOrContent},
+					     titleOrContent=${titleOrContent},
 					     boardType=${boardType})}" th:text="${pageNum + 1}"></a>
 				</li>
 
@@ -127,7 +127,7 @@
 					     nickname=${nickname},
 					     title=${title},
 					     content=${content},
-					     titleAndContent=${titleOrContent},
+					     titleOrContent=${titleOrContent},
 					     boardType=${boardType})}"
 					   aria-label="Next Group">
 						<span aria-hidden="true">&raquo;</span>
@@ -191,7 +191,7 @@
         }
 
         if (filter === "keyword") {
-            location.href = "/admin/board?titleAndContent=" + encodeURIComponent(query) + boardQuery;
+            location.href = "/admin/board?titleOrContent=" + encodeURIComponent(query) + boardQuery;
         } else if (filter === "title") {
             location.href = "/admin/board?title=" + encodeURIComponent(query) + boardQuery;
         } else if (filter === "content") {
