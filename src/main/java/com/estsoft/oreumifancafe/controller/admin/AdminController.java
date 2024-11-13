@@ -70,7 +70,7 @@ public class AdminController {
     public String boardStateUpdate(@RequestParam long boardId,
                                    @RequestParam int state) {
         adminService.updateBoardState(boardId, state);
-        return "redirect:admin/board";
+        return "redirect:/admin/board";
     }
 
     @PutMapping("/board/hidden")
