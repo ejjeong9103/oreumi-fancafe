@@ -27,7 +27,7 @@ public class AdminController {
 
     @GetMapping
     public String getAdminPage() {
-        return "/admin/adminIndex";
+        return "admin/adminIndex";
     }
 
     @GetMapping("/user")
