@@ -57,7 +57,7 @@
 
             </div>
             <div class="page-button-list">
-                <div>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
                     <button class="btn btn-secondary board-btn" type="button" onclick="location.href='/myPage'">목록
                     </button>
                 </div>

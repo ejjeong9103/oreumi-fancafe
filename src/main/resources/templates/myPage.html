@@ -169,7 +169,7 @@
             <td th:text="${item.id}">
             </td>
             <td>
-              <a th:href="@{/question/{id}(id=${item.id})}"
+              <a th:href="@{/help/question/{id}(id=${item.id})}"
                  th:text="${item.title}"></a>
             </td>
             <td th:text="${session.user.nickname}"></td>
@@ -230,7 +230,7 @@
             <td th:text="${item.id}">
             </td>
             <td>
-              <a th:href="@{/question/{id}(id=${item.id})}"
+              <a th:href="@{/help/question/{id}(id=${item.id})}"
                  th:text="${item.title}"></a>
             </td>
             <td th:text="${session.user.nickname}"></td>
