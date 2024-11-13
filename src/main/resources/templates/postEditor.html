@@ -21,7 +21,7 @@
   <section class="--section">
     <main class="main-content">
       <div class="container">
-        <form th:action="${request.id != null ? '/board/article/edit/' + request.id : '/board'}"
+        <form th:action="${request.id != null ? '/board/' + request.id : '/board'}"
               method="post" th:object="${request}">
           <input type="hidden" name="_method" th:value="${request.id != null ? 'put' : 'post'}">
 

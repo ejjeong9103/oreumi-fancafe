@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/board")
@@ -25,12 +24,12 @@ public class ReplyController {
         this.boardService = boardService;
     }
 
-    @PostMapping("/article/{boardId}/reply")
-    public String addReply(@PathVariable Long boardId,
-                           @RequestParam String commentbox,
-                           @RequestParam(required = false) Long parentReplyId,
-                           @AuthenticationPrincipal User loggedInUser,
-                           Model model) {
+    @PostMapping("/reply")
+    public String writeReply(@RequestParam Long boardId,
+                             @RequestParam String commentbox,
+                             @RequestParam(required = false) Long parentReplyId,
+                             @AuthenticationPrincipal User loggedInUser,
+                             Model model) {
         // 게시글 조회
         Board board = boardService.findById(boardId);
 
@@ -49,12 +48,11 @@ public class ReplyController {
         return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
     }
 
-    @DeleteMapping("/article/{boardId}/reply/{replyId}")
-    public String deleteReply(@PathVariable Long boardId,
-                              @PathVariable Long replyId,
+    @DeleteMapping("reply/{replyId}")
+    public String deleteReply(@PathVariable Long replyId,
                               @AuthenticationPrincipal User loggedInUser) {
-        // 댓글 삭제 로직 실행
-        replyService.deleteReply(replyId, loggedInUser);
+        // 댓글 삭제 로직 실행 및 boardId 반환
+        Long boardId = replyService.deleteReply(replyId, loggedInUser);
 
         // boardId를 사용해 boardType 조회
         Board board = boardService.findById(boardId);
@@ -63,14 +61,17 @@ public class ReplyController {
         return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
     }
 
-    @PostMapping("/article/{boardId}/reply/update/{replyId}")
-    public String updateReply(@PathVariable Long boardId,
-                              @PathVariable Long replyId,
+    @PostMapping("/reply/{replyId}")
+    public String updateReply(@PathVariable Long replyId,
                               @RequestParam("updatedContent") String updatedContent,
                               @AuthenticationPrincipal User loggedInUser) {
-        System.out.println("Updated Content: " + updatedContent); // 디버그용
-        replyService.updateReply(replyId, updatedContent, loggedInUser);
-        Board board = boardService.findById(boardId);
+
+        Reply updatedReply = replyService.updateReply(replyId, updatedContent, loggedInUser);
+
+        Long boardId = updatedReply.getBoard().getId();
+        Board board = updatedReply.getBoard();
+
+        // 업데이트 후 해당 게시글로 리디렉션
         return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
     }
 

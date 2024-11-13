@@ -39,8 +39,8 @@ public class BoardController {
         return "postEditor";
     }
 
-    @GetMapping("/article/edit/{id}")
-    public String editPost(@PathVariable Long id, Model model) {
+    @GetMapping("/{id}")
+    public String showEditBoard(@PathVariable Long id, Model model) {
         Board board = boardService.findById(id); // ID를 통해 Board 객체 조회
         model.addAttribute("board", board);
         model.addAttribute("request", new AddBoardRequest(
@@ -52,8 +52,6 @@ public class BoardController {
         ));
         return "postEditor";
     }
-
-
 
     @GetMapping("/article/{boardType}/{id}")
     public String viewPost(@PathVariable int boardType,
@@ -78,8 +76,7 @@ public class BoardController {
 
     @PostMapping
     public String writeBoard(@ModelAttribute AddBoardRequest request,
-                             @AuthenticationPrincipal User user,
-                             Model model) {
+                             @AuthenticationPrincipal User user) {
 
         Board board = boardService.writeBoard(request, user); // 새 게시글 생성 및 저장
 
@@ -87,7 +84,7 @@ public class BoardController {
         return "redirect:/board/article/" + boardType + "/" + board.getId();
     }
 
-    @PutMapping("/article/edit/{id}")
+    @PutMapping("/{id}")
     public String editBoard(@PathVariable Long id,
                             @ModelAttribute AddBoardRequest request,
                             @AuthenticationPrincipal User user,
@@ -99,12 +96,12 @@ public class BoardController {
         // 수정된 게시글의 boardType과 id를 가져와서 리디렉션
         return "redirect:/board/article/" + request.getBoardType() + "/" + request.getId();
     }
+
     @DeleteMapping("/{id}")
     public String deleteBoard(@PathVariable Long id, @AuthenticationPrincipal User user) {
         int boardType = boardService.deleteBoard(id, user);
         return "redirect:/board/" + boardType + "/1";
     }
-
 
     // 게시글 페이징에 필요한 페이지 수 반환
     @GetMapping("/{boardType}/pagecount")
