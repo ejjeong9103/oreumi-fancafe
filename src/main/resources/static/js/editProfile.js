@@ -207,7 +207,7 @@ function preSubmitCheck() {
 
 function deleteUser() {
     // 확인 팝업 띄우기
-    const isConfirmed = confirm("정말로 삭제하시겠습니까?");
+    const isConfirmed = confirm("정말로 탈퇴하시겠습니까?");
     if (!isConfirmed) {
         return; // 사용자가 '아니오'를 선택하면 함수 종료
     }

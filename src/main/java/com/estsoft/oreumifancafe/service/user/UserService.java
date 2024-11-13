@@ -118,5 +118,6 @@ public class UserService {
 
         // 상태 변경
         user.deleteUser();
+        userRepository.save(user);
     }
 }
