@@ -42,7 +42,7 @@
         <td th:text="${item.id}"></td>
         <td th:text="${item.title}"></td>
         <td th:text="${item.userId}"></td>
-        <td th:text="${item.state == 0 ? '처리중' : '완료'}"></td>
+        <td th:text="${item.state == 1 ? '처리중' : '완료'}"></td>
         <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
         <td>
           <a
@@ -152,7 +152,7 @@
   function helpAnswer() {
     const id = document.getElementById('modalId').textContent; // ID 가져오기
     const replyContent = document.getElementById('modalReplyContent').value; // 답변 내용 가져오기
-    const adminId = document.getElementById('modalReplyContent').value; // 답변 내용 가져오기
+    const adminId = document.getElementById('adminId').value; // 답변 내용 가져오기
 
     console.log(id);
     console.log(replyContent);

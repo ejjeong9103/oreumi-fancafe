@@ -120,7 +120,7 @@ public class AdminService {
         help.setAnswer(answer);
         help.setAdminId(adminId);
         help.setAnsweredAt(LocalDateTime.now());
-        help.setState(1);
+        help.setState(2);
         return helpRepository.save(help);
     }
 
