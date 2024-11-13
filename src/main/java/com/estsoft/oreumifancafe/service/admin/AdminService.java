@@ -11,6 +11,9 @@ import com.estsoft.oreumifancafe.repository.help.HelpRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +24,35 @@ public class AdminService {
     private final UserRepository userRepository;
     private final HelpRepository helpRepository;
     private final BoardRepository boardRepository;
+    private static final int PAGE_SIZE = 3;
+
+    private Pageable createPageRequest(int pageNum, int pageSize) {
+        return PageRequest.of(pageNum - 1, pageSize);
+    }
+
+    // 유저 가져오기
+    public Page<UserInfoResponse> getUserPaging(int pageNum, String userId, String nickName) {
+        Pageable pageable = createPageRequest(pageNum, PAGE_SIZE);
+        if (!userId.isEmpty()) {
+            return userRepository.findUserByUserIdContaining(userId, pageable).map(User::toUserInfoResponse);
+        } else if (!nickName.isEmpty()) {
+            return userRepository.findUserByNicknameContaining(nickName, pageable).map(User::toUserInfoResponse);
+        } else {
+            return userRepository.findAll(pageable).map(User::toUserInfoResponse);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     // 사용자 ID 조회
     public UserInfoResponse findUserById(String userId) {

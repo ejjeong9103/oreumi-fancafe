@@ -8,6 +8,7 @@ import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,19 @@ public class AdminController {
 
     @GetMapping
     public String getAdminPage() {
-        return "adminPage";
+        return "/admin/adminIndex";
+    }
+
+    @GetMapping("/user")
+    public String getUserPage(Model model,
+                              @RequestParam(defaultValue = "1") int userPageNum,
+                              @RequestParam(defaultValue = "") String nickname,
+                              @RequestParam(defaultValue = "") String userId) {
+        Page<UserInfoResponse> userInfoResponses = adminService.getUserPaging(userPageNum, userId, nickname);
+        model.addAttribute("user", userInfoResponses);
+        model.addAttribute("userId", userId);
+        model.addAttribute("nickname", nickname);
+        return "/admin/adminUser";
     }
 
     // 사용자 ID 조회
@@ -37,14 +50,14 @@ public class AdminController {
     }
 
     // 모든 사용자 조회
-    @GetMapping("/user")
-    public String getAllUser(Model model) {
-        List<UserInfoResponse> users = adminService.getAllUser();
-
-        model.addAttribute("userList", users);
-
-        return "adminPage";
-    }
+//    @GetMapping("/user")
+//    public String getAllUser(Model model) {
+//        List<UserInfoResponse> users = adminService.getAllUser();
+//
+//        model.addAttribute("userList", users);
+//
+//        return "adminPage";
+//    }
 
     // 신고 및 문의 전체 조회
     @GetMapping("/help/{userId}")
