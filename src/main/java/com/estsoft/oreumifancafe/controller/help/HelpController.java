@@ -61,14 +61,6 @@ public class HelpController {
         return ResponseEntity.ok(response);
     }
 
-    // 관리자 - 전체 질문 조회
-    @GetMapping("/question/admin")
-    public ResponseEntity<List<HelpResponse>> findAllQuestion() {
-        List<HelpResponse> questionList = service.findAllQuestion().stream()
-                .map(HelpResponse::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(questionList);
-    }
 
     // 유저 - 내가 쓴 문의글 조회
     @GetMapping("/inquiry")
