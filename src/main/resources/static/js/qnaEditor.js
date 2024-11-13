@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         createButton.addEventListener('click', event => {
             if (currentUrl.includes('/answer/')) {
                 const id = parseInt(currentUrl.split('/answer/')[1], 10);
-                fetch(`/help/answer/${id}`, {
+                fetch(`/admin/answer/${id}`, {
                     method: 'PUT',
                     headers: {
                         "Content-Type": "application/json"

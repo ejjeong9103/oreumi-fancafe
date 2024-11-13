@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("/help")
 @RestController
 public class HelpController {
 
@@ -27,7 +26,7 @@ public class HelpController {
     }
 
     // POST - 질문 작성하기
-    @PostMapping("/question")
+    @PostMapping("/help/question")
     public ResponseEntity<HelpResponse> writeQuestion(@RequestBody AddHelpRequest request) {
 
         User currentUser = (User) session.getAttribute("user");
@@ -40,7 +39,7 @@ public class HelpController {
 
     // GET - 내가 쓴 질문 전체 조회
     // service에서 받아온 현재 유저의 아이디와 일치하는 질문 전체 조회
-    @GetMapping("/question/all")
+    @GetMapping("/help/question/all")
     public ResponseEntity<List<HelpResponse>> findAllQuestionsByUser() {
         User currentUser = (User) session.getAttribute("user");
         List<HelpResponse> questionList = service.findAllQuestionByUser(currentUser.getUserId()).stream()
@@ -51,7 +50,7 @@ public class HelpController {
 
 
     // PUT - 답변 작성하기 (관리자 권한)
-    @PutMapping("/answer/{id}")
+    @PutMapping("/admin/answer/{id}")
     public ResponseEntity<HelpResponse> updateAnswer(@PathVariable Long id, @RequestBody AddHelpRequest request) {
         User currentUser = (User) session.getAttribute("user");
         request.setAdminId(currentUser.getUserId());
@@ -63,7 +62,7 @@ public class HelpController {
 
 
     // 유저 - 내가 쓴 문의글 조회
-    @GetMapping("/inquiry")
+    @GetMapping("/help/inquiry")
     public ResponseEntity<List<HelpResponse>> findInquiryByUser() {
         User currentUser = (User) session.getAttribute("user");
         List<HelpResponse> inquiryList = service.findInquiryByUserId(currentUser.getUserId())
@@ -74,7 +73,7 @@ public class HelpController {
     }
 
     // 유저 - 내가 쓴 신고글 조회
-    @GetMapping("/declaration")
+    @GetMapping("/help/declaration")
     public ResponseEntity<List<HelpResponse>> findDeclarationByUser() {
         User currentUser = (User) session.getAttribute("user");
         List<HelpResponse> declarationList = service.findDeclarationByUserId(currentUser.getUserId())
