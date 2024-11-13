@@ -44,6 +44,8 @@ public class SecurityConfig {
                                 // 회원가입 페이지, 회원가입 누구나 가능
                                 // 로그아웃은 session이 없어도 그냥 통과되게
                                 .requestMatchers("/user/signup", "/user", "/user/logout").permitAll()
+                                // 정회원만
+                                .requestMatchers("/board/3/**").hasRole("USER")
                                 // 게스트만
                                 .requestMatchers("/user/updateInfo", "/board/new-article", "/board/reply/**", "/board/**").hasRole("GUEST")
                                 .requestMatchers(HttpMethod.GET, "/help").hasRole("GUEST")
