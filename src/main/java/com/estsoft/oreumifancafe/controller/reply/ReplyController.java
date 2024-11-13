@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/board")
@@ -25,12 +24,12 @@ public class ReplyController {
         this.boardService = boardService;
     }
 
-    @PostMapping("/article/{boardId}/reply")
-    public String addReply(@PathVariable Long boardId,
-                           @RequestParam String commentbox,
-                           @RequestParam(required = false) Long parentReplyId,
-                           @AuthenticationPrincipal User loggedInUser,
-                           Model model) {
+    @PostMapping("/reply/{boardId}")
+    public String writeReply(@PathVariable Long boardId,
+                             @RequestParam String commentbox,
+                             @RequestParam(required = false) Long parentReplyId,
+                             @AuthenticationPrincipal User loggedInUser,
+                             Model model) {
         // 게시글 조회
         Board board = boardService.findById(boardId);
 
@@ -49,7 +48,7 @@ public class ReplyController {
         return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
     }
 
-    @DeleteMapping("/article/{boardId}/reply/{replyId}")
+    @DeleteMapping("/{boardId}/{replyId}")
     public String deleteReply(@PathVariable Long boardId,
                               @PathVariable Long replyId,
                               @AuthenticationPrincipal User loggedInUser) {
@@ -63,7 +62,7 @@ public class ReplyController {
         return "redirect:/board/article/" + board.getBoardType() + "/" + boardId;
     }
 
-    @PostMapping("/article/{boardId}/reply/update/{replyId}")
+    @PostMapping("/{boardId}/{replyId}")
     public String updateReply(@PathVariable Long boardId,
                               @PathVariable Long replyId,
                               @RequestParam("updatedContent") String updatedContent,

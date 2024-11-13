@@ -28,7 +28,7 @@
             <!-- 수정 및 삭제 버튼을 오른쪽 끝에 배치 -->
             <div class="d-flex justify-content-end mb-2" th:if="${isMyBoard}">
                 <button class="btn btn-secondary btn-update me-2"
-                        th:onclick="|location.href='@{/board/article/edit/{id}(id=${article.id})}'|">
+                        th:onclick="|location.href='@{/board/{id}(id=${article.id})}'|">
                     수정
                 </button>
                 <form th:action="@{/board/{id}(id=${article.id})}" method="post" onsubmit="return confirmDelete()">
@@ -82,7 +82,7 @@
                                             th:if="${loggedInUser != null and item.user.userId == loggedInUser.userId}">수정</button>
 
                                     <!-- 댓글 수정 폼 -->
-                                    <form th:action="@{/board/article/{boardId}/reply/update/{replyId}(boardId=${article.id}, replyId=${item.id})}"
+                                    <form th:action="@{/board/{boardId}/{replyId}(boardId=${article.id}, replyId=${item.id})}"
                                           method="post" id="editForm-${item.id}-unique"
                                           style="display: none;" >
                                         <textarea name="updatedContent" class="form-control mb-2 reply-textarea" rows="3" maxlength="600" th:text="${item.content}"></textarea>
@@ -91,7 +91,7 @@
                                         </div>
                                     </form>
 
-                                    <form th:action="@{/board/article/{boardId}/reply/{replyId}(boardId=${article.id}, replyId=${item.id})}"
+                                    <form th:action="@{/board/{boardId}/{replyId}(boardId=${article.id}, replyId=${item.id})}"
                                           method="post"
                                           onsubmit="return confirm('정말로 댓글을 삭제하시겠습니까?')"
                                           th:if="${loggedInUser != null and item.user.userId == loggedInUser.userId}">
@@ -103,7 +103,7 @@
                                 <p class="comment-body text-break" th:text="${item.content}"></p>
                             </div>
                             <div th:id="'replyForm-' + ${item.id}" class="reply-form" style="display: none; margin-top: 10px;">
-                                <form th:action="@{/board/article/{boardId}/reply(boardId=${article.id})}" method="post">
+                                <form th:action="@{/board/reply/{boardId}(boardId=${article.id})}" method="post">
                                     <input type="hidden" name="parentReplyId" th:value="${item.id}">
                                     <textarea class="form-control mb-2 reply-textarea" name="commentbox" rows="2" placeholder="답글을 입력하세요" maxlength="600"></textarea>
                                     <div class="d-flex justify-content-end align-items-center">
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <form th:action="@{/board/article/{boardId}/reply(boardId=${article.id})}" method="post" class="comment-create bg-light" style="padding: 0 30px;">
+                    <form th:action="@{/board/reply/{boardId}(boardId=${article.id})}" method="post" class="comment-create bg-light" style="padding: 0 30px;">
                         <div>
                             <label for="commentbox" th:text="${loggedInUser != null ? loggedInUser.nickname : ''}"></label><br>
                             <textarea class="w-100" id="commentbox" name="commentbox" rows="3" spellcheck="false" maxlength="600" style="resize: none; background-color: white; border: none; width: 100%;"></textarea>
@@ -209,7 +209,7 @@
             const updatedContent = textarea.value;
 
             // AJAX 요청으로 서버에 수정된 내용 전송
-            fetch(`/board/article/${articleId}/reply/update/${replyId}`, {
+            fetch(`/board/${articleId}/${replyId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
