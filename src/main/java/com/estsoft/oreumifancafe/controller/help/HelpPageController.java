@@ -28,7 +28,7 @@ public class HelpPageController {
 
     // 문의 페이지
     @GetMapping("/help")
-    public String helpForm(Model model) {
+    public String showQnaEditor(Model model) {
         return "qnaEditor";
     }
 
