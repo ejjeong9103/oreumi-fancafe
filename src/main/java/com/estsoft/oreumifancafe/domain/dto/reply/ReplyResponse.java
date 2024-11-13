@@ -1,5 +1,6 @@
 package com.estsoft.oreumifancafe.domain.dto.reply;
 
+import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.reply.Reply;
 import lombok.*;
 
@@ -8,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ReplyResponse {
     private String content;
     private LocalDateTime createdAt;
@@ -16,6 +19,7 @@ public class ReplyResponse {
     private int orders;
     private int group;
     private String userNickname;
+    private BoardResponse boardResponse;
 
     @Builder
     public ReplyResponse(String content, LocalDateTime createdAt, LocalDateTime updatedAt, int hierarchy, int orders, int group, String userNickname) {

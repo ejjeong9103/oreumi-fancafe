@@ -69,4 +69,18 @@ public class Help {
         this.helpType = helpType;
     }
 
+    public HelpResponse toResponse() {
+        return HelpResponse.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .userId(this.userId)
+                .createdAt(this.createdAt)
+                .adminId(this.adminId)
+                .helpType(this.helpType)
+                .state(this.state)
+                .answer(this.answer)
+                .answeredAt(this.answeredAt)
+                .build();
+    }
 }

@@ -52,6 +52,7 @@ let isEmpty = (txt) => {
 const inputIdField = document.getElementById("user-id");
 // 아이디 입력란 밑에 표시해줄 메세지 span
 const messageIdSpan = document.getElementById("idCheckMessage");
+const idRegex = /^[a-zA-Z][a-zA-Z0-9]{5,13}$/;
 
 // 아이디에서 포커스가 빠지면 아이디 중복 체크 검사
 // 포커스가 빠질때마다 서버통신하면 낭비
@@ -70,6 +71,18 @@ inputIdField.addEventListener("blur", function() {
         messageIdSpan.textContent = "아이디를 입력해주세요.";
         idCheck = false;
         return
+    }
+
+    if (!idRegex.test(focusOutId)) {
+        messageIdSpan.style.display = "block";
+        messageIdSpan.style.color = "red";
+        messageIdSpan.textContent = "아이디는 영문으로 시작하며 영문 또는 영문과 숫자 조합만 가능합니다. (6~14)";
+        idCheck = false;
+        return
+    } else {
+        messageIdSpan.style.display = "";
+        messageIdSpan.style.color = "";
+        messageIdSpan.textContent = "";
     }
 
     // 포커스가 빠질때 전에 입력해둔 아이디와 다를때만 서버통신
@@ -115,6 +128,7 @@ const inputNicknameField = document.getElementById("user-nickname");
 // 닉네임 입력란 밑에 표시해줄 메세지 span
 const messageNicknameSpan = document.getElementById("nicknameCheckMessage");
 let nicknameValue = inputNicknameField.value;
+const nicknameRegex = /^[a-zA-Z가-힣][a-zA-Z가-힣0-9]{5,13}$/;
 
 inputNicknameField.addEventListener("blur", function() {
     let focusOutNickname = inputNicknameField.value;
@@ -125,6 +139,18 @@ inputNicknameField.addEventListener("blur", function() {
         messageNicknameSpan.textContent = "닉네임를 입력해주세요.";
         nicknameCheck = false;
         return
+    }
+
+    if (!nicknameRegex.test(focusOutNickname)) {
+        messageNicknameSpan.style.display = "block";
+        messageNicknameSpan.style.color = "red";
+        messageNicknameSpan.textContent = "영문 또는 한글로 시작해야하며 자릿수를 확인해주세요. (6~14)";
+        idCheck = false;
+        return
+    } else {
+        messageNicknameSpan.style.display = "";
+        messageNicknameSpan.style.color = "";
+        messageNicknameSpan.textContent = "";
     }
 
     if (nicknameValue !== focusOutNickname) {
@@ -192,6 +218,7 @@ function validatePw() {
         messagePwSpan.style.color = "red";
         messagePwSpan.textContent = "비밀번호는 영문, 숫자, 특수문자가 최소 1개씩 들어가야합니다. (8~16)";
         pwCheck = false;
+        return;
     } else {
         messagePwSpan.style.display = "";
         messagePwSpan.style.color = "";
@@ -310,7 +337,7 @@ function preSubmitCheck(event) {
     const formData = new FormData(document.getElementById("signupForm"));
 
     // 비동기 요청
-    fetch("/user/signup", {
+    fetch("/user", {
         method: "POST",
         body: formData
     })

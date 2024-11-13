@@ -18,5 +18,6 @@ public interface BoardRepository extends JpaRepository<Board,Long> {
     Page<Board> findAllByBoardType(int boardType, Pageable pageable);
     long countByBoardType(int boardType);
     Optional<Board> findAllByBoardType(int boardType);
-    Page<Board> findBoardByUser(User user, Pageable pageable);
+    Page<Board> findBoardByUserOrderByIdDesc(User user, Pageable pageable);
+    List<Board> findByIdInOrderByIdDesc(List<Long> ids);
 }

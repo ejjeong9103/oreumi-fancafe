@@ -1,8 +1,15 @@
 package com.estsoft.oreumifancafe.service.help;
 
 import com.estsoft.oreumifancafe.domain.dto.help.AddHelpRequest;
+import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.help.Help;
+import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.repository.help.HelpRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,6 +18,8 @@ import java.util.List;
 //@Slf4j
 @Service
 public class HelpService {
+    private static final int MY_PAGE_SIZE = 3;
+    // String currentId = "id";  < 이 부분 나중에 일괄 수정해주세요.
 
     private final HelpRepository repository;
 
@@ -64,5 +73,12 @@ public class HelpService {
         return repository.save(help);
     }
 
+    private Pageable createPageRequest(int pageNum, int pageSize) {
+        return PageRequest.of(pageNum - 1, pageSize);
+    }
 
+    // 마이 페이지 내 문의/신고내역 페이징
+    public Page<HelpResponse> findByUserAndHelpType(User user, int pageNum, int helpType) {
+        return repository.findHelpByUserIdAndHelpTypeOrderByIdDesc(user.getUserId(),  helpType, createPageRequest(pageNum, MY_PAGE_SIZE)).map(Help::toResponse);
+    }
 }

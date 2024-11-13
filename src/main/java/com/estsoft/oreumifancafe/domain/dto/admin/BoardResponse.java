@@ -17,11 +17,14 @@ public class BoardResponse {
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime updatedAt;
     private User user;
     private int boardType;
     private String boardCategoryName;
     private int state;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime updatedAt;
 }

@@ -3,27 +3,33 @@ package com.estsoft.oreumifancafe.service.board;
 import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.board.AddBoardRequest;
+import com.estsoft.oreumifancafe.domain.dto.reply.ReplyResponse;
+import com.estsoft.oreumifancafe.domain.reply.Reply;
 import com.estsoft.oreumifancafe.domain.user.User;
+import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
+import com.estsoft.oreumifancafe.repository.reply.ReplyRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final ReplyRepository replyRepository;
     private static final int PAGE_SIZE = 30;
     private static final int MY_PAGE_SIZE = 3;
 
-    public BoardService(BoardRepository boardRepository, UserRepository userRepository) {
+    public BoardService(BoardRepository boardRepository, UserRepository userRepository, ReplyRepository replyRepository) {
         this.boardRepository = boardRepository;
         this.userRepository = userRepository;
+        this.replyRepository = replyRepository;
     }
 
     public Board writeBoard(AddBoardRequest request, User user) {
@@ -102,6 +108,22 @@ public class BoardService {
 
     // 해당 유저의 글 목록
     public Page<BoardResponse> findByUserId(User user, int pageNum) {
-        return boardRepository.findBoardByUser(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
+        return boardRepository.findBoardByUserOrderByIdDesc(user,  createPageRequest(pageNum, MY_PAGE_SIZE)).map(Board::toBoardResponse);
+    }
+
+    // 해당 유저가 남긴 댓글의 게시물을 가져오기
+    public Page<BoardResponse> findDistinctBoardsByUserComments(User user, int pageNum) {
+
+        Page<Long> boardIds = replyRepository.findDistinctBoardIdsByUser(user, createPageRequest(pageNum, MY_PAGE_SIZE));
+
+        List<Board> boards = boardRepository.findByIdInOrderByIdDesc(boardIds.getContent());
+
+        // 3. Board 엔터티를 DTO로 변환
+        List<BoardResponse> boardResponses = boards.stream()
+                .map(Board::toBoardResponse)
+                .toList();
+
+        // 4. Page 객체 반환
+        return new PageImpl<>(boardResponses, createPageRequest(pageNum, MY_PAGE_SIZE), boardIds.getTotalElements());
     }
 }

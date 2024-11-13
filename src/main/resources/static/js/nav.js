@@ -42,9 +42,23 @@ function login(event) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("login").addEventListener("click", function (event) {
-        login(event);
-    })
+    let loginField = document.getElementById("login");
+    if (loginField != null) {
+        loginField.addEventListener("click", function (event) {
+            login(event);
+        })
+    }
+
+    // Enter 키로 로그인 활성화
+    const form = document.getElementById("login-form");
+    if (form != null) {
+        form.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // 폼의 기본 동작 방지
+                login(event);
+            }
+        });
+    }
     // document.getElementById("my-page-button").addEventListener("click", function (event) {
     //     location.href="/user/myPage";
     // })

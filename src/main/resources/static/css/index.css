@@ -1,0 +1,12 @@
+.section-img {
+    width: 930px;
+    height: auto;
+    object-fit: cover;
+}
+
+.section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}

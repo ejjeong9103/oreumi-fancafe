@@ -3,12 +3,14 @@ package com.estsoft.oreumifancafe.controller.admin;
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.admin.UpdateBoardStateRequest;
 import com.estsoft.oreumifancafe.domain.dto.admin.UpdateStateRequest;
+import com.estsoft.oreumifancafe.domain.dto.admin.UserInfoResponse;
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
 import com.estsoft.oreumifancafe.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,40 +21,56 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
 
+    @GetMapping
+    public String getAdminPage() {
+        return "adminPage";
+    }
+
     // 사용자 ID 조회
     @GetMapping("/user/{userId}")
-    public ResponseEntity<UserResponse> findUserById(@PathVariable String userId) {
-        return ResponseEntity.ok(adminService.findUserById(userId));
-    }
+    public String findUserById(@PathVariable String userId, Model model) {
+        UserInfoResponse user = adminService.findUserById(userId);
 
-    // 신고 및 문의 전체 조회
-    @GetMapping("/help/{userId}")
-    public ResponseEntity<List<HelpResponse>> getAllHelp(@PathVariable String userId) {
-        return ResponseEntity.ok(adminService.getAllHelp(userId));
-    }
+        model.addAttribute("user", user);
 
-    // 신고 및 문의 페이지 카운트
-    @GetMapping("/help/{userId}/helpPageCount")
-    public ResponseEntity<Long> helpPageCount(@PathVariable String userId) {
-        return ResponseEntity.ok(adminService.helpPageCount(userId));
-    }
-
-    // 게시글 전체 조회
-    @GetMapping("/board/allBoards")
-    public ResponseEntity<List<BoardResponse>> getAllBoard() {
-        return ResponseEntity.ok(adminService.getAllBoard());
-    }
-
-    // 특정 게시판 게시글 조회
-    @GetMapping("/board/{boardType}")
-    public ResponseEntity<List<BoardResponse>> getAllBoardByType(@PathVariable int boardType) {
-        return ResponseEntity.ok(adminService.getAllBoardByType(boardType));
+        return "adminPage";
     }
 
     // 모든 사용자 조회
     @GetMapping("/user")
-    public ResponseEntity<List<UserResponse>> getAllUser() {
-        return ResponseEntity.ok(adminService.getAllUser());
+    public String getAllUser(Model model) {
+        List<UserInfoResponse> users = adminService.getAllUser();
+
+        model.addAttribute("userList", users);
+
+        return "adminPage";
+    }
+
+    // 신고 및 문의 전체 조회
+    @GetMapping("/help/{userId}")
+    public String getAllHelp(@PathVariable String userId, Model model) {
+        List<HelpResponse> helps = adminService.getAllHelp(userId);
+
+        model.addAttribute("helpList", helps);
+
+        return "adminPage";
+    }
+
+    // 게시글 조회
+    @GetMapping("/board")
+    public String getBoards(@RequestParam(required = false) Integer boardType, Model model) {
+        List<BoardResponse> boards;
+
+        if (boardType == null) {
+            boards = adminService.getAllBoard();
+        }
+        else {
+            boards = adminService.getAllBoardByType(boardType);
+        }
+
+        model.addAttribute("boardList", boards);
+
+        return "adminPage";
     }
 
     // 사용자 상태 변경
@@ -62,8 +80,6 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateUserState(userId, request));
     }
 
-    // 신고 및 문의 사항 답변
-
     // 게시글 상태 변경 (게시글 비공개 처리)
     @PutMapping("/board/{boardId}")
     public ResponseEntity<BoardResponse> updateBoardState(@PathVariable Long id,
@@ -72,7 +88,7 @@ public class AdminController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("board/{boardId}")
+    @DeleteMapping("board/deleteBoard/{boardId}")
     public ResponseEntity<Void> deleteBoard(@PathVariable Long id) {
         boolean valid = adminService.deleteBoard(id);
 
