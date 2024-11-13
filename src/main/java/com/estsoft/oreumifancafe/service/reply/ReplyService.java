@@ -51,8 +51,8 @@ public class ReplyService {
         return replyRepository.findAllByBoardIdOrderByGroupAscOrdersAsc(boardId);
     }
 
-    public void deleteReply(Long replyId, User user) {
-
+    public Long deleteReply(Long replyId, User user) {
+        // 댓글을 삭제하기 전에 boardId를 미리 조회
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다"));
 
@@ -61,7 +61,14 @@ public class ReplyService {
             throw new IllegalArgumentException("댓글을 삭제할 권한이 없습니다");
         }
 
+        // boardId를 가져옴
+        Long boardId = reply.getBoard().getId();
+
+        // 댓글 삭제
         replyRepository.delete(reply);
+
+        // 삭제 후 boardId 반환
+        return boardId;
     }
 
     public Reply updateReply(Long replyId, String updatedContent, User user) {
@@ -76,5 +83,6 @@ public class ReplyService {
         reply.setContent(updatedContent);
         return replyRepository.save(reply);
     }
+
 
 }
