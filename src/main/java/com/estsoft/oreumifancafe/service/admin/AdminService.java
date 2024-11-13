@@ -96,6 +96,14 @@ public class AdminService {
         boardRepository.save(board);
     }
 
+    // 게시글 숨김 처리
+    public void updateBoardHidden(long boardId, int hidden) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없음"));
+
+        board.setHidden(hidden);
+        boardRepository.save(board);
+    }
+
 
 
 

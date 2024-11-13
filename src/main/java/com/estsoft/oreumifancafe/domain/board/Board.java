@@ -52,6 +52,9 @@ public class Board {
     @Column
     private int state = 0;
 
+    @Column
+    private int hidden = 1;
+
 
     @Builder
     public Board(String title, String content, User user, int boardType, String boardCategoryName, int state) {

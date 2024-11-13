@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -69,6 +71,19 @@ public class AdminController {
                                    @RequestParam int state) {
         adminService.updateBoardState(boardId, state);
         return "redirect:/admin/board";
+    }
+
+    @PutMapping("/board/hidden")
+    public ResponseEntity boardHiddenUpdate(@RequestParam long boardId,
+                                   @RequestParam int hidden) {
+        adminService.updateBoardHidden(boardId, hidden);
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "처리가 완료되었습니다.");
+        response.put("boardId", boardId);
+        response.put("hidden", hidden);
+
+        return ResponseEntity.ok(response);
     }
 
     // 사용자 ID 조회

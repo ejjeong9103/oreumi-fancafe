@@ -37,6 +37,8 @@
 				<th th:if="${boardType == 1}">처리 상태</th>
 				<th>작성일</th>
 				<th th:if="${boardType == 1}">처리</th>
+				<th>숨김 상태</th>
+				<th>숨김 처리</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -61,6 +63,23 @@
         완료
     </span>
 			</td>
+				<!-- 숨김 상태 -->
+				<td th:text="${item.hidden == 1 ? '공개' : '비공개'}"></td>
+
+				<!-- 숨김 처리 -->
+				<td>
+					<a th:if="${item.hidden == 2}"
+					   th:onclick="'updateHidden(' + ${item.id} + ', 1, this)'"
+					   style="color: blue;">
+						공개
+					</a>
+
+					<a th:if="${item.hidden == 1}"
+					   th:onclick="'updateHidden(' + ${item.id} + ', 2, this)'"
+					   style="color: red;">
+						비공개
+					</a>
+				</td>
 			</tr>
 			</tbody>
 		</table>
@@ -184,6 +203,58 @@
         }
         return false;
         // return true; // 폼 제출 진행
+    }
+
+
+    function updateHidden(boardId, newHiddenValue, element) {
+        fetch(`/admin/board/hidden?boardId=${boardId}&hidden=${newHiddenValue}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('처리 실패');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("서버 응답:", data);
+
+                // 현재 클릭된 <a> 태그의 <tr> 찾기
+                const parentRow = element.closest('tr');
+                console.log("parentRow:", parentRow);
+
+                // 숨김 상태 (lastChild.previousSibling 사용)
+                const hiddenStatusCell = parentRow.querySelector('td:nth-last-child(2)'); // 마지막에서 두 번째 열
+                const hiddenActionCell = parentRow.querySelector('td:last-child'); // 마지막 열
+
+                console.log("hiddenStatusCell:", hiddenStatusCell);
+                console.log("hiddenActionCell:", hiddenActionCell);
+
+                // 숨김 상태와 숨김 처리 업데이트
+                if (newHiddenValue === 1) {
+                    // 상태 업데이트: 비공개 -> 공개
+                    hiddenStatusCell.textContent = '공개';
+                    hiddenActionCell.innerHTML = `
+                    <a style="color: red !important; cursor: pointer !important;" onclick="updateHidden(${boardId}, 2, this)">
+                        비공개
+                    </a>
+                `;
+                } else {
+                    // 상태 업데이트: 공개 -> 비공개
+                    hiddenStatusCell.textContent = '비공개';
+                    hiddenActionCell.innerHTML = `
+                    <a style="color: blue !important; cursor: pointer !important;" onclick="updateHidden(${boardId}, 1, this)">
+                        공개
+                    </a>
+                `;
+                }
+            })
+            .catch(error => {
+                alert('처리 중 오류 발생: ' + error.message);
+            });
     }
 </script>
 </body>
