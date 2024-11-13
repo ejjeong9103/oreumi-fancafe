@@ -39,7 +39,7 @@ public class AdminController {
         model.addAttribute("user", userInfoResponses);
         model.addAttribute("userId", userId);
         model.addAttribute("nickname", nickname);
-        return "/admin/adminUser";
+        return "admin/adminUser";
     }
 
     // 리팩토링 해야할 부분
@@ -63,14 +63,14 @@ public class AdminController {
         model.addAttribute("titleOrContent", titleOrContent);
         model.addAttribute("nickname", nickname);
         model.addAttribute("boardType", boardType);
-        return "/admin/adminBoard";
+        return "admin/adminBoard";
     }
 
     @GetMapping("/board/state")
     public String boardStateUpdate(@RequestParam long boardId,
                                    @RequestParam int state) {
         adminService.updateBoardState(boardId, state);
-        return "redirect:/admin/board";
+        return "redirect:admin/board";
     }
 
     @PutMapping("/board/hidden")
@@ -93,7 +93,7 @@ public class AdminController {
                        @RequestParam(defaultValue = "1") int helpType) {
         model.addAttribute("help", adminService.getHelpPaging(helpPageNum, helpType));
         model.addAttribute("helpType", helpType);
-        return "/admin/adminHelp";
+        return "admin/adminHelp";
     }
 
     @PutMapping("/help/answer")
