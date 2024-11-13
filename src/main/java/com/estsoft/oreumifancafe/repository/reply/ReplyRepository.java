@@ -26,4 +26,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     @Query("SELECT DISTINCT r.board.id FROM Reply r WHERE r.user = :user")
     Page<Long> findDistinctBoardIdsByUser(@Param("user") User user, Pageable pageable);
+
+    @Query("SELECT DISTINCT r.board.id, r.id FROM Reply r WHERE r.user = :user ORDER BY r.id DESC")
+    Page<Object[]> findDistinctBoardIdsByUserOrder(@Param("user") User user, Pageable pageable);
 }
