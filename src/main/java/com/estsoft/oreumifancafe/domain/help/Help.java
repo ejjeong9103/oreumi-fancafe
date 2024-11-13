@@ -1,15 +1,14 @@
 package com.estsoft.oreumifancafe.domain.help;
 
-import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.cglib.core.Local;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 
+@DynamicInsert
 @Getter
 @Setter
 @AllArgsConstructor
@@ -55,6 +54,9 @@ public class Help {
     protected void onCreate() {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
+        }
+        if (this.state == 0) {
+            this.state = 1;
         }
     }
 

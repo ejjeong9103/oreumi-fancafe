@@ -1,6 +1,6 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
-html {
+.main-content {
     width: auto;
     font-family: Pretendard, "Pretendard Variable", sans-serif;
     background-color: #ffffff;
@@ -8,7 +8,7 @@ html {
     align-items: center;
     flex-wrap: wrap;
     overflow-x: hidden;
-    padding: 40px 50px;
+    padding: 40px 90px;
 }
 
 .btn-secondary {

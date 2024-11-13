@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+
     const currentUrl = window.location.href;
     let helpTypeInput = document.getElementById('helpType');
     let titleInput = document.getElementById('title');
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         createButton.addEventListener('click', event => {
             if (currentUrl.includes('/answer/')) {
                 const id = parseInt(currentUrl.split('/answer/')[1], 10);
-                fetch(`/help/answer/${id}`, {
+                fetch(`/admin/answer/${id}`, {
                     method: 'PUT',
                     headers: {
                         "Content-Type": "application/json"
@@ -66,6 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         console.error('오류:', error);
                     })
             } else {
+                if (!hiddenInput.value){
+                    alert('문의 유형을 선택해주세요.');
+                    return;
+                }
                 fetch('/help/question', {
                     method: 'POST',
                     headers: {
