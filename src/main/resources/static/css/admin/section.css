@@ -1,0 +1,11 @@
+.admin-section {
+    width: 1600px;
+    height: 1000px;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+.section-span {
+    margin: 0 auto;
+    font-size: 40px;
+}

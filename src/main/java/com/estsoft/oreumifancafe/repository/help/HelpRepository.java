@@ -17,4 +17,5 @@ public interface HelpRepository extends JpaRepository<Help, Long> {
     Help findByHelpType(int helpType);
 
     Page<Help> findHelpByUserIdAndHelpTypeOrderByIdDesc(String userId, int helpType, Pageable pageable);
+    Page<Help> findHelpsByHelpType(int helpType, Pageable pageable);
 }

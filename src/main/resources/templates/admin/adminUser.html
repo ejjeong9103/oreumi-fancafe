@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Page</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/reset.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/section.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/adminUser.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/nav.css}">
+<body>
+<th:block th:replace="admin/common/admin-header :: header"></th:block>
+<main class="admin-main">
+  <th:block th:replace="admin/common/admin-nav :: nav"></th:block>
+  <section class="admin-section">
+    <table class="table">
+      <thead class="text-center">
+      <tr class="caption text-nowrap">
+        <th>아이디</th>
+        <th>닉네임</th>
+        <th>주소</th>
+        <th>이메일</th>
+        <th>상태</th>
+        <th>가입일</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="board_body" th:each="item : ${user.content}">
+        <td th:text="${item.userId}"></td>
+        <td th:text="${item.nickname}"></td>
+        <td th:text="${item.address} + ${item.addressDetail}"></td>
+        <td th:text="${item.email}"></td>
+        <td th:text="${item.state}"></td>
+        <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <nav aria-label="Page navigation" class="paging">
+      <ul class="pagination">
+
+        <!-- 이전 페이지 그룹 버튼 -->
+        <li th:classappend="${user.number >= 5} ? 'page-item' : 'page-item disabled'">
+          <a class="page-link"
+             th:href="@{/admin/user(userPageNum=${(user.number / 5 - 1) * 5 + 1}, userId=${userId}, nickname=${nickname})}"
+             aria-label="Previous Group">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
+        <li th:if="${user.totalPages > 0}"
+            th:each="pageNum : ${#numbers.sequence(user.number / 5 * 5, T(java.lang.Math).min(user.totalPages - 1, user.number / 5 * 5 + 4))}"
+            th:classappend="${pageNum == user.number} ? 'page-item active' : 'page-item'">
+          <a class="page-link" th:href="@{/admin/user(userPageNum=${pageNum + 1}, userId=${userId}, nickname=${nickname})}" th:text="${pageNum + 1}"></a>
+        </li>
+
+        <!-- DB가 비어있는 경우 페이지 번호 1 표시 -->
+        <li th:if="${user.totalPages == 0}" class="page-item active">
+          <a class="page-link">1</a>
+        </li>
+
+        <!-- 다음 페이지 그룹 버튼 -->
+        <li th:if="${user.number / 5 < (user.totalPages - 1) / 5}" class="page-item">
+          <a class="page-link"
+             th:href="@{/admin/user(userPageNum=${(user.number / 5 + 1) * 5 + 1}, userId=${userId}, nickname=${nickname})}"
+             aria-label="Next Group">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        <li th:unless="${user.number / 5 < (user.totalPages - 1) / 5}" class="page-item disabled">
+          <a class="page-link" href="javascript:void(0);" aria-label="Next Group">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <nav class="navbar bg-light">
+      <div class="container-fluid justify-content-center">
+        <form class="d-flex" role="search" method="get" onsubmit="return setSearchAction(this)">
+          <!-- 말머리 선택 드롭다운 -->
+          <select id="filterSelect" class="form-select me-2" aria-label="말머리 선택">
+            <option value="nickname">닉네임</option>
+            <option value="userId">아이디</option>
+          </select>
+
+          <!-- 검색 입력 및 버튼 -->
+          <input id="searchQuery" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+  </section>
+</main>
+<th:block th:replace="admin/common/admin-footer :: footer"></th:block>
+</body>
+
+<script>
+  function setSearchAction(form) {
+    const filter = document.getElementById("filterSelect").value;
+    const query = document.getElementById("searchQuery").value.trim();
+
+    if (!query) {
+      alert("검색어를 입력하세요.");
+      return false; // 검색어가 비어 있을 때 폼 제출 중단
+    }
+
+    if (filter === "nickname") {
+      location.href = "/admin/user?nickname=" + encodeURIComponent(query);
+    } else {
+      location.href = "/admin/user?userId=" + encodeURIComponent(query);
+    }
+    return false;
+    // return true; // 폼 제출 진행
+  }
+</script>
+</html>

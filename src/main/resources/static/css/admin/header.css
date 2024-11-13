@@ -1,0 +1,10 @@
+.admin-header {
+    background-color: #EEEEEE;
+    width: 100%;
+}
+
+.admin-logo {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+}

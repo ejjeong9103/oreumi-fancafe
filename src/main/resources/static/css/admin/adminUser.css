@@ -1,0 +1,8 @@
+tbody {
+    text-align: center;
+}
+
+.paging {
+    display: flex;
+    justify-content: center;
+}
