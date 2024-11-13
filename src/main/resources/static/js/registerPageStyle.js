@@ -79,7 +79,7 @@ inputIdField.addEventListener("blur", function() {
         messageIdSpan.textContent = "아이디는 영문으로 시작하며 영문 또는 영문과 숫자 조합만 가능합니다. (6~14)";
         idCheck = false;
         return
-    } else {
+    } else if (idValue !== focusOutId && idRegex.test(focusOutId)) {
         messageIdSpan.style.display = "";
         messageIdSpan.style.color = "";
         messageIdSpan.textContent = "";
@@ -145,9 +145,9 @@ inputNicknameField.addEventListener("blur", function() {
         messageNicknameSpan.style.display = "block";
         messageNicknameSpan.style.color = "red";
         messageNicknameSpan.textContent = "영문 또는 한글로 시작해야하며 자릿수를 확인해주세요. (6~14)";
-        idCheck = false;
+        nicknameCheck = false;
         return
-    } else {
+    } else if (nicknameValue !== focusOutNickname && nicknameRegex.test(focusOutNickname)) {
         messageNicknameSpan.style.display = "";
         messageNicknameSpan.style.color = "";
         messageNicknameSpan.textContent = "";
@@ -296,7 +296,6 @@ inputEmailField.addEventListener("blur", function() {
                 emailValue = focusOutEmail;
             })
             .catch(error => {
-                console.log(error);
                 messageEmailSpan.style.display = "block";
                 messageEmailSpan.style.color = "red";
                 messageEmailSpan.textContent = "에러 발생!! 문의 부탁드립니다.";
