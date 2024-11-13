@@ -1,5 +1,6 @@
 package com.estsoft.oreumifancafe.controller.admin;
 
+import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.admin.BoardResponse;
 import com.estsoft.oreumifancafe.domain.dto.admin.UpdateBoardStateRequest;
 import com.estsoft.oreumifancafe.domain.dto.admin.UpdateStateRequest;
@@ -39,6 +40,37 @@ public class AdminController {
         return "/admin/adminUser";
     }
 
+    // 리팩토링 해야할 부분
+    // 파라미터가 너무 많음
+    // 급하게 만드느냐 파라미터로 분기
+    // 처리중 처리상태나 정렬등 추가하려면 spec이나 쿼리dsl로 추후에 변경.....
+    @GetMapping("/board")
+    public String getUserPage(Model model,
+                              @RequestParam(defaultValue = "1") int boardPageNum,
+                              @RequestParam(defaultValue = "1") int boardType,
+                              @RequestParam(defaultValue = "") String title,
+                              @RequestParam(defaultValue = "") String content,
+                              @RequestParam(defaultValue = "") String titleOrContent,
+                              @RequestParam(defaultValue = "") String userId,
+                              @RequestParam(defaultValue = "") String nickname) {
+        Page<Board> boardPage = adminService.getBoardPaging(boardPageNum, boardType, userId, nickname, title, content, titleOrContent);
+        model.addAttribute("board", boardPage);
+        model.addAttribute("userId", userId);
+        model.addAttribute("title", title);
+        model.addAttribute("content", content);
+        model.addAttribute("titleOrContent", titleOrContent);
+        model.addAttribute("nickname", nickname);
+        model.addAttribute("boardType", boardType);
+        return "/admin/adminBoard";
+    }
+
+    @GetMapping("/board/state")
+    public String boardStateUpdate(@RequestParam long boardId,
+                                   @RequestParam int state) {
+        adminService.updateBoardState(boardId, state);
+        return "redirect:/admin/board";
+    }
+
     // 사용자 ID 조회
     @GetMapping("/user/{userId}")
     public String findUserById(@PathVariable String userId, Model model) {
@@ -70,21 +102,21 @@ public class AdminController {
     }
 
     // 게시글 조회
-    @GetMapping("/board")
-    public String getBoards(@RequestParam(required = false) Integer boardType, Model model) {
-        List<BoardResponse> boards;
-
-        if (boardType == null) {
-            boards = adminService.getAllBoard();
-        }
-        else {
-            boards = adminService.getAllBoardByType(boardType);
-        }
-
-        model.addAttribute("boardList", boards);
-
-        return "adminPage";
-    }
+//    @GetMapping("/board")
+//    public String getBoards(@RequestParam(required = false) Integer boardType, Model model) {
+//        List<BoardResponse> boards;
+//
+//        if (boardType == null) {
+//            boards = adminService.getAllBoard();
+//        }
+//        else {
+//            boards = adminService.getAllBoardByType(boardType);
+//        }
+//
+//        model.addAttribute("boardList", boards);
+//
+//        return "adminPage";
+//    }
 
     // 사용자 상태 변경
     @PutMapping("/user/{userId}/userState")

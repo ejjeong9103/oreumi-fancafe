@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin Page</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/reset.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/section.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/adminUser.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/adminBoard.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
+<link rel="stylesheet" th:href="@{/css/admin/nav.css}">
+<body>
+<th:block th:replace="admin/common/admin-header :: header"></th:block>
+<main class="admin-main">
+	<th:block th:replace="admin/common/admin-nav :: nav"></th:block>
+	<section class="admin-section">
+		<!-- 게시판 유형 선택 -->
+		<form id="boardForm">
+			<label for="boardType">게시판 유형 선택:</label>
+			<select id="boardType" name="boardType">
+				<option th:value="1" th:selected="${boardType == 1}">등업게시판</option>
+				<option th:value="2" th:selected="${boardType == 2}">자유게시판</option>
+				<option th:value="3" th:selected="${boardType == 3}">정모게시판</option>
+			</select>
+			<button type="submit">이동</button>
+		</form>
+		<table class="table">
+			<thead class="text-center">
+			<tr class="caption text-nowrap">
+				<th>번호</th>
+				<th>제목</th>
+				<th>아이디</th>
+				<th>닉네임</th>
+				<th th:if="${boardType == 1}">처리 상태</th>
+				<th>작성일</th>
+				<th th:if="${boardType == 1}">처리</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="board_body" th:each="item : ${board.content}">
+				<td th:text="${item.id}"></td>
+				<td th:text="${item.title}"></td>
+				<td th:text="${item.user.userId}"></td>
+				<td th:text="${item.user.nickname}"></td>
+				<td th:if="${boardType == 1}"
+				    th:text="${item.state == 1 ? '처리중' : (item.state == 2 ? '처리완료' : (item.state == 3 ? '반려' : ''))}">
+				</td>
+				<td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm')}"></td><td th:if="${boardType == 1}">
+				<!-- 상태가 1일 때만 '처리'와 '반려' 버튼 표시 -->
+				<a th:if="${item.state == 1}" th:href="@{/admin/board/state(boardId=${item.id}, state=2)}" class="state-a" style="color: blue">
+					처리
+				</a>
+				<a th:if="${item.state == 1}" th:href="@{/admin/board/state(boardId=${item.id}, state=3)}" class="state-a" style="color: red">
+					반려
+				</a>
+				<!-- 상태가 1이 아닐 때 '완료' 표시 -->
+				<span th:if="${item.state != 1}" style="color: green; font-weight: bold;">
+        완료
+    </span>
+			</td>
+			</tr>
+			</tbody>
+		</table>
+		<nav aria-label="Page navigation" class="paging">
+			<ul class="pagination">
+
+				<!-- 이전 페이지 그룹 버튼 -->
+				<li th:classappend="${board.number >= 5} ? 'page-item' : 'page-item disabled'">
+					<a class="page-link"
+					   th:href="@{/admin/board(boardPageNum=${(board.number / 5 - 1) * 5 + 1},
+					     userId=${userId},
+					     nickname=${nickname},
+					     title=${title},
+					     content=${content},
+					     titleAndContent=${titleOrContent},
+					     boardType=${boardType})}"
+					   aria-label="Previous Group">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+
+				<!-- 페이지 번호 버튼 (현재 페이지 그룹에서 5개씩만 표시) -->
+				<li th:if="${board.totalPages > 0}"
+				    th:each="pageNum : ${#numbers.sequence(board.number / 5 * 5, T(java.lang.Math).min(board.totalPages - 1, board.number / 5 * 5 + 4))}"
+				    th:classappend="${pageNum == board.number} ? 'page-item active' : 'page-item'">
+					<a class="page-link" th:href="@{/admin/board(boardPageNum=${pageNum + 1},
+					     userId=${userId},
+					     nickname=${nickname},
+					     title=${title},
+					     content=${content},
+					     titleAndContent=${titleOrContent},
+					     boardType=${boardType})}" th:text="${pageNum + 1}"></a>
+				</li>
+
+				<!-- DB가 비어있는 경우 페이지 번호 1 표시 -->
+				<li th:if="${board.totalPages == 0}" class="page-item active">
+					<a class="page-link">1</a>
+				</li>
+
+				<!-- 다음 페이지 그룹 버튼 -->
+				<li th:if="${board.number / 5 < (board.totalPages - 1) / 5}" class="page-item">
+					<a class="page-link"
+					   th:href="@{/admin/board(boardPageNum=${(board.number / 5 + 1) * 5 + 1},
+					     userId=${userId},
+					     nickname=${nickname},
+					     title=${title},
+					     content=${content},
+					     titleAndContent=${titleOrContent},
+					     boardType=${boardType})}"
+					   aria-label="Next Group">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+				<li th:unless="${board.number / 5 < (board.totalPages - 1) / 5}" class="page-item disabled">
+					<a class="page-link" href="javascript:void(0);" aria-label="Next Group">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<nav class="navbar bg-light">
+			<div class="container-fluid justify-content-center">
+				<form class="d-flex" role="search" method="get" onsubmit="return setSearchAction(this)">
+					<!-- 말머리 선택 드롭다운 -->
+					<select id="filterSelect" class="form-select me-2" aria-label="말머리 선택">
+						<option value="keyword">제목+내용</option>
+						<option value="title">제목</option>
+						<option value="content">내용</option>
+						<option value="nickname">닉네임</option>
+						<option value="id">아이디</option>
+					</select>
+
+					<!-- 검색 입력 및 버튼 -->
+					<input id="searchQuery" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Search</button>
+				</form>
+			</div>
+		</nav>
+	</section>
+</main>
+<th:block th:replace="admin/common/admin-footer :: footer"></th:block>
+<script>
+    // 폼 제출 이벤트 처리
+    const form = document.getElementById('boardForm');
+    const select = document.getElementById('boardType');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // 기본 제출 동작 막기
+
+        // 선택한 boardType 값 가져오기
+        const boardType = select.value;
+
+        // URL 생성 및 이동
+        const url = `/admin/board?boardType=${boardType}`;
+        window.location.href = url;
+    });
+
+
+    function setSearchAction(form) {
+        const filter = document.getElementById("filterSelect").value;
+        const query = document.getElementById("searchQuery").value.trim();
+        const select = document.getElementById('boardType').value;
+
+        console.log(select);
+        const boardQuery = "&boardType=" + select;
+        if (!query) {
+            alert("검색어를 입력하세요.");
+            return false; // 검색어가 비어 있을 때 폼 제출 중단
+        }
+
+        if (filter === "keyword") {
+            location.href = "/admin/board?titleAndContent=" + encodeURIComponent(query) + boardQuery;
+        } else if (filter === "title") {
+            location.href = "/admin/board?title=" + encodeURIComponent(query) + boardQuery;
+        } else if (filter === "content") {
+            location.href = "/admin/board?content=" + encodeURIComponent(query) + boardQuery;
+        } else if (filter === "userId") {
+            location.href = "/admin/board?userId=" + encodeURIComponent(query) + boardQuery;
+        } else {
+            location.href = "/admin/board?nickname=" + encodeURIComponent(query) + boardQuery;
+        }
+        return false;
+        // return true; // 폼 제출 진행
+    }
+</script>
+</body>
+</html>

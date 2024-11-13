@@ -4,10 +4,12 @@ import com.estsoft.oreumifancafe.domain.board.Board;
 import com.estsoft.oreumifancafe.domain.dto.admin.*;
 import com.estsoft.oreumifancafe.domain.dto.help.HelpResponse;
 import com.estsoft.oreumifancafe.domain.dto.user.UserResponse;
+import com.estsoft.oreumifancafe.domain.user.Role;
 import com.estsoft.oreumifancafe.domain.user.User;
 import com.estsoft.oreumifancafe.exceptions.UserNotFoundException;
 import com.estsoft.oreumifancafe.repository.board.BoardRepository;
 import com.estsoft.oreumifancafe.repository.help.HelpRepository;
+import com.estsoft.oreumifancafe.repository.user.RoleRepository;
 import com.estsoft.oreumifancafe.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final HelpRepository helpRepository;
     private final BoardRepository boardRepository;
+    private final RoleRepository roleRepository;
     private static final int PAGE_SIZE = 3;
 
     private Pageable createPageRequest(int pageNum, int pageSize) {
@@ -42,7 +46,55 @@ public class AdminService {
         }
     }
 
+    // 게시글 가져오기
+    public Page<Board> getBoardPaging(int boardPageNum,
+                                      int boardType,
+                                      String userId,
+                                      String nickName,
+                                      String title,
+                                      String content,
+                                      String titleOrContent) {
+        Pageable pageable = createPageRequest(boardPageNum, PAGE_SIZE);
+        if (!userId.isEmpty()) {
+            return boardRepository.findBoardByBoardTypeAndUserUserIdContaining(boardType, userId, pageable);
+        } else if (!nickName.isEmpty()) {
+            return boardRepository.findBoardByBoardTypeAndUserNicknameContaining(boardType, nickName, pageable);
+        } else if (!title.isEmpty()) {
+            return boardRepository.findBoardByBoardTypeAndTitleContaining(boardType, title, pageable);
+        } else if (!content.isEmpty()) {
+            return boardRepository.findBoardByBoardTypeAndContentContaining(boardType, content, pageable);
+        } else if (!titleOrContent.isEmpty()) {
+            return boardRepository.findBoardByBoardTypeAndTitleContainingOrContentContaining(boardType, titleOrContent, titleOrContent, pageable);
+        } else {
+            return boardRepository.findBoardByBoardType(boardType, pageable);
+        }
+    }
 
+    // 게시글 상태 변경
+    public void updateBoardState(long boardId, int state) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없음"));
+
+        board.setState(state);
+
+        // state가 2가 되면 정회원으로 올려주자
+        if (state == 2) {
+            User user = board.getUser();
+            // 사용자 권한 목록을 가져옵니다.
+            Collection<Role> roles = user.getRoles();
+
+            // 정회원 권한(ROLE_USER)이 있는지 확인
+            boolean hasRoleUser = roles.stream()
+                    .anyMatch(role -> "ROLE_USER".equals(role.getName()));
+
+            // 정회원 권한이 없으면 추가
+            if (!hasRoleUser) {
+                // 권한 추가
+                user.getRoles().add(roleRepository.findByName("ROLE_USER"));
+                userRepository.save(user);
+            }
+        }
+        boardRepository.save(board);
+    }
 
 
 
